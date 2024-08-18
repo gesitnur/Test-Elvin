@@ -1,0 +1,10 @@
+{
+  "name": "elvin_app",
+  "private": true,
+  "dependencies": {
+    "puppeteer": "^19.2.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9"
+  }
+}
