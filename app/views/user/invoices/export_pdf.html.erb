@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Elvin.com</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" charset="utf-8">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+    <style>
+      @font-face {
+        font-family: "neue";
+        font-weight: bold;
+        font-style: normal;
+        src: url('../../../assets/font/Neue_Plak_Black.ttf');
+      }
+
+      @font-face {
+        font-family: "neue";
+        font-weight: normal;
+        font-style: normal;
+        src: url('../../../assets/font/Neue_Plak_Regular.ttf');
+      }
+      body {
+        font-family: "neue", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-content" class="max-w-2xl mx-auto relative min-h-screen border-y-8 flex flex-col">
+      <div class="invoice-header py-4 flex justify-between items-center mb-2">
+        <div class="invoice-header-item">
+          <span class="font-semibold uppercase invoice-header-title block">invoice</span>
+          <span class="uppercase invoice-people-title"># <%= @invoice.invoice_code %></span>
+        </div>
+        <div class="invoice-header-item">
+          <div class="w-32 ml-2 h-32">
+            <%= image_tag company_logo_image(app_setting.company_logo&.url), class: 'w-full h-full rounded-full object-cover text-end', alt: 'invoice-logo' %>
+          </div>
+        </div>
+      </div>            
+      <div class="invoice-people mb-4">
+        <div class="invoice-people-desc w-full flex justify-between mb-4">
+          <p class="font-bold invoice-people-title"><%= @customer.display_name %></p>
+          <div class="invoice-company w-32">
+            <p class="font-bold text-center block"><%= app_setting.company_name %></p>
+            <p class="text-center"><%= app_setting.country&.name %></p>
+          </div>
+        </div>
+        <div class="flex justify-between mb-5">
+          <div class="invoice-people-desc">
+            <h2 class="font-bold uppercase invoice-people-title">Bill To:</h2>
+            <div class="invoice-people-details">
+              <p><%= @customer.billing_address.street1 %></p>
+              <p><%= @customer.billing_address.street2 %></p>
+              <p><%= @customer.billing_address.city %></p>
+              <p><%= @customer.billing_address.zip_code %> <%= @customer.billing_address.state.name %></p>
+              <p><%= @customer.billing_address.country.name %></p>
+            </div>
+          </div>
+          <% if @invoice.ship_item? %>
+            <div class="invoice-people-desc">
+              <h2 class="font-bold uppercase invoice-people-title">Ship To:</h2>
+              <div class="invoice-people-details">
+                <p><%= @customer.shipping_address.street1 %></p>
+                <p><%= @customer.shipping_address.street2 %></p>
+                <p><%= @customer.shipping_address.city %></p>
+                <p><%= @customer.shipping_address.zip_code %> <%= @customer.shipping_address.state&.name %></p>
+                <p><%= @customer.shipping_address.country&.name %></p>
+              </div>
+            </div>
+          <% end %>
+          <table class="invoice-people-identity">
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Invoice Date</td>
+              <td class="invoice-people-identity-detail text-end"><%= date_formater(@invoice.invoice_date) %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Terms</td>
+              <td class="invoice-people-identity-detail text-end"><%= @invoice.payment_term.name %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Due Date</td>
+              <td class="invoice-people-identity-detail text-end"><%= date_formater(@invoice.due_date) %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Due Date</td>
+              <td class="invoice-people-identity-detail text-end"><%= date_formater(@invoice.due_date) %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="invoice-total py-3 mb-4 flex justify-between border-y-2">
+        <h1 class="invoice-total-title font-bold">Invoice Total</h1>
+        <p class="invoice-total-detail font-bold"><%= number_to_currency(@invoice.total, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></p>
+      </div>
+      <div class="invoice-details mb-4">
+        <table class="invoice-details-table w-full text-left">
+          <thead class="invoice-details-table-head uppercase">
+            <tr>
+              <th>Description</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody class="invoice-details-table-body">
+            <% @services.each do |service| %>
+              <tr>
+                <td><%= simple_format(service.name) %></td>
+                <td><%= service.qty %></td>
+                <td><%= number_to_currency(service.rate, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+                <td><%= number_to_currency((service.rate * service.qty), unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="invoice-amount flex justify-end mt-2">
+          <table>
+            <tr>
+              <td class="px-28">Subtotal</td>
+              <td class="text-end"><%= number_to_currency(@invoice.total, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+            </tr>
+            <tr class=<%= "hidden" if @invoice.discount_amount.to_f.zero? %> >
+              <td class="px-28">Discount</td>
+              <td class="text-end"><span class="mr-1">-</span><%= number_to_currency(@invoice.discount_amount || 0, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+            </tr>
+            <tr class=<%= "hidden" if @invoice.shipping_charge.to_f.zero? %> >
+              <td class="px-28">Shipping Charge</td>
+              <td class="text-end"><%= number_to_currency(@invoice.shipping_charge || 0, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+            </tr>
+
+            <% taxes = [] %>
+            <% tax_list = [] %>
+            <% @invoice.invoice_items.each do |item| %>
+              <% taxes.push({item.tax_rate&.name => item&.tax_amount}) %>
+              <% tax_list = taxes.flat_map(&:to_a).group_by(&:first).map {|k,v| Hash[k, v.map(&:last).sum]} %>
+            <% end %>
+            <% tax_list.each do |tax| %>
+              <% unless tax.values.join.to_f.zero? %>
+                <tr>
+                  <td class="px-28"><%= tax.keys.join %></td>
+                  <td class="text-end"><%= number_to_currency(tax.values.join, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+                </tr>
+              <% end %>
+            <% end %>
+            <tr class=<%= "hidden" if @invoice.adjusment.to_f.zero? %> >
+              <td class="px-28">Adjusment</td>
+              <td class="text-end"><%= number_to_currency(@invoice.adjusment || 0, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+            </tr>
+            <tr>
+              <td class="font-bold px-28 uppercase">Total</td>
+              <td class="font-bold text-end"><%= number_to_currency(@invoice.total, unit: @invoice.currency&.symbol || @customer.currency.symbol) %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="invoice-footer mt-auto w-full bottom-0">
+        <% if @invoice.customer_notes.present? %>
+          <div class="invoice-notes mb-4">
+            <div class="invoice-notes-text mb-4">
+              <h1 class="uppercase text-1xl font-bold mb-1 invoice-notes-title">
+                Notes
+              </h1>
+              <p class="invoice-notes-detail"><%= simple_format(@invoice.customer_notes) %></p>
+            </div>
+          </div>
+        <% end %>
+        <% if @invoice.term_and_condition.present? %>
+          <div class="invoice-terms mb-4">
+            <div class="invoice-terms-desc mb-4">
+              <h1 class="uppercase text-1xl font-bold mb-1 invoice-terms-title">
+                Terms & Conditions
+              </h1>
+              <p class="invoice-terms-detail"><%= simple_format(@invoice.term_and_condition) %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  :root {
+  --font-size-head: 40px;
+  --font-size-title: 35px;
+  --font-size-secondaryTitle: 20px;
+  --font-size-description: 16px;
+  --color-primary: #000000;
+  --color-secondary: #3e74b9;
+  --color-tertiary: #8f8f8f;
+  --color-querternary: #fff;
+}
+
+.invoice-header-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-head);
+}
+
+.separator-section {
+  background-color: var(--color-secondary);
+}
+
+#main-content {
+  border-color: var(--color-secondary);
+}
+
+.invoice-people-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-people-details {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-people-identity-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-people-identity-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-total {
+  border-color: var(--color-primary);
+}
+
+.invoice-total-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-total-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-details-table-head {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-details-table-body {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-amount-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+</style>

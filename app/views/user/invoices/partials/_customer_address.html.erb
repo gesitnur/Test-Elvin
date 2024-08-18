@@ -1,0 +1,34 @@
+<div class="customer-address grid grid-cols-2 gap-4 mb-2">
+  <div class="customer-billing-address">
+    <label class="block text-gray-400">BILLING ADDRESS</label>
+    <span class="block font-bold"><%= customer.billing_address.attention %></span>
+    <span class="block"><%= customer.billing_address.country.name %></span>
+    <span class="block"><%= customer.billing_address.street1 %></span>
+    <span class="block"><%= customer.billing_address.street2 %></span>
+    <span class=""><%= customer.billing_address.city %></span>
+    <span class=""><%= customer.billing_address.state.name %></span>
+    <span class=""><%= customer.billing_address.zip_code %></span>
+    <span class="block"><%= customer.billing_address.phone %></span>
+    <span class="block"><%= customer.billing_address.fax %></span>
+  </div>
+  <div class="customer-shipping-address">
+    <label class="block text-gray-400">SHIPPING ADDRESS</label>
+    <span class="block font-bold"><%= customer.shipping_address.attention %></span>
+    <span class="block"><%= customer.shipping_address.country&.name %></span>
+    <span class="block"><%= customer.shipping_address.street1 %></span>
+    <span class="block"><%= customer.shipping_address.street2 %></span>
+    <span class=""><%= customer.shipping_address.city %></span>
+    <span class=""><%= customer.shipping_address.state&.name %></span>
+    <span class=""><%= customer.shipping_address.zip_code %></span>
+    <span class="block"><%= customer.shipping_address.phone %></span>
+    <span class="block"><%= customer.shipping_address.fax %></span>
+  </div>
+</div>
+<% if customer.remark.present? %>
+  <div class="grid grid-rows-3 grid-flow-col gap-4 mb-2">
+    <div class="row-span-3">
+    	<label class="block text-gray-400">REMARKS</label>
+      <span class="block" id="remarks"><%= @customer&.remark %></span>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,44 @@
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">New Transaction</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded">
+  <%= form_for(@transaction, url: update_transfer_user_transaction_path, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+    <%= f.hidden_field :transaction_type, value: 'Transfer' %>
+    <div class="form-group">
+      <%= f.label :transaction_date, "Date", class: 'font-bold block' %>
+      <%= f.datetime_field :transaction_date, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Date', required: true, value: (f.object.transaction_date ||= Time.now).strftime('%Y-%m-%dT%H:%M') %>
+    </div>
+    <div class="form-group">
+      <%= f.label :amount, "Amount", class: 'font-bold block' %>
+      <%= f.number_field :amount, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', step: :any, placeholder: 'Amount', required: true %>
+
+      <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+    </div>
+    <div class="form-group income-category">
+      <%= f.label :transfer_from, "Transfer From", class: 'font-bold block' %>
+
+      <%= f.select :transfer_from , options_for_select(@cash_books || [], f.object.transfer_from), {include_blank: 'Select Transfer From'}, { class: "w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-category", required: true } %>
+
+      <input type="hidden" class="category-id-field" value="<%= f.object.transfer_from %>">
+      <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+    </div>
+    <div class="form-group income-category">
+      <%= f.label :transfer_to, "Transfer To", class: 'font-bold block' %>
+
+      <%= f.select :transfer_to , options_for_select(@cash_books || [], f.object.transfer_to), {include_blank: 'Select Transfer To'}, { class: "w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-category", required: true } %>
+
+      <input type="hidden" class="category-id-field" value="<%= f.object.transfer_to %>">
+      <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :description, "Description", class: 'font-bold block' %>
+
+      <%= f.text_field :description, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Description', required: true %>
+    </div>
+
+    <div class="form-group flex gap-2">
+      <%= f.submit 'Transfer', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+      <%= link_to 'Back', user_transactions_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+    </div>
+  <% end %>
+</div>

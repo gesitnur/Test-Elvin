@@ -1,0 +1,182 @@
+<style>
+  input[type=file] {
+    /*width: 350px;*/
+    max-width: 100%;
+    color: #444;
+    padding: 5px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #555;
+  }
+
+  input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #50B0C0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+  }
+  :root {
+    --fc-button-bg-color: #50B0C0;
+    --fc-button-border-color: #50B0C0;
+    --fc-button-hover-bg-color: #50B0C0;
+    --fc-button-hover-border-color: #50B0C0;
+    --fc-button-active-border-color: #50B0C0;
+    --fc-event-border-color: none;
+    --fc-event-bg-color: #50B0C0;
+  }
+  .fc-event{
+    cursor: pointer;
+  }
+
+  .fc .fc-col-header-cell-cushion {
+    display: inline-block;
+    padding: 2px 4px;
+  }
+
+  .fc-event .fc-event-start .fc-event-end{
+    padding: 5px;
+  }
+
+  .fc-button {
+    box-shadow: none !important;
+  }
+
+  @media (max-width: 640px){
+    .fc-toolbar {
+      flex-direction: column;
+    }
+
+    .fc-toolbar-chunk {
+      text-align: center;
+    }
+  }
+
+  .dropbtn {
+  background-color: #3498DB;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  /*background-color: #2980B9;*/
+}
+
+.import-holiday-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.dropdown button:hover {background-color: #ddd;}
+
+.show {display: block;}
+</style>
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Calendars</h1>
+</div>
+<div class="detail-modal"></div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12">
+      <div id="company-calendar" class="w-full min-h-screen mb-5"></div>
+      <div class="modal fixed z-50 hidden add-modal" id="modal">
+        <button class="showModal holiday" id="showModalHoliday"></button>
+        <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+        <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+          <div class="bg-white rounded-md m-auto relative shadow-lg w-full sm:w-1/2 lg:w-2/5">
+            <button type="button" class="absolute right-4 top-3 text-xl text-slate-400 hideModal"><i class="fas fa-times"></i></button>
+            <%= form_for @company_holiday, url: user_calendars_path, remote: true, class: 'modal-form-holiday' do |f| %>
+              <%  %>
+              <div class="modal-header p-4 border-b">
+                <h1 class="font-bold text-xl">Add Holiday</h1>
+                <span id="holiday-url" data-url="<%= get_holidays_user_calendars_path %>"></span>
+              </div>
+              <div class="px-6 flash_alert"></div>
+              <div class="modal-content grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                <div class="form-group sm:col-span-2">
+                  <label class="font-bold block">Holiday name</label>
+                  <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, placeholder: 'Holiday Name' %>
+                  <%= f.hidden_field :company_id, value: current_user.company.id %>
+                </div>
+                <div class="form-group">
+                  <label class="font-bold block">Start Date</label>
+                  <%= f.date_field :start_date, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true %>
+                </div>
+                <div class="form-group">
+                  <label class="font-bold block">End Date</label>
+                  <%= f.date_field :end_date, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true %>
+                </div>
+              </div>
+              <div class="modal-footer flex justify-end p-4 border-t">
+                <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+                <button type="submit" class="bg-pacifixBlue hover:shadow-lg text-white px-4 py-2 rounded button-save-event">Save</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="modal fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-40 px-4 hidden import-modal" id="modal">
+        <button class="showModal workday" id="showModalImportHoliday"></button>
+        <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+        <!-- <div class="relative w-full sm:w-[500px] mx-auto my-10 bg-white rounded"> -->
+        <%= form_tag import_holiday_user_calendars_path, method: :post, class: 'relative w-full sm:w-[500px] mx-auto my-10 bg-white rounded', remote: true, multipart: true do %>
+          <div class="modal-header mb-1 p-4">
+            <h1 class="text-2xl font-bold">Import Holidays</h1>
+          </div>
+          <div class="px-6 flash_alert"></div>
+          <span id="leave-link" data-url=<%= leave_modal_user_calendars_path %>></span>
+          <button type="button" class="absolute right-4 top-3 text-xl text-slate-400 hideModal"><i class="fas fa-times"></i></button>
+          <div class="modal-content border-y p-4">
+            <div class="">
+              <input type="file" id="images" class="w-full" name="import_file" required>
+              
+              <p class="mt-5">You can download the <%= link_to 'sample file', download_template_user_calendars_path, class: 'text-blue-700' %> to get detailed information about the data fields used while importing</p>
+            </div>
+          </div>
+          <div class="modal-footer flex justify-end p-4">
+            <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+            <%= button_tag 'Save', type: 'submit', class: 'bg-pacifixBlue hover:shadow-lg text-white px-4 py-2 rounded button-save-event' %>
+          </div>
+        <% end %>
+      </div>
+      </div>
+      <div class="calender-desc">
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <div class="calender-desc-item flex gap-3 items-center mb-5">
+            <span class="w-5 h-5 inline-block align-middle rounded" style="background-color: #F3F3F3"></span>
+            <p>Weekends</p>
+          </div>
+          <div class="calender-desc-item flex gap-3 items-center mb-5">
+            <span class="w-5 h-5 inline-block bg-pacifixBlue align-middle rounded"></span>
+            <p>Holiday</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function myFunction() {
+    setTimeout(function() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }, 1);
+  }
+</script>

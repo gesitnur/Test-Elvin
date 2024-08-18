@@ -1,0 +1,49 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+
+<%= form_for(gameplay, url: url, html: {class: '', id: 'gameplay_form'}) do |f| %>
+  <div class="main-content-card p-7 bg-white shadow-md rounded border grid grid-cols-1 gap-2 mb-8">
+    <div class="form-group">
+      <%= f.label :name, 'Name', class: 'font-bold block' %>
+      <%= f.text_field :name, class: 'w-full border border-slate-300 py-[5px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Name', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :description, 'Description', class: 'font-bold block' %>
+      <%= f.text_area :description, class: 'h-20 border focus:border-pacifixBlue outline-none p-2 w-full rounded transition ease-in', placeholder: 'Description', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 <%= 'hidden' unless f.object.new_record? %>">
+      <%= f.label :is_basic, "Basic Gameplay ?", class: 'block font-bold mb-2' %>
+      <div class="flex gap-10" id="is-basic-radio">
+        <div class="form-radio">
+          <%= f.radio_button :is_basic, true, class: 'appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer is-basic', id: 'is_basic', required: true %>
+          <%= label :is_basic, 'Yes', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+        <div class="form-check">
+          <%= f.radio_button :is_basic, false, class: 'appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer is-basic', id: 'is_basic', required: true %>
+          <%= label :is_basic, 'No', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tab-multiple-choice" class="block quest-section">
+    <div class="main-content-header mb-3 flex justify-between items-center mt-4">
+      <p class="text-2xl text-slate-500">Multiple Choice Question</p>
+    </div>
+    <div id='multiples'>
+      <%= f.fields_for :question_multiples do |question_f| %>
+          <%= render 'question_multiple_fields', form: question_f %>
+      <% end %>
+    </div>
+  </div>
+  <div id="tab-essay" class="hidden quest-section">
+    <div class="main-content-header mb-3 flex justify-between items-center mt-4">
+      <p class="text-2xl text-slate-500">Essay Question</p>
+    </div>
+    <div id='essays'>
+      <%= f.fields_for :question_essays do |question_f| %>
+        <%= render 'question_essay_fields', form: question_f %>
+      <% end %>
+    </div>
+    <% @form = f %>
+  </div>
+<% end %>

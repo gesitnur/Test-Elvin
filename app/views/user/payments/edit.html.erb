@@ -1,0 +1,53 @@
+<% @app_setting = app_setting %>
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Pay Invoice</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded border">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <%= form_tag user_invoice_payment_path, method: :put, class: 'grid grid-cols-1 sm:grid-cols-2 gap-4' do %>
+    <div class="form-group">
+      <%= label_tag :payment_date,'Invoice Amount', class: 'font-bold block' %>
+      <p class="text-lg"><%= number_to_currency(@invoice.total, unit: @invoice.currency.symbol) %></p>
+      <input type="hidden" name="" class="invoice-amount-field" value="<%= @invoice.total %>">
+      <input type="hidden" class="invoice-currency" value="<%= @invoice.currency.id %>">
+      <input type="hidden" class="deposit-currency" name="">
+    </div>
+    <div class="form-group">
+      <%= label_tag :payment_type,'Payment Type', class: 'font-bold block' %>
+      <label class="inline-flex items-center">
+        <%= check_box_tag "payment_mode", 'Partial Payment', true, class: 'accent-pacifixBlue' %>
+        <span class="ml-2">Partial Payment</span>
+      </label>
+    </div>
+    <div class="form-group">
+      <%= label_tag :payment_date,'Payment Date', class: 'font-bold block' %>
+      <%= datetime_field_tag :payment_date, (@payment.payment_date || Time.now).strftime('%Y-%m-%dT%H:%M'), class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in' %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :payment_date,'Amount Received', class: 'font-bold block' %>
+      <%= text_field_tag :amount_received, @payment.amount_received, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in amount-received-field format-currency', id: 'amount-field', placeholder: 'Amount', required: true, step: :any %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :payment_date,'Deposit To', class: 'font-bold block' %>
+      <%= select_tag 'deposit_to',
+          options_for_select(@cash_books, @payment.payment_transaction&.cash_book_id),
+          { include_blank: 'Select Deposit To', class: 'w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select2-dropdown', 'data-url': find_cash_book_user_transactions_path } %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :category,'Category', class: 'font-bold block' %>
+      <%= select_tag 'category',
+          options_for_select(@categories, @payment.payment_transaction&.cash_book_category_id),
+          { include_blank: 'Select Category', class: 'w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select2-dropdown', style: 'width: 100%' } %>
+      
+    </div>
+    <div class="form-group col-span-1 sm:col-span-2">
+      <%= label_tag :payment_date,'Description ', class: 'font-bold block' %>
+      <%= text_area_tag :description, @payment.description, class: 'w-full border border-slate-300 h-20 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Description', required: true %>
+    </div>
+    <div class="form-group flex gap-2 col-span-1 sm:col-span-2">
+      <%= button_tag 'Submit', type: 'submit', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+      <%= link_to 'Back', user_invoices_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+    </div>
+  <% end %>
+</div>

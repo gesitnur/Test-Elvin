@@ -1,0 +1,52 @@
+<div class="main-content-wrap grid grid-cols-1 md:grid-cols-12">
+  <div class="h-screen md:col-span-3 flex flex-col px-4 py-7 md:py-7 md:pl-7">
+    <div class="main-content-header mb-2">
+      <h1 class="text-2xl font-bold">Search for a question</h1>
+      <p class="text-gray-500">Type your question or search keyword</p>
+    </div>
+    <div id="search-forum">
+    </div>
+    <div class="h-full bg-white w-full overflow-y-auto scrollbar-hide rounded shadow" id="filter-category">
+    </div>
+  </div>
+  <div class="h-screen md:col-span-9 flex flex-col px-4 py-7 md:py-7 md:pr-7">
+    <%= load_flash_alert %>
+    <%= load_flash_notice %>
+    <div class="flex sm:flex-row flex-col justify-between gap-3 mb-3">
+      <div class="tabs main-content-tabs w-full">
+        <ul id="tabs-nav-forum" class="overflow-y-hidden overflow-x-auto border-b">
+          <%= link_to user_help_questions_path, remote: true do %>
+            <li class="float-left mr-5 md:mr-0 lg:mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= 'active' if params[:filter].blank? %>">
+              Officials
+            </li>
+          <% end %>
+          <%= link_to user_help_questions_path('filter':  'usefull'), remote: true do %>
+            <li class="float-left mr-5 md:mr-0 lg:mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+              Usefull
+            </li>
+          <% end %>
+          <%= link_to user_help_questions_path('filter':  'all'), remote: true do %>
+            <li class="float-left mr-5 md:mr-0 lg:mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= 'active' if params[:filter].eql?('all') %>">
+              All Threads
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="flex gap-2 items-center justify-between">
+        <% if current_user.present? %>
+          <div class="left">
+            <%= link_to new_user_help_question_path, class: 'bg-pacifixBlue inline-flex text-sm items-center gap-2 text-white rounded py-2 w-32 justify-center shadow hover:shadow-lg transition ease-linear' do %>
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              <span>New Thread</span>
+            <% end %>
+          </div>
+        <% end %>
+        <div class="right" id="sorting-section">
+        </div>
+      </div>
+    </div>
+    <div class="main-content-threads h-full overflow-y-auto scrollbar-hide" id="question-table">      
+    </div>
+    <div class="mt-2" id="question-pagination"></div>
+  </div>
+</div>

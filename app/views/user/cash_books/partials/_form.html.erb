@@ -1,0 +1,37 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(cash_book, url: url, html: {class: 'grid grid-cols-1 sm:grid-cols-3 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Name", class: 'font-bold block' %>
+    <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Name', required: true %>
+  </div>
+  <% if f.object.transaction? %>
+    <div class="form-group">
+      <label class="font-bold block">Currency</label>
+     <%= f.select :currency_id , options_for_select(@currencies, f.object.currency_id), {include_blank: 'Select Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", id: 'domain-access', required: true, disabled: true} %>
+    </div>
+    <div class="form-group">
+      <label class="font-bold block">Start Balance</label>
+       <%= f.text_field :start_balance, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in format-currency', step: :any, placeholder: 'Start Balance', required: true, disabled: true %>
+    </div>
+  <% else %>
+    <div class="form-group">
+      <%= f.label :currency_id, "Currency", class: 'font-bold block' %>
+      <%= f.select :currency_id , options_for_select(@currencies, f.object.currency_id), {include_blank: 'Select Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", id: 'domain-access', required: true} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :start_balance, "Start Balance", class: 'font-bold block' %>
+      <%= f.text_field :start_balance, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in format-currency', step: :any, placeholder: 'Start Balance', required: true %>
+      <%= f.hidden_field :company_id, class: '', value: current_user.company.id, placeholder: 'Name', required: true %>
+    </div>
+  <% end %>
+  <div class="form-group col-span-1 sm:col-span-3">
+    <%= f.label :description, "Description", class: 'font-bold block' %>
+    <%= f.text_area :description, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Description', required: true %>
+  </div>
+
+  <div class="form-group flex gap-2 col-span-1 sm:col-span-3">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

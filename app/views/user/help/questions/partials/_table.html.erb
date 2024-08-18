@@ -1,0 +1,108 @@
+<% if params[:q].present? %>
+  <% @params_category = params[:q][:forum_category_id_eq] %>
+<% end %>
+
+<div role="loading" id="loading-help-center" class="h-full flex justify-center items-center flex-col bg-white shadow rounded">
+  <svg aria-hidden="true" class="w-16 h-16 mr-2 mb-2 text-gray-200 animate-spin dark:text-gray-600 fill-pacifixBlue" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+  </svg>
+  <span>Loading...</span>
+</div>
+
+<% if forums.blank? %>
+  <div class="thread-empty text-center bg-white flex justify-center items-center flex-col h-full rounded shadow">
+    <%= image_tag asset_image("elvin/no-data-img.svg"), class: 'w-96 ' %>
+    <p class="text-lg">No Thread list yet</p>
+  </div>
+<% else %>
+  <% forums.each.with_index do |forum, key| %>
+    <div class="modal fixed z-50 hidden" id="modal-<%= key %>">
+      <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+        <div class="modal-content fixed inset-0 flex items-center justify-center z-50 px-5">
+          <div class="bg-white p-6 rounded-md m-auto shadow-lg w-full sm:w-1/2 lg:w-1/3">
+            <p class="mb-4">Are you sure?</p>
+            <div class="flex justify-end">
+            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+            <%= link_to user_help_question_path(forum), method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' do %>
+              Delete
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="thread-item p-5 bg-white shadow rounded mb-3">
+      <div class="flex justify-between mb-2">
+        <span class="inline-flex flex-wrap items-center gap-x-3">
+          <span>Thread #<%= "#{forum.created_at.year}-#{forum.id}" %></span>
+          <% if forum.is_admin %>
+            <span class="px-4 py-1 text-xs rounded-full bg-pacifixBlue bg-opacity-20 text-pacifixBlue font-bold">Official</span>
+          <% end %>
+        </span>
+        <span class="inline-flex">
+          <span class="text-right"><%= datetime_formater(forum.created_at, '%d %h %Y, %I:%M %p') %></span>
+          <div class="group relative">
+            <% if current_user.present? && forum.user.eql?(current_user) %>
+              <button class="group-focus-within:text-gray-500 transition ease-in ml-3"><i class="fas fa-ellipsis-h"></i></button>
+              <div class="border z-10 bg-white invisible rounded w-48 absolute right-0 shadow-xl transition-all duration-300 opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1">
+                <ul class="py-2">
+                  <li>
+                    <%= link_to edit_user_help_question_path(forum), class: 'block px-4 py-2 hover:bg-gray-100' do %>
+                      <span><i class="fa fa-edit w-7" aria-hidden="true"></i> Edit</span>
+                    <% end %>
+                  </li>
+                  <li>
+                    <a class="block px-4 py-2 hover:bg-gray-100 showModal cursor-pointer" data-modal="modal-<%= key %>">
+                      <span><i class="fa fa-trash w-7" aria-hidden="true"></i> Delete</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            <% end %>
+          </div>
+        </span>
+      </div>
+      <div class="thread-item-text mb-4">
+        <span class="inline-flex items-center justify-between w-full flex-wrap">
+          <%= link_to count_view_user_help_question_path(forum) do %>
+            <h1 class="text-xl font-bold mb-2 hover:text-pacifixBlue transition inline"><%= forum.title.humanize %> </h1>
+          <% end %>
+          <%= link_to user_help_questions_path('q[forum_category_id_eq]':  forum.forum_category, filter: params[:filter]), class: 'text-xs font-bold text-africanViolet bg-africanViolet bg-opacity-20 py-1 px-4 rounded-full', remote: true do %>
+            <%= forum.forum_category.name.humanize %>
+          <% end %>
+        </span>
+        <p class="thread-desc text-limiter text-gray-500 text-justify">
+          <%= forum.description %>
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-y-2 justify-between">
+        <span class="inline-flex items-center gap-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="w-7 h-7">
+          <% if forum.is_admin %>
+            <p>Admin</p>
+          <% else %>
+            <p><%= forum.user.name %></p>
+          <% end %>
+        </span>
+        <% params_category = if params[:q].blank? %>
+          <% nil %>
+        <% else %>
+          <% params[:q][:forum_category_id_eq] %>
+        <% end %>
+        <span class="inline-flex items-center gap-3">
+          <span class="inline-flex items-center gap-2">
+            <i class="fas fa-tags text-gray-500"></i>
+            <p class="text-gray-500">
+              <% forum.tag.split(",").each do |tag| %>
+                <%= link_to tag.humanize, user_help_questions_path('q[tag_cont]': tag, 'q[forum_category_id_eq]': params_category, filter: params[:filter]), remote: true %>
+                <%= ',' unless forum.tag.split(",").last.eql?(tag) %>
+              <% end %>
+            </p>
+          </span>
+          <span class="text-gray-500"><i class="far fa-eye"></i> <%= forum.hits %></span>
+          <span class="text-gray-500"><i class="far fa-comment-dots"></i> <%= forum.forum_replies.count %></span>
+        </span>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,201 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Show Invoice</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flex flex-row-reverse justify-between mb-5">
+    <%= link_to edit_user_invoice_path(@invoice), class: "inline-block bg-pacifixBlue #{ 'invisible' if @invoice.status.eql?('paid') }  text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" do %>
+      <i class="fa fa-edit" aria-hidden="true"></i> Edit
+    <% end %>
+    <%= link_to user_invoices_path, class: 'inline-block border border-pacifixBlue rounded py-2 px-4 hover:shadow-md transition ease-linear' do %>
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="invoice-title text-center sm:text-left order-1">
+      <h1 class="text-4xl uppercase font-bold">invoice#</h1>
+      <h2 class="text-2xl "><%= @invoice.invoice_code %></h2>
+    </div>
+    <div class="invoice-date order-2">
+      <table class="w-full text-left sm:text-right text-lg">
+        <tr>
+          <td class="font-bold">Invoice Date</td>
+          <td>:</td>
+          <td class=""><%= date_formater(@invoice.invoice_date) %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Terms</td>
+          <td>:</td>
+          <td class=""><%= @invoice.payment_term&.name %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Due Date</td>
+          <td>:</td>
+          <td><%= date_formater(@invoice.due_date) %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Order Number</td>
+          <td>:</td>
+          <td><%= @invoice.order_number %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="invoice-wrap flex justify-between order-3">
+      <div class="invoice-shipping-address">
+        <h1 class="text-xl text-slate-500 font-bold uppercase">shipping address</h1>
+        <table>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.attention %></td>
+          </tr>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.street1 %></td>
+          </tr>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.street2 %></td>
+          </tr>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.city %></td>
+          </tr>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.state&.name %> <%= @invoice.customer.shipping_address&.zip_code %> </td>
+          </tr>
+          <tr>
+            <td><%= @invoice.customer.shipping_address&.country&.name %></td>
+          </tr>
+        </table>
+      </div>
+    
+    </div>
+    <div class="invoice-billing-address text-lg w-full order-4">
+      <h1 class="text-xl text-slate-500 font-bold uppercase">billing address</h1>
+      <table>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.attention %></td>
+        </tr>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.street1 %></td>
+        </tr>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.street2 %></td>
+        </tr>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.city %></td>
+        </tr>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.state&.name %> <%= @invoice.customer.billing_address&.zip_code %> </td>
+        </tr>
+        <tr>
+          <td><%= @invoice.customer.billing_address&.country&.name %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="overflow-y-auto col-span-1 sm:col-span-2 order-5">
+      <table class="w-full text-left shadow mt-7 mb-5">
+        <thead>
+          <tr>
+            <th class="border p-2">Item Details</th>
+            <th class="border p-2">Quantity</th>
+            <th class="border p-2">Rate</th>
+            <th class="border p-2">Tax</th>
+            <th class="border p-2 text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @invoice.invoice_items.each do |invoice_item| %>
+            <tr>
+              <td class="border p-2">
+                <span class="w-64 select-invoice-item">
+                  <%= simple_format(invoice_item.name) %>
+                </span>
+              </td>
+              <td class="border p-2">
+                <span class="w-24">
+                  <%= invoice_item.qty %>
+                </span>
+              </td>
+              <td class="border p-2">
+                <span class="w-24">
+                  <%= number_to_currency(invoice_item.rate, unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %>
+                </span>
+              </td>
+              <td class="border p-2">
+                <span class="w-32 p-2 rounded focus:outline-none bg-white border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-invoice-tax">
+                  <%= invoice_item.tax_rate&.name %>
+                </span>
+              </td>
+              <td class="border p-2 text-right">
+                <span class="w-24" style="text-align:right">
+                  <%= number_to_currency(invoice_item.amount, unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="invoice-notes order-7 sm:order-6">
+      <div class="form-group">
+        <span class="font-bold">Customer Notes</span>
+        <div class="main-content-title text-1xl mb-3"><%= simple_format(@invoice.customer_notes) %></div>
+      </div>
+      <div class="form-group">
+        <span class="font-bold">Terms & Conditions</span>
+        <div class="main-content-title text-1xl mb-3"><%= simple_format(@invoice.term_and_condition) %></div>
+      </div>
+    </div>
+    <div class="flex flex-row-reverse order-6 sm:order-7">
+      <div class="invoice-calc w-full sm:w-4/5">
+        <div class="grid grid-cols-2 gap-y-2">
+          <p class="text-lg">Sub Total</p>
+          <p class="text-end text-lg"><%= number_to_currency(@invoice.sub_total || '0.00', unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+          <p class="text-lg">Discount</p>
+          <p class="text-end text-lg"><span class="mr-1">-</span><%= number_to_currency(@invoice.discount_amount || '0.00', unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+          <p class="text-lg">Shipping Charges</p>
+          <p class="text-end text-lg"><%= number_to_currency(@invoice.shipping_charge || '0.00', unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+          <% taxes = [] %>
+          <% tax_list = [] %>
+          <% @invoice.invoice_items.each do |item| %>
+            <% taxes.push({item.tax_rate&.name => item&.tax_amount}) %>
+            <% tax_list = taxes.flat_map(&:to_a).group_by(&:first).map {|k,v| Hash[k, v.map(&:last).sum]} %>
+          <% end %>
+          <% tax_list.each do |tax| %>
+            <% unless tax.values.join.to_f.zero? %>
+                <p class="text-lg"><%= tax.keys.join %></p>
+                <p class="text-end text-lg"><%= number_to_currency(tax.values.join, unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+            <% end %>
+          <% end %>
+          <p class="text-lg">Adjustment</p>
+          <p class="text-end text-lg"><%= number_to_currency(@invoice.adjusment || '0.00', unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+          <p class="text-lg font-bold">Total</p>
+          <p class="text-end text-lg"><%= number_to_currency(@invoice.total || '0.00', unit: @invoice.currency&.symbol || @invoice.customer.currency.symbol) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-span-1 sm:col-span-2 order-8">
+      <span class="font-bold">Attachment</span>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 attachment-section gap-3">
+        <% @invoice.attachments.each do |attachment| %>
+          <% if attachment.attachment.present? %>
+            <% if attachment.attachment.metadata['mime_type'].include?('image') %>
+              <% icon = 'fa-file-image' %>
+            <% elsif attachment.attachment.metadata['mime_type'].include?('pdf') %>
+              <% icon = 'fa-file-pdf' %>
+            <% elsif attachment.attachment.metadata['mime_type'].include?('spreadsheet') %>
+              <% icon = 'fa-file-excel' %>
+            <% elsif attachment.attachment.metadata['mime_type'].include?('csv') %>
+              <% icon = 'fa-file-csv' %>
+            <% else %>
+              <% icon = 'fa-file' %>
+            <% end %>
+            <div class="mt-2 ">
+              <i class="fa <%= icon %> m-auto text-pacifixBlue fa-6x" aria-hidden="true"></i><br>
+              <span><%= attachment.attachment.metadata['filename'] %></span><br>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

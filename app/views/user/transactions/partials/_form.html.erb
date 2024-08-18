@@ -1,0 +1,72 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(transaction, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :transaction_type, "Type", class: 'font-bold block' %>
+    <%= f.select :transaction_type , options_for_select(@types || [], f.object.transaction_type), { include_blank: false }, {class: "w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-type", 'data-url': category_collection_user_transactions_path, disabled: f.object.persisted?  } %>
+  </div>
+  <div class="form-group">
+    <%= f.hidden_field :cash_book_id %>
+    <%= f.label :transaction_date, "Date", class: 'font-bold block' %>
+    <%= f.datetime_field :transaction_date, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Date', required: true, value: (f.object.transaction_date ||= Time.now).strftime('%Y-%m-%dT%H:%M') %>
+  </div>
+  <div class="form-group">
+    <%= f.label :amount, "Amount", class: 'font-bold block' %>
+
+    <%= f.number_field :amount, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', step: :any, placeholder: 'Amount', required: true %>
+
+    <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+  </div>
+  <div class="form-group income-category">
+    <%= f.label :cash_book_category_id, "Category", class: 'font-bold block' %>
+
+    <%= f.select :cash_book_category_id , options_for_select([], f.object.cash_book_category_id), {include_blank: 'Select Category'}, { class: "w-full p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-category" } %>
+
+    <input type="hidden" class="category-id-field" value="<%= f.object.cash_book_category_id %>">
+    <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description, "Description", class: 'font-bold block' %>
+
+    <%= f.text_field :description, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Description', required: true %>
+  </div>
+
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  
+
+  function category_collection(){
+    // console.log($('.select-type').data('url'))
+    $.ajax({
+      url: $('.select-type').data('url'),
+      type: "GET",
+      dataType:"script",
+      data: {
+        type: $('.select-type').val(),
+        category: $('.category-id-field').val()
+      },
+    })
+  }
+
+  category_collection();
+
+  $('.select-type').change(function(){
+    // // var data_form = $("#search-contact-form").serialize()
+    // $.ajax({
+    //   url: $(this).data('url'),
+    //   type: "GET",
+    //   dataType:"script",
+    //   data: {
+    //     customer_id: $(this).val()
+    //   },
+    // })
+
+    category_collection();
+
+  })
+  // alert('aabb')  
+</script>

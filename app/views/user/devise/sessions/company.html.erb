@@ -1,0 +1,33 @@
+<section class="login-company h-screen">
+  <div class="container mx-auto h-full px-4">
+    <div class="flex gap-x-10 justify-center items-center flex-wrap h-full">
+      <%= image_tag asset_image("elvin/company-login-img.svg"), class: 'w-full lg:w-2/5 text-center', alt: 'company-login-img' %>
+      <%= form_for(resource, as: resource_name, data: { turbo: false }, :html => {:class => 'company-login-form xl:w-5/12 lg:w-5/12 w-full md:mb-0'}, url: session_path(resource_name)) do |f| %>
+        <% if flash[:alert].present? %>
+          <p class="alert"><%= flash[:alert] %></p>
+        <% end %>
+        <% if flash[:notice].present? %>
+          <p class="alert"><%= flash[:notice] %></p>
+        <% end %>
+        <div class="form-group mb-4">
+          <%= f.email_field :email, autocomplete: "email", class: 'form-control block w-full px-4 py-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-pacifixBlue outline-none', id: 'email-input', placeholder: 'Email address', required: true %>
+        </div>
+        <div class="form-group mb-4">
+          <%= f.password_field :password, autocomplete: "current-password", class: 'form-control block w-full px-4 py-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-pacifixBlue outline-none', id: 'password-input', placeholder: 'Password', required: true %>
+        </div>
+        <div class="form-group form-check mb-3">
+          <input type="checkbox" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-pacifixBlue checked:border-none outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" id="input-check" />
+          <label class="form-check-label inline-block text-gray-800" for="exampleCheck2">Remember me</label>
+        </div>
+
+        <div class="text-center lg:text-left">
+          <%= f.submit "Sign In", class: 'w-full mb-3 inline-block py-3 text-white font-medium text-sm uppercase rounded shadow-md bg-pacifixBlue hover:shadow-xl transition duration-300 ease-in-out' %>
+          <!-- <p class="text-sm ">
+            Don't have an account?
+            <%= link_to 'Sign Up', new_user_registration_path, class: 'text-pacifixBlue focus:text-red-700 transition duration-200 ease-in-out' %>
+          </p> -->
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3 flex justify-between items-center">
+  <h1 class="main-content-title text-3xl font-bold">Detail Gameplay</h1>
+</div>
+<div class="main-content-card bg-white p-6 rounded w-full shadow-lg border">
+  <div class="main-content-button flex justify-between items-center flex-row-reverse mb-3">
+    <%= link_to edit_user_gameplay_path, class: 'inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+      <i class="fa fa-edit" aria-hidden="true"></i> Edit
+    <% end %>
+    <%= link_to user_gameplays_path, class: 'border border-pacifixBlue inline-block rounded hover:bg-slate-100 px-4 py-2 shadow hover:shadow-lg transition ease-linear' do %>
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+  <table class="text-left w-full mb-6">
+    <tr>
+      <th class="py-1 w-1/4 align-top">Name</th>
+      <td class="py-1 align-top"><%= @gameplay.name %></td>
+    </tr>
+    <tr>
+      <th class="py-1 align-top">Description</th>
+      <td class="py-1 align-top"><%= @gameplay.description %></td>
+    </tr>
+    <tr>
+      <th class="py-1 align-top">Basic Gameplay</th>
+      <td class="py-1 align-top"><%= label_yes_no @gameplay.is_basic %></td>
+    </tr>
+  </table>
+  <% if @gameplay.question_multiples.present? %>
+    <table class="w-full text-left mb-5">
+      <h1 class="text-xl text-slate-500 mb-2">Multiple Choice</h1>
+      <thead>
+        <tr>
+          <th class="border p-2">No.</th>
+          <th class="border p-2">Question</th>
+          <th class="border p-2">Answer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @gameplay.question_multiples.each.with_index(1) do |question_multiple, idx| %>
+          <tr>
+            <td class="border p-2 align-top"><%= idx %></td>
+            <td class="border p-2 align-top"><%= question_multiple.question %></td>
+            <td class="border p-2 align-top">
+              <ul>
+                <li><%= question_multiple.option_1 %> <%= checkmark(@gameplay, 'option_1', question_multiple.answer) %></li>
+                <li><%= question_multiple.option_2 %> <%= checkmark(@gameplay, 'option_2', question_multiple.answer) %></li>
+                <li><%= question_multiple.option_3 %> <%= checkmark(@gameplay, 'option_3', question_multiple.answer) %></li>
+                <li><%= question_multiple.option_4 %> <%= checkmark(@gameplay, 'option_4', question_multiple.answer) %></li>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  <% if @gameplay.question_essays.present? %>
+    <table class="w-full text-left">
+      <h1 class="text-xl text-slate-500 mb-2">Essay</h1>
+      <thead>
+        <tr>
+          <th class="border p-2">No.</th>
+          <th class="border p-2">Question</th>
+          <% unless @gameplay.basic_gameplay? %>
+            <th class="border p-2">Hint Answer</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @gameplay.question_essays.each.with_index(1) do |question_essay, idx| %>
+          <tr>
+            <td class="border p-2 align-top"><%= idx %></td>
+            <td class="border p-2 align-top"><%= question_essay.question %></td>
+            <% unless @gameplay.basic_gameplay? %>
+              <td class="border p-2 align-top">
+                <ul><%= question_essay.hint_answer %></ul>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

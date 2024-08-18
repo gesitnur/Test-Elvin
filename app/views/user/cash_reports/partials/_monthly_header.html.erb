@@ -1,0 +1,53 @@
+<div class="flex justify-between flex-col sm:flex-row mb-4 gap-3">
+  <div class="form-group flex items-center gap-3">
+    <p>Report With Currency : </p>
+    <select name="select-cash-repost" id="select-cash-report" class="py-3 px-2 bg-white outline-none border rounded focus:border-pacifixBlue year-filter w-32 filter-currency" data-url=<%= monthly_user_cash_reports_path %>>
+      <option value="">All</option>
+      <% @currency_list.each do |currency| %>
+        <option value="<%= currency.id %>" <%= 'selected' if currency.id.eql?(params[:currency_id].to_i) %>><%= currency.code %></option>
+      <% end %>
+    </select>
+    <%= link_to monthly_report_url, class: 'inline-block text-center bg-pacifixBlue text-white tooltip  rounded w-10 p-2 shadow hover:shadow-lg transition ease-linear sm:relative', target: '_blank' do %>
+    <span class="tooltip-text bg-gray-500 shadow text-white -bottom-10 left-0 rounded whitespace-nowrap">Download PDF</span>
+      <i class="fa fa-file-pdf"></i>
+    <% end %>
+  </div>
+  <div class="form-group flex items-center gap-3">
+    <%= link_to prev_month_report(params[:month].to_i, params[:year].to_i, params[:currency_id]) do %>
+      <i class="fa fa-chevron-left text-slate-400" aria-hidden="true"></i>
+    <% end %>
+    <select id="month" class="bg-white w-full md:w:0 border text-gray-900 rounded focus:border-pacifixBlue outline-none p-2.5 year-filter transition ease-in" data-url=<%= monthly_user_cash_reports_path %>>
+      <% @months.each do |month, key| %>
+        <option value=<%= key %> <%= 'selected' if key.eql?(params[:month].to_i) %> ><%= month %></option>
+      <% end %>
+    </select>
+    <select id="year" class="bg-white w-full md:w:0 border text-gray-900 rounded focus:border-pacifixBlue outline-none p-2.5 year-filter transition ease-in" data-url=<%= monthly_user_cash_reports_path %>>
+      <% @years.each do |year| %>
+        <option value=<%= year %> <%= 'selected' if year.eql?(params[:year].to_i) %>><%= year %></option>
+      <% end %>
+    </select>
+    <%= link_to next_month_report(params[:month].to_i, params[:year].to_i, params[:currency_id]) do %>
+      <i class="fa fa-chevron-right text-slate-400" aria-hidden="true"></i>
+    <% end %>
+  </div>
+ 
+</div>
+<div class="tabs mb-4">
+  <ul id="report-nav" class="border-b">
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('monthly', action_name) %>">
+      <%= link_to monthly_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        General
+      <% end %> 
+    </li>
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('monthly_expense', action_name) %>">
+      <%= link_to monthly_expense_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        Expense & Income
+      <% end  %>
+    </li>
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('monthly_transfer', action_name) %>">
+      <%= link_to monthly_transfer_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        Transfer List
+      <% end %>
+    </li>
+  </ul>
+</div>

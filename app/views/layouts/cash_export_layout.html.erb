@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Elvin.com</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" charset="utf-8">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%#= javascript_pack_tag "application.js", "data-turbolinks-track": "reload" %>
+    <%= stylesheet_link_tag "admin_layout", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <style type="text/css">
+      html { -webkit-print-color-adjust: exact; }
+      .column {
+        float: left;
+        width: 50%;
+        padding: 10px;
+      }
+      .column2 {
+        float: left;
+        width: 50%;
+      }
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100">
+    <div class="main-app min-h-screen relative flex flex-col">
+      <div class="main-content sm:ml-56 py-5">
+        <div class="container mx-auto px-6">
+          <div id="main-content" class="max-w-2xl mx-auto relative min-h-screen flex flex-col">
+            <%= yield %>
+            <div class="text-center empty-data-section" hidden>
+              You do not have any activity in this <%= @balance_label %>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  if($('.report-section').length == 0){
+    $('.empty-data-section').show();
+  }
+
+  $('.filter-date').change(function(){
+    window.location.replace($(this).data('url')+'?date=' + $('#select-cash-report-date').val()+'&currency_id=' + $('#select-cash-report').val());
+  })
+</script>

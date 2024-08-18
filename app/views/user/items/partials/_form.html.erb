@@ -1,0 +1,48 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(item, url: url, html: {class: 'grid grid-cols-2 gap-4'}) do |f| %>
+  <div class="form-group col-span-2">
+    <%= f.label :item_type, "Type", class: 'font-bold block' %>
+    <div class="form-group flex items-center gap-2">
+      <div class="flex items-center">
+        <%= f.radio_button :item_type, 'Goods', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', placeholder: 'Name', required: true, checked: true %>
+        <label for="">Goods</label>
+      </div>
+      <div class="flex items-center">
+        <%= f.radio_button :item_type, 'Service', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', placeholder: 'Name', required: true %>
+        <label for="">Service</label> 
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :name, class: 'font-bold block' %>
+    <%= f.text_field :name, placeholder: 'Name', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, min: 1 %>
+    <%= f.hidden_field :company_id, value: current_user.company.id %>
+  </div>
+  <div class="form-group">
+    <%= f.label :price, class: 'font-bold block' %>
+    <%= f.text_field :price, placeholder: 'Selling Price', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in price format-currency',required: true, min: 1, step: :any %>
+  </div>
+  <div class="form-group-wrap grid grid-cols-1 md:grid-cols-3 gap-4 w-full col-span-2">
+    <div class="form-group">
+      <%= f.label :unit, class: 'font-bold block' %>
+      <%= f.select :unit , options_for_select(@units || [], f.object.unit), {include_blank: 'Select Unit'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", required: true} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :currency_id, class: 'font-bold block' %>
+      <%= f.select :currency_id , options_for_select(@currencies || [], f.object.currency_id), {include_blank: 'Select Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-country select-dropdown", required: true} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tax_rate_id, 'Tax', class: 'font-bold block' %>
+      <%= f.select :tax_rate_id , options_for_select(@tax_rates || [], f.object.tax_rate_id), {include_blank: 'Select Tax'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-tax select-dropdown", required: true } %>
+    </div>
+  </div>
+  <div class="form-group col-span-2">
+    <%= f.label :description, class: 'font-bold block' %>
+    <%= f.text_area :description, placeholder: 'Description', rows: 3, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, min: 1 %>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

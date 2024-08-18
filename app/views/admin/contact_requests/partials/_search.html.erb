@@ -1,0 +1,27 @@
+<%= search_form_for @q, url: admin_contact_requests_path,
+                        html: { method: :get, class: 'gap-2 mb-2', id: 'search-contact-form' } do |f| %>
+  <div class="bg-white p-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2 rounded shadow-md mb-5">
+    <% if current_admin.domain_access.eql?("All") %>
+      <div class="form-group">
+        <%= f.label :domain_request_eq, "Domain Access", class: 'font-bold block' %>
+        <%= f.select :domain_request_eq, options_for_select(@domain_requests, params[:q] ? params[:q][:domain_request_eq] : nil), {include_blank: 'All'}, {class: "w-full p-2 rounded transition ease-in outline-none bg-white border border-slate-300 focus:border-pacifixBlue py-[6px] select-dropdown", id: 'domain-access-field', 'data-url': admin_contact_requests_path} %>
+      </div>
+    <% end %>
+    <div class="form-group">
+      <label for="name" class="font-bold block">Name</label>
+      <%= f.text_field :name_cont, class: 'w-full border border-slate-300 py-[7px] px-3 rounded transition ease-in outline-none focus:border-pacifixBlue', placeholder: 'Name' %>
+    </div>
+    <div class="form-group">
+      <label for="name" class="font-bold block">Email</label>
+      <%= f.text_field :email_cont, class: 'w-full border border-slate-300 py-[7px] px-3 rounded transition ease-in outline-none focus:border-pacifixBlue', placeholder: 'Email' %>
+    </div>
+    <div class="form-group">
+      <label for="name" class="font-bold block">Subject</label>
+      <%= f.text_field :subject_cont, class: 'w-full border border-slate-300 py-[7px] px-3 rounded transition ease-in outline-none focus:border-pacifixBlue', placeholder: 'Subject' %>
+    </div>
+    <div class="form-group">
+      <button class="bg-pacifixBlue text-white py-2 px-4 rounded mr-2">Search</button>
+      <%= link_to "Reset", admin_contact_requests_path, class: 'inline-block border border-pacifixBlue py-2 px-4 rounded hover:bg-slate-100 transition ease-in', method: :get %>
+    </div>
+  </div>
+<% end %>

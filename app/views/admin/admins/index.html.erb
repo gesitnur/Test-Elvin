@@ -1,0 +1,19 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">User Admin</h1>
+</div>
+<%= render 'admin/admins/partials/search' %>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="grid">
+    <div class="flow-root mt-4">
+      <div class="float-right">
+        <%= link_to new_admin_admin_path, class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+          <i class="fa fa-plus" aria-hidden="true"></i> New User Admin
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render partial: 'admin/admins/partials/table',
+              locals: {admins: @admins} %>
+</div>

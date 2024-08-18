@@ -1,0 +1,58 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border border-slate-300 p-2 w-12">Type</th>
+        <th class="border border-slate-300 p-2 w-36">Date</th>
+        <th class="border border-slate-300 p-2 w-24">Category</th>
+        <th class="border border-slate-300 p-2 w-64">Description</th>
+        <th class="border border-slate-300 p-2 w-24">Amount</th>
+        <th class="border border-slate-300 p-2 w-24">Balance</th>
+        <th class="border border-slate-300 p-2 w-10">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(@transactions, 7) %>
+      <% @transactions.each_with_index do |transaction, idx| %>
+        <tr class=" <%= transaction_class(transaction.transaction_type) %>">
+          <td class="border border-slate-300 p-2"><%= transaction_icon(transaction.transaction_type).html_safe %></div></td>
+          <td class="border border-slate-300 p-2 text-sm whitespace-nowrap"><%= datetime_formater(transaction.transaction_date, '%d %h %Y, %I:%M %p') %></td>
+          <td class="border border-slate-300 p-2 whitespace-nowrap"><%= transaction_label(transaction) %></td>
+          <td class="border border-slate-300 p-2 text-sm"><%= simple_format(transaction.description) %></td>
+          <td class="border border-slate-300 p-2 text">
+            <% if transaction.transaction_type.eql?('Transfer') %>
+              <% if transaction.transfer_from.eql?(params[:cash_book_id].to_i) %>
+                <%= number_to_currency(transaction.transfer_from_amount, unit: transaction.cash_book.currency.symbol) %>
+              <% else %>
+                <%= number_to_currency(transaction.transfer_to_amount, unit: transaction.cash_book.currency.symbol) %>
+              <% end %>
+            <% else %>
+              <%= number_to_currency(transaction.amount, unit: transaction.cash_book.currency.symbol) %>
+            <% end %>
+          </td>
+          <td class="border border-slate-300 p-2 text"><%= number_to_currency(transaction.balance, unit: transaction.cash_book.currency.symbol) %></td>
+          <td class="border border-slate-300 p-2 text-center">
+            <% if transaction.Transfer? %>
+              <%= link_to edit_transfer_user_transaction_path(transaction, cash_book_id: params[:cash_book_id]), remote: true, class: 'bg-orange-400 w-7 h-7 rounded inline-block btn-modal-income' do %>
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end %>
+            <% else %>
+              <%= link_to edit_user_transaction_path(transaction, cash_book_id: params[:cash_book_id]), remote: true, class: 'bg-orange-400 w-7 h-7 rounded inline-block btn-modal-income' do %>
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end if transaction.is_editable? %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info @transactions, entry_name: 'Transaction' if @transactions.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate @transactions, window: 2 %>
+  </div>
+</div>

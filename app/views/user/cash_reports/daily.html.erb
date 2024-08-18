@@ -1,0 +1,13 @@
+<div class="main-content-header mb-3 flex justify-between items-center">
+  <h1 class="main-content-title text-3xl font-bold mb-3">Daily Report</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <%= render partial: "user/cash_reports/partials/daily_header",
+              locals: { url: daily_user_cash_reports_path } %>
+  <div class="text-center empty-data-section" hidden>
+    <%= image_tag asset_image("elvin/no-data-img.svg"), class: 'w-60 m-auto' %>
+    <p>You do not have any activity in this day.</p>
+  </div>
+  <%= render partial: "user/cash_reports/partials/general_tab",
+              locals: { beginning: 'day' } %>
+</div>

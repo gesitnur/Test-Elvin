@@ -1,0 +1,31 @@
+<div class="main-content sm:ml-56 py-20">
+  <div class="container mx-auto px-3">
+    <div class="main-content-header mb-3">
+      <h1 class="main-content-title text-3xl font-bold mb-5">Contact Us Detail</h1>
+    </div>
+    <div class="main-content-card p-7 bg-white shadow-md rounded flex">
+      <table class="text-left w-full">
+        <tr>
+          <th class="py-1">Subject</td>
+          <td class="py-1"><%= @contact_request.subject %></td>
+        </tr>
+        <tr>
+          <th class="py-1 w-1/3 ">Name</th>
+          <td class="py-1"><%= @contact_request.name %></td>
+        </tr>
+        <tr>
+          <th class="py-1">Email</td>
+          <td class="py-1"><%= @contact_request.email %></td>
+        </tr>
+        <tr>
+          <th class="py-1">Domain Request</th>
+          <td class="py-1 align-top"><%= @contact_request.domain_request %></td>
+        </tr>
+        <tr>
+          <th class="py-1 align-top">Message</th>
+          <td class="py-1"><%= @contact_request.message %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

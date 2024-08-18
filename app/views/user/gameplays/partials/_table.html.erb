@@ -1,0 +1,57 @@
+<div class="gameplay-table overflow-x-auto" id="gameplay-table">
+  <table class="w-full text-left">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2">Name</th>
+        <th class="border p-2">Description</th>
+        <th class="border p-2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(gameplays, 4, 'There is no gameplay available here...') %>
+      <% gameplays.each.with_index(1) do |gameplay, key| %>
+        <tr>
+          <td class="border p-2"><%= key %></td>
+          <td class="border p-2"><%= gameplay.name %></td>
+          <td class="border p-2"><%= truncate(gameplay.description, :length => 70) %></td>
+          <td class="border p-2">
+            <%= link_to edit_user_gameplay_path(gameplay), class: 'bg-orange-400 w-7 h-7 rounded inline-block mb-1' do %>
+              <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+            <% end %>
+            <%= link_to user_gameplay_path(gameplay), class: 'bg-africanViolet w-7 h-7 rounded text-white inline-block mb-1' do %>
+              <span class="flex h-full"><i class="fa fa-eye text-xs m-auto" aria-hidden="true"></i></span>
+            <% end %>
+            <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+              <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+            </button>
+            <div class="modal fixed z-50 hidden" id="modal">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                  <div class="modal-content mb-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer text-right">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                    <%= link_to user_gameplay_path(gameplay), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                       Delete
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info gameplays, entry_name: 'Gameplay' if gameplays.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate gameplays, window: 2 %>
+  </div>
+</div>

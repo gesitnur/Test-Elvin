@@ -1,0 +1,13 @@
+import "./plugins/copy-to-clipboard/index";
+import "./custom/admin_layout/custom.js";
+import "./custom/nineod/custom.js";
+import "./custom/nineod-freight/custom.js";
+import "./custom/invoice";
+import "./custom/work_leave_request";
+import "./custom/customer";
+import "./custom/currency";
+import "./custom/transaction";
+import "./custom/payment";
+import "./custom/employee_form";
+import "./plugins/progressbar/progressbar.min";
+import "./plugins/daterangepicker/daterangepicker";

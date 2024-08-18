@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="column2 text-2xl"><%= params[:title] %>: Transfer</div>
+  <div class="column2 text-2xl" style="text-align: right;"><%= @date_header %></div>
+</div>
+<div class="row text-slate-500" style="margin-bottom: 30px;">
+  <div class="column2 text-sm <%= 'invisible' if params[:currency_id].present? %>">All Currencies</div>
+  <div class="column2 text-xs" style="text-align: right;">Printed on <%= Date.today.strftime('%d %b %Y, %Y') %></div>
+</div>
+<div class="relative">
+  <% @transfers.each do |key, transfers| %>
+  <% next if transfers.blank? %>
+    <div class="report-section mb-5">
+      <span class="form-custom-header p-3 border-b text-2xl bg-blue-100 text-blue-800 rounded-t-md border-blue-500 flex justify-between font-bold mb-3"><%= key %> - <%= CashBook.find_by_name(key).currency.code %></span>
+      <table class="w-full">
+        <thead>
+          <% plus = 0 %>
+          <% minus = 0 %>
+          <% transfers.each do |transfer| %>
+            <tr class="border-y">
+              <td class="p-2 " style="width:10%"><%= date_formater transfer.transaction_date %><br><%= time_formater transfer.transaction_date %></td>
+              <td class="p-2">
+              <% if transfer.transfer_to_cash_book_name.eql?(key) %>
+                <%= "Transfer From #{transfer.transfer_from_cash_book_name}" %>
+              <% else %>
+                <%= "Transfer To #{transfer.transfer_to_cash_book_name}" %>
+              <% end %></td>
+              <td class="p-2 w-8"></td>
+              <td class="p-2 w-8">
+                <% if transfer.transfer_to_cash_book_name.eql?(key) %>
+                  <% amount = transfer.transfer_to_amount %>
+                  <%= '(+)' %>
+                  <% plus += amount %>
+                <% else %>
+                  <% amount = transfer.transfer_from_amount %>
+                  <%= '(-)' %>
+                  <% minus += amount %>
+                <% end %>
+              </td>
+              <td class="p-2 w-8"><%= CashBook.find_by_name(key).currency.symbol %></td>
+              <td class="p-2 w-32 text-right"><%= number_to_currency(amount, :unit => "") %></td>
+            </tr>
+          <% end %>
+          <tr class="border-y">
+            <td class="w-48 p-2 "></td>
+            <td class="p-2"></td>
+            <td class="p-2 w-48 text-right">Transfer to <%= key %></td>
+            <td class="p-2 w-8">(+)</td>
+            <td class="p-2 w-8 border-t-2 border-black"><%= CashBook.find_by_name(key).currency.symbol %></td>
+            <td class="p-2 w-32 border-t-2 border-black text-right"><%= number_to_currency(plus, :unit => "") %></td>
+          </tr>
+          <tr class="border-y">
+            <td class="w-48 p-2 "></td>
+            <td class="p-2"></td>
+            <td class="p-2 w-48 text-right">Transfer from <%= key %></td>
+            <td class="p-2 w-8">(-)</td>
+            <td class="p-2 w-8"><%= CashBook.find_by_name(key).currency.symbol %></td>
+            <td class="p-2 w-32 text-right"><%= number_to_currency(minus, :unit => "") %></td>
+          </tr>
+          <tr class="bg-slate-100 border-y-2 font-bold border-slate-300">
+            <td class="p-2">&nbsp;</td>
+            <td class="p-2">&nbsp;</td>
+            <td class="p-2 w-24 text-right">TOTAL</td>
+            <td class="p-2 w-8"></td>
+            <td class="p-2 w-8"><%= CashBook.find_by_name(key).currency.symbol %></td>
+            <td class="p-2 w-32 text-right"><%= number_to_currency(plus - minus, :unit => "") %></td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  <% end %>
+</div>

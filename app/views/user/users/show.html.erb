@@ -1,0 +1,255 @@
+<div class="show-link-modal"></div>
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Detail Worker</h1>
+</div>
+<div class="detail-modal"></div>
+<div class="main-content-card p-7 bg-white shadow-md rounded border">
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+  <div class="tabs">
+    <ul id="tabs-nav" class="border-b overflow-auto">
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab1">Worker</a>
+      </li>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear ">
+        <a href="#tab2">Pending Requests</a>
+      </li>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear ">
+        <a href="#tab3">Day Off</a>
+      </li>
+    </ul>
+  </div>
+  <div id="tabs-content" class="py-3">
+    <div id="tab1" class="tab-content emmployee-tab">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="group">
+          <label for="date-of-birth" class="font-semibold">Name</label>
+          <p><%= @user.name %></p>
+        </div>
+        <div class="group">
+          <label for="email" class="font-semibold">Email</label>
+          <p><%= @user.email %></p>
+        </div>
+        <div class="group">
+          <label for="major" class="font-semibold">Position</label>
+          <p><%= @user.position.name %></p>
+        </div>
+      </div>
+    </div>
+    <div id="tab2" class="tab-content requests-tab mb-5">
+      <div class="pending-request mb-8">
+        <% if @user.work_leave_requests.pending_data.blank? %>
+          No Data
+        <% end %>
+        <div class="pending-request-list">
+          <% @user.work_leave_requests.pending_data.each.with_index(1) do |work_leave_request, idx| %>
+            <div class="modal fixed z-50 hidden" id="modalApprove<%= idx %>">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px]">
+                  <div class="modal-content py-6 px-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer border-t text-right p-4">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalApprove" data-modal="modalApprove<%= idx %>">Close</button>
+                    <%= link_to approve_leave_request_user_user_path(work_leave_request.user, work_leave_request_id: work_leave_request), method: :patch, class: 'bg-green-500 hover:bg-green-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                       Approve
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fixed z-50 hidden" id="modalEdit<%= idx %>">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px]">
+                  <div class="modal-content py-6 px-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer border-t text-right p-4">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalEdit" data-modal="modalEdit<%= idx %>">Close</button>
+                    <%= link_to allow_edit_leave_request_user_user_path(work_leave_request.user, work_leave_request_id: work_leave_request), method: :patch, class: 'bg-orange-500 hover:bg-orange-600 px-4 py-2 text-white mr-2 rounded hideModalEdit inline-block' do %>
+                       Allow Edit
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fixed z-50 hidden" id="modalReject<%= idx %>">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+                  <%= form_tag reject_leave_request_user_user_path(work_leave_request.user), method: :patch do %>
+                    <div class="modal-content p-4 gap-4">
+                      <%= label_tag :reject_reason, 'Reject Reason', class: 'font-bold block' %>
+                      <%= text_field_tag :reject_reason, '', class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: "Reject Reason", required: true, autocomplete: :off %>
+                      <%= hidden_field_tag :work_leave_request_id, work_leave_request.id %>
+                    </div>
+                    <div class="modal-footer p-4 border-t text-right">
+                      <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalReject" data-modal="modalReject<%= idx %>">Close</button>
+                      <%= button_tag(type: "submit", class: "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded") do %>
+                         Reject
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <div class="pending-request-item flex gap-2 items-center justify-between border-b pb-2">
+              <div class="pending-request-text">
+                <p class="mb-1 mt-1"><%= calculate_day_off(work_leave_request) %> Day Off (<%= work_leave_request.leave_period %>) <span class="text-red-500 font-bold"><%= work_leave_request.status.humanize %></span></p>
+                <div class="mb-1">
+                  <p class="text-sm text-slate-500"><i class="fas fa-calendar-alt"></i> <%= date_formater(work_leave_request.start_date, '%a %d %b') %>
+                  <% if work_leave_request.end_date.present? %>
+                    <i class="fas fa-calendar-alt"></i> <%= date_formater(work_leave_request.end_date, '%a %d %b') %></p>
+                  <% else %>
+                    <p class="text-pacifixBlue text-sm font-bold"><%= date_formater(work_leave_request.start_date, '%a %d %b') %></p>
+                  <% end %>
+                </div>
+                <p class="text-pacifixBlue text-sm mb-1 font-bold"><%= date_formater(work_leave_request.created_at, '%A, %d %B , %I:%M%p') %></p>
+                <span class="py-0.5 px-5 inline-block mb-1 text-center text-sm text-white rounded-full font-bold uppercase" style="background-color: #<%= work_leave_request.leave_type.colour_code %>;"><%= work_leave_request.leave_type.name %></span>
+                <%#= link_to 'View Details', user_work_leave_request_path(work_leave_request), class: 'hover:underline text-sm', remote: true %>
+              </div>
+              <div class="pending-request-button text-right flex gap-1.5">
+                <div class="group relative">
+                  <%= link_to  user_work_leave_request_path(work_leave_request), class: 'w-8 h-8 bg-africanViolet text-white rounded flex', remote: true do %>
+                    <i class="fa fa-eye text-sm m-auto" aria-hidden="true"></i>
+                    <span class="pointer-events-none absolute top-[46px] -right-4 bg-gray-500 text-white py-1 px-2 rounded opacity-0 transition-opacity group-hover:opacity-100" >
+                      Detail
+                    </span>
+                  <% end %>
+                </div>
+                <div class="group relative">
+                  <button class="w-8 h-8 bg-green-500 text-white rounded flex showModalApprove showModal" data-modal="modalApprove<%= idx %>"><i class="fa fa-check text-sm m-auto" aria-hidden="true"></i></button>
+                  <span class="pointer-events-none absolute top-[46px] -right-4 bg-gray-500 text-white py-1 px-2 rounded opacity-0 transition-opacity group-hover:opacity-100" >
+                    Approve
+                  </span>
+                </div>
+                <div class="group relative">
+                  <button class="w-8 h-8 bg-red-500 text-white rounded flex showModalReject showModal" data-modal="modalReject<%= idx %>"><i class="fa fa-ban text-sm m-auto" aria-hidden="true"></i></button>
+                  <span class="pointer-events-none absolute top-[46px] -right-3 bg-gray-500 text-white py-1 px-2 rounded w-max opacity-0 transition-opacity group-hover:opacity-100" >
+                     Reject
+                  </span>
+                </div>
+                <div class="group relative">
+                  <button class="w-8 h-8 bg-orange-400 text-white rounded flex showModalEdit showModal" data-modal="modalEdit<%= idx %>"><i class="fas fa-user-edit text-sm m-auto" aria-hidden="true"></i></button>
+                  <span class="pointer-events-none absolute top-[46px] -right-3 bg-gray-500 text-white py-1 px-2 rounded w-max opacity-0 transition-opacity group-hover:opacity-100" >
+                     Allow Edit
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div id="tab3" class="tab-content day-off-tab mb-5">
+      <div class="pending-request">
+        <div class="pending-request-link text-left">
+          <%= link_to generate_work_leave_link_user_user_path(@user), class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear', remote: true do %>
+            <i class="fas fa-link"></i> Generate Link
+          <% end %>
+        </div>
+      </div>
+      <div class="history py-2">
+        <% if @user.work_leave_requests.day_off_data.blank? %>
+          No Data
+        <% end %>
+        <div class="history-list">
+          <% @user.work_leave_requests.day_off_data.each.with_index(1) do |work_leave_request, idx| %>
+            <div class="modal fixed z-50 hidden" id="modalDelete<%= idx %>">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px]">
+                  <div class="modal-content py-6 px-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer border-t text-right p-4">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalDelete" data-modal="modalDelete<%= idx %>">Close</button>
+                    <%= link_to destroy_leave_request_user_user_path(work_leave_request.user, work_leave_request_id: work_leave_request), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalDelete inline-block' do %>
+                       Delete
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="history-item flex gap-2 items-center justify-between border-b pb-2">
+              <div class="history-text">
+                <p class="mb-1"><%= calculate_day_off(work_leave_request) %> Day Off (<%= work_leave_request.leave_period %>) <span class="text-pacifixBlue font-bold"><%= work_leave_request.status.humanize %></span></p>
+                <div class="mb-1">
+                  <p class="text-sm text-slate-500"><i class="fas fa-calendar-alt"></i> <%= date_formater(work_leave_request.start_date, '%a %d %b') %>
+                  <% if work_leave_request.end_date.present? %>
+                    <i class="fas fa-calendar-alt"></i> <%= date_formater(work_leave_request.end_date, '%a %d %b') %></p>
+                  <% else %>
+                    <p class="text-pacifixBlue text-sm font-bold"><%= date_formater(work_leave_request.start_date, '%a %d %b') %></p>
+                  <% end %>
+                </div>
+                <span class="py-0.5 px-5 inline-block text-center text-sm text-white rounded-full font-bold uppercase" style="background-color: #<%= work_leave_request.leave_type.colour_code %>;"><%= work_leave_request.leave_type.name %></span>
+                <%#= link_to 'View Details', user_work_leave_request_path(work_leave_request), class: 'hover:underline text-sm', remote: true %>
+              </div>
+              <div class="history-button text-right flex gap-1.5">
+                <div class="group relative">
+                  <%= link_to user_work_leave_request_path(work_leave_request), class: 'w-8 h-8 bg-africanViolet text-white rounded flex', remote: true do %>
+                    <i class="fa fa-eye text-sm m-auto" aria-hidden="true"></i>
+                    <span class="pointer-events-none absolute top-[46px] -right-4 bg-gray-500 text-white py-1 px-2 rounded opacity-0 transition-opacity group-hover:opacity-100" >
+                      Detail
+                    </span>
+                  <% end %>
+                </div>
+                <div class="group relative">
+                  <button class="w-8 h-8 bg-red-500 text-white rounded flex showModalDelete showModal" data-modal="modalDelete<%= idx %>"><i class="fa fa-trash text-sm m-auto" aria-hidden="true"></i></button>
+                  <span class="pointer-events-none absolute top-[46px] -right-3 bg-gray-500 text-white py-1 px-2 rounded w-max opacity-0 transition-opacity group-hover:opacity-100" >
+                     Delete
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div id="tab4" class="tab-content emmployee-tab">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        Tab 4
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= link_to edit_user_user_path, class: 'bg-pacifixBlue py-3 px-4 text-white rounded' do %>
+      <i class="fa fa-edit" aria-hidden="true"></i> Edit
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+  $('.showModalApprove').click(function(){
+    $('#'+$(this).data('modal')).fadeIn(200)
+  })
+
+  $('.hideModalApprove').click(function(){
+    $('#'+$(this).data('modal')).fadeOut(100)
+  })
+
+  $('.showModalReject').click(function(){
+    $('#'+$(this).data('modal')).fadeIn(200)
+  })
+
+  $('.hideModalReject').click(function(){
+    $('#'+$(this).data('modal')).fadeOut(100)
+  })
+
+  $('.showModalEdit').click(function(){
+    $('#'+$(this).data('modal')).fadeIn(200)
+  })
+
+  $('.hideModalEdit').click(function(){
+    $('#'+$(this).data('modal')).fadeOut(100)
+  })
+
+  $('.showModalDelete').click(function(){
+    $('#'+$(this).data('modal')).fadeIn(200)
+  })
+
+  $('.hideModalDelete').click(function(){
+    $('#'+$(this).data('modal')).fadeOut(100)
+  })
+</script>

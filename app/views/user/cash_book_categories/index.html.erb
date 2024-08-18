@@ -1,0 +1,17 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <div class="notification-section"></div>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Cash Book Categories</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div id="category-table">          
+    <%= render partial: 'user/cash_book_categories/partials/table',
+                locals: {
+                  expenses: @expenses,
+                  incomes: @incomes,
+                  category: @category,
+                } %>
+
+  </div>
+</div>

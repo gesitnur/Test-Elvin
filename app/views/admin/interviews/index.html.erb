@@ -1,0 +1,17 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3">
+  <h1 class="interview-header-title text-3xl mb-5 font-bold">Calon Pegawai</h1>
+</div>
+
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_admin_interview_path, class: 'bg-pacifixBlue mb-3 inline-block text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> Tambah Calon Pegawai
+      <% end %>
+    </div>
+  </div>
+  <%= render partial: 'admin/interviews/partials/table',
+                locals: { interviews: @interviews } %>
+</div>

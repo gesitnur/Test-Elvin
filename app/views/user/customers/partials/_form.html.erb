@@ -1,0 +1,198 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(customer, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :customer_type, "Customer Type", class: 'font-bold block' %>
+    <div class="form-group flex items-center gap-7">
+      <div class="flex items-center">
+        <%= f.radio_button :customer_type, 'business', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', placeholder: 'Name', required: true, checked: true %>
+        <label for="">Business</label>
+      </div>
+      <div class="flex items-center">
+        <%= f.radio_button :customer_type, 'individual', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', placeholder: 'Name', required: true %>
+        <label for="">Individual</label>
+      </div>
+    </div>
+  </div>
+  <%= f.hidden_field :company_id, value: current_user.company.id %>
+  <div class="form-group-wrap">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="form-group">
+        <%= f.label :salutation, "Salutation", class: 'font-bold block' %>
+        <%= f.select :salutation , options_for_select(@salutations || [], f.object.salutation), {include_blank: 'Select Salutation'}, {id: "salutation", class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-dropdown", style: "width: 100%"} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :first_name, "First Name", class: 'font-bold block' %>
+        <%= f.text_field :first_name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'First Name', id: 'first-name', required: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label :last_name, "Last Name", class: 'font-bold block' %>
+        <%= f.text_field :last_name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Last Name', id: 'last-name', required: true %>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn-join hidden">join</button>
+  <div class="form-group">
+    <%= f.label :company_name, "Company Name", class: 'font-bold block' %>
+
+    <%= f.text_field :company_name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: "company-name", placeholder: 'Company Name', required: true %>
+  </div>
+  <div class="form-group">
+    <%= f.label :display_name, "Display Name", class: 'font-bold block' %>
+    <%= f.text_field :display_name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'display-name', placeholder: 'Display Name', required: true %>
+  </div>
+  <div class="form-group-wrap">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+      <div class="form-group">
+        <%= f.label :email, "Email", class: 'font-bold block' %>
+        <%= f.email_field :email, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Email', required: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label :phone, "Phone", class: 'font-bold block' %>
+        <%= f.text_field :phone, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Phone', required: true %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :website, "Website", class: 'font-bold block' %>
+    <%= f.text_field :website, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Website' %>
+  </div>
+  <div class="tabs">
+    <ul id="tabs-nav" class="border-b overflow-auto">
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab1">Other Details</a>
+      </li>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab2">Address</a>
+      </li>
+      <li class="float-left py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab3">Remark</a>
+      </li>
+    </ul>
+  </div>
+  <div id="tabs-content" class="py-3">
+    <div id="tab1" class="tab-content">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+        <div class="form-group">
+          <%= f.label :currency_id, "Currency", class: 'font-bold block' %>
+          <%= f.select :currency_id , options_for_select(@currencies, f.object.currency_id), {include_blank: 'Select Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", style: "width: 100%"} %>
+        </div>
+        <div class="form-group">
+          <%= f.label :payment_term_id, "Payment Terms", class: 'font-bold block' %>
+          <%= f.select :payment_term_id , options_for_select(@payment_terms, f.object.payment_term_id), {include_blank: 'Select Payment Terms'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", style: "width: 100%"} %>
+        </div>
+        <div class="form-group">
+          <%= f.label :enable_portal, "Enable Portal?", class: 'font-bold block' %>
+          <div class="form-check mb-3 mt-2">
+            <%= f.check_box :enable_portal, class: 'form-check-input accent-pacifixBlue appearanceinline-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer' %>
+            <label class="form-check-label -block text-gray-800" for="enable_portal">Allow portal access for this customer</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :portal_language, "Portal Language", class: 'font-bold block' %>
+          <%= f.select :portal_language , options_for_select(@countries, f.object.portal_language || 'Malaysia'), {include_blank: 'Select Portal Language'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", style: "width: 100%"} %>
+        </div>
+        <div class="form-group">
+          <%= f.label :facebook, "Facebook", class: 'font-bold block' %>
+          <%= f.text_field :facebook, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Facebook', required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :twitter, "Twitter", class: 'font-bold block' %>
+          <%= f.text_field :twitter, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Twitter', required: true %>
+        </div>
+      </div>
+    </div>
+    <%= f.fields_for :billing_address do |billing_address_builder| %>
+    <%= f.fields_for :shipping_address do |shipping_address_builder| %>
+    <div id="tab2" class="tab-content">
+      <button type="button" id="btn-copy-address" class="mb-5 p-2 bg-africanViolet text-white rounded">Copy billing address</button>
+      <div class="form-wrap flex gap-x-8">
+        <div class="form-bill w-1/2 grid grid-cols-1 gap-y-3">
+          <div class="form-group">
+            <%= f.label :display_name, "BILLING ADDRESS", class: 'font-bold text-lg text-gray-400 block mb-2' %>
+            <%= label_tag 'customer[bill_address][attention]', 'Attention', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :attention, placeholder: 'Attention', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-attention', required: true %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][country]', 'Country', class: 'font-bold block' %>
+            <%= billing_address_builder.select :country_id , options_for_select(@countries, billing_address_builder.object.country_id), {include_blank: 'Select Country'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%", id: 'billing-country'} %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][street1]', 'Address', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :street1, placeholder: 'Street 1', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-street1', required: true %>
+            <%= billing_address_builder.text_field :street2, placeholder: 'Street 2', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in mt-4', id: 'billing-street2', required: true %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][state]', 'State', class: 'font-bold block' %>
+            <%= billing_address_builder.select :state_id , options_for_select(@states, billing_address_builder.object.state_id), {include_blank: 'Select State'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%", id: 'billing-state'} %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][city]', 'City', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :city, placeholder: 'City', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-city', required: true %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][zip_code]', 'Zip Code', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :zip_code, placeholder: 'Zip Code', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-zip-code', required: true %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][phone]', 'Phone', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :phone, placeholder: 'Phone', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-phone', required: true %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[bill_address][fax]', 'Fax', class: 'font-bold block' %>
+            <%= billing_address_builder.text_field :fax, placeholder: 'Fax', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'billing-fax', required: true %>
+          </div>
+        </div>
+        <div class="form-ship w-1/2 grid grid-cols-1 gap-y-3">
+          <div class="form-group">
+            <%= f.label :display_name, "SHIPPING ADDRESS", class: 'font-bold text-lg text-gray-400 block mb-2' %>
+            <%= label_tag 'customer[ship_address][attention]', 'Attention', class: 'font-bold block' %>
+            <%= shipping_address_builder.text_field :attention, placeholder: 'Attention', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-attention' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][country]', 'Country', class: 'font-bold block' %>
+            <%= shipping_address_builder.select :country_id , options_for_select(@countries, billing_address_builder.object.country_id), {include_blank: 'Select Country'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%", id: 'shipping-country'} %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][street1]', 'Address', class: 'font-bold block' %>
+            <%= shipping_address_builder.text_field :street1, placeholder: 'Street 1', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-street1' %>
+            <%= shipping_address_builder.text_field :street2, placeholder: 'Street 2', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in mt-4', id: 'shipping-street2' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][state]', 'State', class: 'font-bold block' %>
+            <%= shipping_address_builder.select :state_id , options_for_select(@states, billing_address_builder.object.state_id), {include_blank: 'Select State'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%", id: 'shipping-state'} %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][city]', 'City', class: 'font-bold block' %>
+            <%= shipping_address_builder.text_field :city, placeholder: 'City', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-city' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][zip_code]', 'Zip Code', class: 'font-bold block' %>
+            <%= shipping_address_builder.text_field :zip_code, placeholder: 'Zip Code', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-zip-code' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'customer[ship_address][phone]', 'Phone', class: 'font-bold block' %>
+            <%= shipping_address_builder.text_field :phone, placeholder: 'Phone', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-phone' %>
+          </div>
+          <div class="form-group">
+          <%= label_tag 'customer[ship_address][fax]', 'Fax', class: 'font-bold block' %>
+          <%= shipping_address_builder.text_field :fax, placeholder: 'Fax', class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'shipping-fax' %>
+        </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+    <% end %>
+    <div id="tab3" class="tab-content">
+      <div class="form-group remark-section">
+        <%= f.label :remark, "Remark", class: 'font-bold block' %>
+        <%= f.text_area :remark, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', rows: 4, placeholder: 'Remark' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

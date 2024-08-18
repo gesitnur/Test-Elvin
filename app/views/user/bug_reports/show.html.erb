@@ -1,0 +1,42 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+
+<div class="main-content-header flex justify-between">
+  <h1 class="text-3xl font-bold mb-3 main-content-title">Detail Bug Report</h1>
+</div>
+<div class="grid grid-cols-1 gap-6">
+  <div class="main-content-card bg-white p-6 rounded w-full shadow-lg">
+    <div class="main-content-button flex justify-between items-center flex-row-reverse mb-3">
+      <div class="flex flex-col sm:flex-row gap-2 text-right">
+        <div class="button-link">
+          <%= link_to edit_user_bug_report_path(@bug_report), class: 'inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+            <i class="fa fa-edit" aria-hidden="true"></i> Edit
+          <% end %>
+        </div>
+      </div>
+      <%= link_to user_bug_reports_path, class: 'border border-pacifixBlue inline-block mb-3 rounded hover:bg-slate-100 px-4 py-2 shadow hover:shadow-lg transition ease-linear' do %>
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      <% end %>
+    </div>
+    <div class="grid gap-4">
+      <div class="group">
+        <label for="email" class="font-semibold">Title</label>
+        <p><%= @bug_report.title %></p>
+      </div>
+      <div class="group">
+        <label for="email" class="font-semibold">Submitted Date</label>
+        <p><%= date_formater(@bug_report.created_at, '%d %h %Y, %I:%M %p') %></p>
+      </div>
+      <div class="group">
+        <label for="date-of-birth" class="font-semibold">Url</label>
+        <p><%= @bug_report.url %></p>
+      </div>
+      <div class="group">
+        <label for="major" class="font-semibold">Description</label>
+        <div class=" border-solid border border-gray-300 p-2">
+          <p class=""><%= @bug_report.description.html_safe %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

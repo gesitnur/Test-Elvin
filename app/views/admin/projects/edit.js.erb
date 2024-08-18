@@ -1,0 +1,8 @@
+$('.project-modal').html(`<%= render partial: 'admin/projects/partials/project_modal',
+                            locals: { project: @project, url: admin_project_path(@project) } %>`)
+
+$('#leaveTypeLink').fadeIn(200)
+
+$('.hideModal').click(function(){
+  $(this).parents('.modal').fadeOut(100)
+})

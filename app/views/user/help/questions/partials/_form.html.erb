@@ -1,0 +1,19 @@
+<%= form_for(forum, url: url, html: {class: 'form-help-center grid grid-cols-12 gap-3', id: 'forum_form'}) do |f| %>
+  <div class="form-group col-span-12">
+    <label class="font-bold block">Category</label>
+    <%= f.select :forum_category_id, options_for_select(@forum_categories, f.object.forum_category_id), {include_blank: 'Select Category'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-dropdown", required: true } %>
+  </div>
+  <div class="form-group col-span-12">
+    <%= f.label :title, "Title", class: 'font-bold block' %>
+    <%= f.text_field :title, class: 'focus:border-pacifixBlue border py-[7px] px-2 w-full rounded outline-none transition ease-in', placeholder: 'Title', required: true %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+  </div>
+  <div class="form-group col-span-12">
+    <label class="font-bold block">Tags</label>
+    <%= f.text_field :tag, class: 'w-full rounded transition ease-in tagify-field', placeholder: 'Tag' %>
+  </div>
+  <div class="form-group col-span-12">
+    <%= f.label :description, "Description", class: 'font-bold block' %>
+    <%= f.text_area :description, class: 'text-editor p-2 w-full h-20 border focus:border-pacifixBlue focus:outline-none rounded transition ease-in', placeholder: 'Description', required: true %>
+  </div>
+<% end %>

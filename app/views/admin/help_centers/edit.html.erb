@@ -1,0 +1,11 @@
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Edit Thread</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded">
+  <%= render partial: 'admin/help_centers/partials/form',
+              locals: {
+                forum: @forum,
+                url: admin_help_center_path(@forum)
+              } %>
+</div>

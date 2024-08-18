@@ -1,0 +1,379 @@
+/*@font-face {
+  font-family: "Raleway";
+  src: url(./fonts/Raleway-Regular.ttf);
+  font-style: normal;
+  font-weight: normal;
+}*/
+
+body {
+  font-family: "Raleway", sans-serif;
+  overflow-x: hidden;
+}
+
+.content-header {
+  height: 450px;
+  background-image: url("nineod-freight/about-header.png");
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.content-layer {
+  background-color: rgba(54, 54, 54, 0.52);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 450px;
+}
+
+.content-panel {
+  background-color: #fafafa;
+}
+
+.content-panel h2 {
+  letter-spacing: 4px;
+}
+
+/* Excelence */
+.excellence-content-active {
+  background-color: rgb(237, 237, 237);
+}
+
+.excellence-title {
+  letter-spacing: 3px;
+}
+
+.excellence-icons {
+  width: 20%;
+}
+
+.excellence-icons-big {
+  width: 31%;
+}
+
+/* Contact */
+.contact-content-text {
+  color: #1487af;
+}
+
+/* Homepage*/
+.homepage-banner {
+  background-image: url("nineod-freight/home.jpg");
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 800px;
+}
+
+.homepage-desc {
+  width: 60%;
+}
+
+.homepage-title {
+  letter-spacing: 6px;
+}
+
+/* about */
+.icon-truck {
+  width: 36%;
+}
+
+/* Navbar */
+.menu-toggle {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.change.bar1 {
+  -webkit-transform: rotate(49deg) translate(1px, 7px);
+  transform: rotate(49deg) translate(1px, 7px);
+}
+
+.change.bar2 {
+  -webkit-transform: rotate(-50deg) translate(-6px, -6px);
+  transform: rotate(-50deg) translate(-6px, -6px);
+}
+
+.change.bar3 {
+  -webkit-transform: rotate(49deg) translate(-9px, 5px);
+  transform: rotate(49deg) translate(-9px, 5px);
+}
+
+.bar1,
+.bar2,
+.bar3 {
+  width: 35px;
+  height: 4px;
+  background-color: #1487af;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.bar1,
+.bar3 {
+  width: 20px;
+}
+
+.menu-wrapper {
+  flex-grow: 0;
+}
+
+.img-logo,
+.img-logo-black {
+  width: 90px;
+}
+
+.btn-hero {
+  border: none;
+  outline: none;
+  letter-spacing: 1.5px;
+  font-size: 18px;
+  color: #1487af;
+  transition: 0.3s ease;
+}
+
+.btn-hero:hover {
+  color: rgb(8, 8, 8);
+}
+
+.navbar-active {
+  color: #1487af;
+}
+
+.nav-item a:hover {
+  color: #1487af;
+  transition: 0.3s ease;
+}
+
+.navigation {
+  transition: 0.4s ease-in-out;
+}
+
+/* Feature*/
+.feature-image img {
+    height: 760px;
+}
+
+.feature-text-item {
+  width: 68%;
+}
+
+.feature-text-title {
+  letter-spacing: 5px;
+}
+
+.feature-icon {
+  width: 20%;
+}
+
+/* Contact Us*/
+.btn-contact-us {
+  border: none;
+  outline: none;
+  letter-spacing: 1.5px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #1487af;
+  transition: 0.3s ease;
+}
+
+.btn-contact-us:hover {
+  background-color: #fff;
+  color: black;
+}
+
+.img-footer {
+  width: 4%;
+}
+
+/* Service */
+.service-banner {
+  height: 450px;
+  background-image: url("nineod-freight/service-header.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.service-content-box {
+  padding: 32px 0px;
+  transition: 0.4s ease;
+}
+
+.service-content-box h5 {
+  letter-spacing: 4px;
+}
+
+.service-content-box:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transform: scale(1.02);
+}
+
+/* Conctact */
+.contact-us {
+  height: 500px;
+  width: 100%;
+  background-image: url("nineod-freight/promotion.jpg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.btn-contact {
+  border: none;
+  outline: none;
+  letter-spacing: 1.5px;
+  font-size: 18px;
+  color: #fff;
+  width: 35%;
+  background-color: #1487af;
+  transition: 0.3s ease;
+}
+
+.btn-contact:hover {
+  background-color: #4bb993;
+}
+
+.contact-input {
+  border: none;
+  outline: none;
+  box-shadow: 0px 3px 10px 1px rgba(0, 0, 0, 0.15);
+}
+
+.contact-input::placeholder {
+  font-weight: bold;
+  color: #969696;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.wa-image {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  bottom: 45px;
+  left: unset;
+  right: 45px;
+  font-size: 30px;
+  z-index: 100;
+}
+
+@media screen and (min-width: 992px) {
+  .menu-toggle {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wa-image {
+    right: 30px;
+    bottom: 30px;
+  }
+
+  .menu-item {
+    text-align: center;
+  }
+
+  .item-nav {
+    margin: 0 !important;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .img-logo,
+  .img-logo-black {
+    width: 70px;
+  }
+
+  .menu-item {
+    margin-top: 30px;
+  }
+
+  .btn-hero {
+    padding: 8px 15px !important;
+    font-size: 13px;
+  }
+
+  .homepage-banner {
+    height: 650px;
+  }
+
+  .homepage-desc {
+    width: 100%;
+  }
+
+  .excellence-content {
+    padding: 12px 14px !important;
+    height: 100%;
+  }
+
+  .excellence-content h5 {
+    font-size: 18px;
+  }
+
+  .media-social-icon {
+    justify-content: center !important;
+  }
+
+  .maps-image {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .footer-title {
+    text-align: center;
+  }
+
+  /* Feature*/
+
+  .feature-item {
+    flex-direction: column;
+  }
+
+  .feature-item-reverse {
+    flex-direction: column-reverse;
+  }
+
+  .feature-image {
+    width: 100% !important;
+  }
+
+  .feature-image img {
+    height: 100%;
+  }
+
+  .feature-text {
+    padding: 15px 0;
+    width: 100% !important;
+  }
+
+  .feature-text-item {
+    width: 100%;
+  }
+
+  /* Contact */
+  .contact-desc-wrap, .contact-form-wrap {
+    width: 100% !important;
+  }
+
+  .contact-input {
+    padding: 12px 14px !important;
+  }
+
+  .contact-input::placeholder {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  .btn-contact-us {
+    letter-spacing: 0px;
+    font-size: 12px;
+  }
+}

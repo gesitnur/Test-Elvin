@@ -1,0 +1,147 @@
+<div class="row">
+  <div class="column2 text-2xl"><%= params[:title] %>: General</div>
+  <div class="column2 text-2xl" style="text-align: right;"><%= @date_header %></div>
+</div>
+<div class="row text-slate-500" style="margin-bottom: 30px;">
+  <div class="column2 text-sm <%= 'invisible' if params[:currency_id].present? %>">All Currencies</div>
+  <div class="column2 text-xs" style="text-align: right;">Printed on <%= Date.today.strftime('%d %b %Y, %Y') %></div>
+</div>
+<% @report_data.each do |currencies| %>
+  <% currencies.each do |key, value| %>
+  <% next if value[:Income].zero? && value[:Expense].zero? %>
+    <div class="">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="form-custom-header p-3 border-slate-400 rounded-t-md report-section border-b text-xl mb-5 bg-slate-100">
+      <b>Currency: <%= Currency.find_by_code(key).code %></b>
+    </div>
+    <div class="main-card-wrap grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+      <div class="row">
+        <div class="column">
+          <div class="main-card-item">
+            <div class="overflow-x-scroll lg:overflow-visible" id="invoice-table">
+              <table class="w-full text-left">
+                <tbody>
+                  <tr>
+                    <td class="border-b border-t p-2">Balance at beginning of <%= @balance_label %></td>
+                    <td class="border-b border-t p-2 w-8"><%= Currency.find_by_code(key).symbol %></td>
+                    <td class="border-b border-t p-2 text-right w-8"><%= number_to_currency(value[:balance], :unit => "") %></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr class="bg-green-100">
+                    <td class="border-b p-2">All Income (+)</td>
+                    <td class="border-b p-2"><%= Currency.find_by_code(key).symbol %></td>
+                    <td class="border-b p-2"><%= number_to_currency(value[:Income], :unit => "") %></td>
+                  </tr>
+                  <tr class="bg-red-100">
+                    <td class="border-b p-2 ">All Expense (-)</td>
+                    <td class="border-b p-2 "><%= Currency.find_by_code(key).symbol %></td>
+                    <td class="border-b p-2 "><%= number_to_currency(value[:Expense], :unit => "") %></td>
+                  </tr>
+                  <tr class="bg-slate-100 border-slate-300 font-bold">
+                    <td class="border-b p-2">Savings</td>
+                    <td class="border-b p-2"><%= Currency.find_by_code(key).symbol %></td>
+                    <td class="border-b p-2"><%= number_to_currency(value[:Income] - value[:Expense], :unit => "") %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+        <div class="column">
+          <div class="main-card-item" style="display: flex;justify-content: center;">
+            <%= column_chart [
+              {name: "Income", data: {"Income VS Expense": value[:Income]}},
+              {name: "Expense", data: {"Income VS Expense": value[:Expense]}}
+            ], colors: ["#3AD6B3", "#BA7AC8"], width: '300px', height: '200px' %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <% if value[:income_detail].present? %>
+        <div class="<%= 'column' if value[:expense_detail].present? %>">
+          <div class="main-card-item">
+            <span class="form-custom-header p-3 bg-green-100 border-b-2 border-green-500 mb-3 rounded-t-md text-2xl text-green-800 flex justify-between font-bold">Income</span>
+            <div class="main-card-item" style="display: flex;justify-content: center;">
+              <%= pie_chart value[:income_detail], colors: ["#3AD6B3", "#86d0c0", "#00d0a2"], donut: true, width: '200px' %>
+            </div>
+            <% if value[:income_detail].present? %>
+              <div class="overflow-x-scroll lg:overflow-visible" id="invoice-table">
+                <table class="w-full text-left">
+                  <tbody>
+                    <% value[:income_detail].each do |income| %>
+                    <tr>
+                      <td class="border-b border-t p-2"><%= income.first %></td>
+                      <td class="border-b border-t p-2 w-8"><%= Currency.find_by_code(key).symbol %></td>
+                      <td class="border-b border-t p-2 text-right w-8"><%= number_to_currency(income.second, :unit => "") %></td>
+                    </tr>
+                    <% end %>
+                    <tr class="bg-slate-100 border-slate-300 font-bold border-y">
+                      <td class="border-b p-2">Total</td>
+                      <td class="border-b p-2 w-8"><%= Currency.find_by_code(key).symbol %></td>
+                      <td class="border-b p-2 text-right w-8"><%= number_to_currency(value[:income_detail].sum(&:second), :unit => "") %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+        <% if value[:expense_detail].present? %>
+        <div class="<%= 'column' if value[:income_detail].present? %>">
+          <div class="main-card-item">
+            <span class="form-custom-header p-3 border-b text-2xl bg-red-100 text-red-800 rounded-t-md border-red-500 flex justify-between font-bold mb-3">Expense</span>
+            <div class="main-card-item" style="display: flex;justify-content: center;">
+              <%= pie_chart value[:expense_detail], colors: ["#BA7AC8", "#C747C9", "#a54bb9"], donut: true, width: '200px' %>
+            </div>
+            <% if value[:expense_detail].present? %>
+              <div class="overflow-x-scroll lg:overflow-visible" id="invoice-table">
+                <table class="w-full text-left">
+                  <tbody>
+                    <% value[:expense_detail].each do |income| %>
+                    <tr>
+                      <td class="border-b border-t p-2"><%= income.first %></td>
+                      <td class="border-b border-t p-2 w-8"><%= Currency.find_by_code(key).symbol %></td>
+                      <td class="border-b border-t p-2 text-right w-8"><%= number_to_currency(income.second, :unit => "") %></td>
+                    </tr>
+                    <% end %>
+                    <tr class="bg-slate-100 border-slate-300 font-bold border-y">
+                      <td class="border-b p-2">Total</td>
+                      <td class="border-b p-2 w-8"><%= Currency.find_by_code(key).symbol %></td>
+                      <td class="border-b p-2 text-right w-8"><%= number_to_currency(value[:expense_detail].sum(&:second), :unit => "") %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <!-- <div class="row">
+        <div class="column">aa</div>
+        <div class="column">bb</div>
+      </div> -->
+    </div>
+    <% if action_name.eql?('annually') %>
+      <% test = [
+                  {:name=>"Income", :data=>value[:income_chart]},
+                  {:name=>"Expense", :data=>value[:expense_chart]},
+                  # {:name=>"XR", :data=>{'Jan'=>41, 'Feb'=>66, 'Mar'=>73, 'Apr'=>44}}
+                ] %>
+      <div class="main-card-wrap grid grid-cols-1 gap-3 mb-4">
+        <div class="main-card-item">
+          <span class="form-custom-header p-3 bg-green-100 border-b-2 border-green-500 mb-3 rounded-t-md text-2xl text-green-800 flex justify-between font-bold">Income & Expense</span>
+          <%= line_chart test, colors: ["#3AD6B3", "#BA7AC8", 'green'], curve: true, legend: "bottom", width: '650px' %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

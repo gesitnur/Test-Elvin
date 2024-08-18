@@ -1,0 +1,8 @@
+<div class="pagination flow-root">
+  <div class="float-left">
+    <%= page_entries_info forums, entry_name: 'threads' if forums.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate forums, window: 2, remote: true %>
+  </div>
+</div>

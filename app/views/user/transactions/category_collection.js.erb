@@ -1,0 +1,15 @@
+$('.select-category')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="">Select Category</option>')
+
+<% @categories.each do |category| %>
+  $('.select-category').append("<option value=<%= category.id %> <%= 'selected' if category.id == @category.to_i %>><%= category.name %></option>")  
+<% end %>
+
+<% if params[:type].eql?('Expense') %>
+  $('.recurring-expense-section').show()
+<% else %>
+  $('.recurring-expense-section').hide()
+<% end %>

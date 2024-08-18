@@ -1,0 +1,38 @@
+<% if @work_leave_request.errors.blank? %>
+  $('.show-link-modal').html(`<%= render partial: 'user/users/partials/generate_link_modal',
+                              locals: { link: "#{request.base_url}#{form_work_leaves_path(@work_leave_request.encrypted_code)}" } %>`)
+
+  $('#modalLink').fadeIn(200)
+
+  $('.hideModalApprove').click(function(){
+    $(this).parents('#modalLink').fadeOut(100)
+  })
+  
+  $('.copy-link').click(function(){
+    // Clipboard($(this).data('link'), {
+    //   debug: false,
+    // });
+    // $('.copy-link').CopyToClipboard('aa');
+    $('.copy-icon').addClass('hidden')
+    $('.copied-icon').removeClass('hidden')
+    $('.popuptext').fadeIn(500)
+    setTimeout(function(){
+      $('.popuptext').fadeOut(800)
+      $('.copy-icon').removeClass('hidden')
+    $('.copied-icon').addClass('hidden')
+    }, 800)
+  })
+
+  $('.input-link').click(function(){
+    $(this).select()
+  })
+<% else %>
+  $('.show-link-modal').html(`<%= render partial: 'user/users/partials/error_modal',
+                              locals: { errors: @work_leave_request.errors.full_messages.to_sentence } %>`)
+
+  $('#modalLink').fadeIn(200)
+
+  $('.hideModalApprove').click(function(){
+    $(this).parents('#modalLink').fadeOut(100)
+  })
+<% end %>

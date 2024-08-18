@@ -1,0 +1,74 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(position, url: url, method: method, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Jabatan", class: 'font-bold block' %>
+    <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Jabatan', required: true %>
+  </div>
+  <!-- <div class="form-group">
+    <%= f.label :position_type, "Type", class: 'font-bold block' %>
+    <% if @position.position_type.eql?('Super Admin') %>
+      <%= f.text_field :position_type, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Title', readonly: true %>
+    <% else %>
+      <%= f.select :position_type, options_for_select(@position_types, f.object.position_type),
+        { include_blank: "Select Type" },
+        {
+          class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select2-dropdown", required: true
+        } %>
+    <% end %>
+  </div>
+  <p class="text-1xl font-bold text-black text-opacity-50">HRD Position</p> -->
+  <!-- <hr> -->
+  <% hrd_levels.each do |hrd_level| %>
+    <!-- <div class="block">
+      <%= label_tag 'aa', hrd_level.to_s.titleize, class: 'font-bold block' %>
+      <div class="mt-2">
+        <label class="inline-flex items-center">
+          <%= check_box_tag "hrd[#{hrd_level}][]", :create, position.public_send("hrd_#{hrd_level}", :create), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Create</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "hrd[#{hrd_level}][]", :read, position.public_send("hrd_#{hrd_level}", :read), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Read</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "hrd[#{hrd_level}][]", :update, position.public_send("hrd_#{hrd_level}", :update), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Update</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "hrd[#{hrd_level}][]", :delete, position.public_send("hrd_#{hrd_level}", :delete), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Delete</span>
+        </label>
+      </div>
+    </div> -->
+  <!-- <% end %> -->
+  <!-- <p class="text-1xl font-bold text-opacity-50 text-black mt-3">Emp Position</p>
+  <hr> -->
+ <!--  <% emp_levels.each do |emp_level| %>
+    <div class="block">
+      <%= label_tag 'aa', emp_level.to_s.titleize, class: 'font-bold block' %>
+      <div class="mt-2">
+        <label class="inline-flex items-center">
+          <%= check_box_tag "emp[#{emp_level}][]", :create, position.public_send("emp_#{emp_level}", :create), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Create</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "emp[#{emp_level}][]", :read, position.public_send("emp_#{emp_level}", :read), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Read</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "emp[#{emp_level}][]", :update, position.public_send("emp_#{emp_level}", :update), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Update</span>
+        </label>
+        <label class="inline-flex items-center ml-2">
+          <%= check_box_tag "emp[#{emp_level}][]", :delete, position.public_send("emp_#{emp_level}", :delete), class: "accent-pacifixBlue" %>
+          <span class="ml-2">Delete</span>
+        </label>
+      </div>
+    </div>
+  <% end %> -->
+  <div class="form-group flex gap-2">
+    <%= f.submit "Simpan", class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Kembali', user_positions_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<!-- <% end %> -->

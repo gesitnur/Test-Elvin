@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Work Leave</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "admin_layout", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  </head>
+  <body class="bg-slate-100">
+    <div class="work-leave w-full">
+      <div class="container mx-auto px-4">
+        <div class="h-screen flex justify-center items-center">
+          <div class="work-leave-card bg-white w-full sm:w-3/4 lg:w-2/5 shadow rounded-lg">
+            <div class="work-leave-header border-b px-5 py-3 text-center justify-between">
+              <div class="work-leave-title">
+                <h1 class="font-bold text-2xl">Access Denied<h1>
+              </div>
+            </div>
+            <div class="work-leave-content px-5 py-3 gap-3 text-center">
+              <%= image_tag asset_image("elvin/access-denied.svg"), class: 'w-60 m-auto' %>
+              <p class="text-xl font-bold mb-4">You are not allowed to access this page</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

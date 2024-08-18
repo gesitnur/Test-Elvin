@@ -1,0 +1,31 @@
+<tr id='test-2'>
+  <td class="border p-2">
+    <div class="flex gap-2 mb-0 items-baseline">
+      <%= form.text_field :name, class: 'item-name hidden', readonly: true %>
+      <%= form.text_field :item_id, class: 'item-id-field hidden', readonly: true %>
+      <%= form.text_area :name, class: "w-full select-item-invoice focus:outline-none focus:border-pacifixBlue border rounded p-1", 'data-url': find_invoice_item_user_invoices_path, disabled: form.object.item_id.present? %>
+
+      <button type="button" class="ml-auto <%= 'hidden' if form.object.item_id.blank? %> btn-close-item"><i class="fa fa-times text-slate-300" aria-hidden="true"></i></button>
+    </div>
+  </td>
+  <td class="border p-2">
+    <%= form.text_field :qty, class: 'w-full border border p-2 focus:outline-none focus:border-pacifixBlue rounded', id: 'invoice-qty', placeholder: 'Quantity', required: true %>  
+  </td>
+  <td class="border p-2">
+    <%= form.number_field :rate, class: 'w-full border border p-2 focus:outline-none focus:border-pacifixBlue rounded', id: 'invoice-rate', placeholder: 'Rate', required: true, step: :any %>
+  </td>
+  <td class="border p-2">
+    <%= form.select :tax_rate_id , options_for_select(@tax_rates || [], form.object.tax_rate_id), {include_blank: 'Select Tax'}, {class: "w-full sm:w-32 p-2 rounded focus:outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-invoice-tax", 'data-url': find_tax_rate_user_invoices_path} %>
+  </td>
+  <td class="border p-2 text-right">
+    <div class="flex items-center gap-2">
+      <%= form.text_field :amount, class: 'w-full border p-2 focus:outline-none focus:border-pacifixBlue rounded', placeholder: 'Amount', id: 'invoice-amount', required: true, readonly: true, style: "text-align:right;" %>
+      <%= link_to_remove_nested(form, link_classes: 'remove-item cursor-pointer', fields_wrapper_selector: '#test-2') do %>
+        <i class="fa fa-times-circle m-auto text-red-500" aria-hidden="true"></i>
+      <% end %>
+    </div>
+  </td>
+  <td class="border p-2 text-right hidden">
+    <%= form.text_field :tax_amount, class: 'w-full border p-2 focus:outline-none focus:border-pacifixBlue rounded', id: 'invoice-tax-amount', required: true, readonly: true, style: "text-align:right;" %>
+  </td>
+</tr>

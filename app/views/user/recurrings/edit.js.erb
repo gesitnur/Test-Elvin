@@ -1,0 +1,14 @@
+// alert('new js erb recurring')
+
+$('#recurring-form').html(`<%= render partial: 'user/recurrings/partials/form',
+                          locals: { recurring: @transaction, types: @types, categories: @categories, url: user_recurring_path(@transaction), title: 'Edit Recurring' } %>`);
+format_number_field()
+
+$('.select-type').select2({
+  width: '100%',
+  minimumResultsForSearch: Infinity
+})
+$('.select2-dropdown').select2({
+  width: '100%',
+})
+change_recurring()

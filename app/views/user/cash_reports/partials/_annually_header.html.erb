@@ -1,0 +1,47 @@
+<div class="flex justify-between  mb-4 gap-3 flex-col sm:flex-row">
+  <div class="form-group flex items-center  gap-3">
+    <label for="select-cash-report inline m-5">Report With Currency : </label>
+    <select name="select-cash-repost" id="select-cash-report" class="py-3 px-2 bg-white focus:outline-none border rounded focus:border-pacifixBlue w-32 filter-annually filter-currency" data-url=<%= annually_user_cash_reports_path %>>
+      <option value="">All</option>
+      <% @currency_list.each do |currency| %>
+        <option value="<%= currency.id %>" <%= 'selected' if currency.id.eql?(params[:currency_id].to_i) %>><%= currency.code %></option>
+      <% end %>
+    </select>
+    <%= link_to daily_report_url, class: 'inline-block bg-pacifixBlue text-white tooltip  rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear sm:relative', target: '_blank' do %>
+      <span class="tooltip-text bg-gray-500 shadow text-white -bottom-10 left-0 rounded whitespace-nowrap">Download PDF</span>
+      <i class="fa fa-file-pdf"></i>
+    <% end %>
+  </div>
+  <div class="form-group flex items-center gap-3">
+    <%= link_to prev_year_report(params[:year].to_i, params[:currency_id]) do %>
+      <i class="fa fa-chevron-left text-slate-400" aria-hidden="true"></i>
+    <% end %>
+    <select class="bg-white w-full md:w:0 border text-center text-gray-900 rounded focus:border-pacifixBlue outline-none p-2.5 filter-annually ease-year transition ease-in" id="select-cash-report-date" data-url=<%= annually_user_cash_reports_path %>>
+      <% @years.each do |year| %>
+        <option value=<%= year %> <%= 'selected' if year.eql?(params[:year].to_i) %>><%= year %></option>
+      <% end %>
+    </select>
+    <%= link_to next_year_report(params[:year].to_i, params[:currency_id]) do %>
+      <i class="fa fa-chevron-right text-slate-400" aria-hidden="true"></i>
+    <% end %>
+  </div> 
+</div>
+<div class="tabs mb-4">
+  <ul id="report-nav" class="border-b overflow-auto">
+    <%= link_to annually_user_cash_reports_path(year: params[:year], currency_id: params[:currency_id]) do %>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('annually', action_name) %>">
+        General
+      </li>
+    <% end %>
+    <%= link_to annually_expense_user_cash_reports_path(year: params[:year], currency_id: params[:currency_id]) do %>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('annually_expense', action_name) %>">
+        Expense & Income
+      </li>
+    <% end %>
+    <%= link_to annually_transfer_user_cash_reports_path(year: params[:year], currency_id: params[:currency_id]) do %>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('annually_transfer', action_name) %>">
+        Transfer List
+      </li>
+    <% end %> 
+  </ul>
+</div>

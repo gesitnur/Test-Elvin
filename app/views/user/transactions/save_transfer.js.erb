@@ -1,0 +1,26 @@
+$('.flash_alert').html('')
+<%# flash[:alert] = 'test transaction update js erb' %>
+<% if flash[:alert].present? %>
+  setTimeout(function() {
+    $('.loading-spinner').hide();
+    $('.btn-submit-transaction').prop('disabled', false).removeClass('opacity-70');
+    $('.flash_alert').html(`<%= render partial: 'shared/global/components/alert_modal',
+                                        locals: { alert: flash[:alert] } %>`);
+
+    $('.btn-close-alert').click(function(){
+      $(this).parent().hide()
+    })
+  }, 500);
+<% else %>
+  $('.flash_alert').html(`<%= render partial: 'shared/global/components/notice_modal',
+                                      locals: { notice: flash[:notice] } %>`);
+  setTimeout(function() {
+    $('.loading-spinner').hide();
+    $('.modal').slideUp('slow')
+
+    setTimeout(function() {
+      location.reload();
+    }, 500);
+
+  }, 500);
+<% end %>

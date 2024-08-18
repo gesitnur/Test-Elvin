@@ -1,0 +1,20 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(currency, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :country_id, "Country", class: 'font-bold block' %>
+
+    <%= f.select :country_id , options_for_select(@countries, f.object.country_id || 'Malaysia'), {include_blank: 'Select Country'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown select-country-currency", style: 'width: 100%', 'data-url': find_country_user_currencies_path} %>
+  </div>
+  <div class="form-group">
+    <%= f.label :symbol, "Symbol", class: 'font-bold block' %>
+
+    <%= f.text_field :symbol, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in symbol-field', placeholder: 'Symbol', required: true %>
+    <%= f.hidden_field :code, class: 'code-field', placeholder: 'Symbol', required: true %>
+  </div>
+
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

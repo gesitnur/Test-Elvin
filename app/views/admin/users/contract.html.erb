@@ -1,0 +1,52 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Edit Kontrak</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded">
+  <%= form_for(@contract, url: set_contract_admin_user_path, method: :post, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+    <div class="form-group">
+      <%= f.label :gaji_pokok, "Gaji Pokok", class: 'font-bold block' %>
+      <%= f.number_field :gaji_pokok, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Gaji Pokok', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :periode_slip_gaji, "Periode Slip Gaji", class: 'font-bold block' %>
+      <%= f.select :periode_slip_gaji, options_for_select([4, 10, 17, 24], f.object.periode_slip_gaji), {include_blank: false}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", id: 'domain-access'} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tunjangan_jabatan, "Tunjangan Jabatan", class: 'font-bold block' %>
+      <%= f.number_field :tunjangan_jabatan, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Tunjangan Jabatan', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tunjangan_makan, "Tunjangan Makan", class: 'font-bold block' %>
+      <%= f.number_field :tunjangan_makan, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Tunjangan Makan', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tunjangan_transport, "Tunjangan Transport", class: 'font-bold block' %>
+      <%= f.number_field :tunjangan_transport, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Tunjangan Transport', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :tunjangan_laptop, "Tunjangan Laptop", class: 'font-bold block' %>
+      <%= f.number_field :tunjangan_laptop, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Tunjangan Laptop', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :bpjs_kesehatan, "BPJS Kesehatan", class: 'font-bold block' %>
+      <%= f.number_field :bpjs_kesehatan, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'BPJS Kesehatan', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :bpjs_ketenagakerjaan, "BPJS Ketenagakerjaan", class: 'font-bold block' %>
+      <%= f.number_field :bpjs_ketenagakerjaan, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'BPJS Ketenagakerjaan', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :pph_21, "PPH 21", class: 'font-bold block' %>
+      <%= f.number_field :pph_21, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'PPH 21', required: true %>
+    </div>
+
+    <%= f.text_field :user_id, class: 'hidden', placeholder: 'PPH 21', required: true %>
+    
+    <div class="form-group flex gap-2">
+      <%= f.submit "Simpan", class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+      <%= link_to 'Back', user_users_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,55 @@
+<style>
+  .popup {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .popup .popuptext {
+    width: 70px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 0;
+    margin-left: -15px;
+  }
+
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 60%;
+    margin-left: -11px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+</style>
+<div class="modal fixed z-50 hidden" id="modalLink">
+  <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+  <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+    <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+      <div class="modal-content p-4 gap-4">
+        <p>Use this Link:</p>
+        <div class="flex">
+          <input type="text" name="input-link" value="<%= link %>" maxlength class="input-link w-full border px-2 py-[7px] focus:outline-none rounded-l focus:border-pacifixBlue transition ease-linear color-code" placeholder="Copy Link" readonly>
+          <span class="popup copy-link flex items-center justify-center border text-white border-pacifixBlue rounded-r bg-pacifixBlue border-r-0 w-12" data-link=<%= link %>>
+            <i class="fas fa-copy copy-icon"></i>
+            <i class="fa fa-check copied-icon hidden"></i>
+            <span class="popuptext bg-black bg-opacity-70 hidden" id="copiedPopup">Copied</span>
+          </span>
+        </div>
+      </div>
+      <div class="modal-footer p-4 border-t text-right">
+        <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded hideModalApprove">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<% params_category = if params[:q].blank? %>
+  <% nil %>
+<% else %>
+  <% params[:q][:forum_category_id_eq] %>
+<% end %>
+
+<% params_tag = if params[:q].blank? %>
+  <% nil %>
+<% else %>
+  <% params[:q][:tag_cont] %>
+<% end %>
+
+<select class="bg-white text-sm p-2.5 rounded outline-none focus:border-pacifixBlue shadow sort-question" data-url="<%= user_help_questions_path('q[forum_category_id_eq]': params_category, 'q[tag_cont]': params_tag, filter: params[:filter]) %>">
+  <option value="">Sort by</option>
+  <option <%= 'selected' if sort.eql?('asc') %> value="asc">A - Z</option>
+  <option <%= 'selected' if sort.eql?('desc') %> value="desc">Z - A</option>
+</select>

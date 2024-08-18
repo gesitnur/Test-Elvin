@@ -1,0 +1,41 @@
+@font-face {
+  font-family: "neue";
+  font-weight: 800;
+  font-style: normal;
+  src: url('Neue_Plak_Black.ttf');
+}
+
+@font-face {
+  font-family: "neue";
+  font-weight: normal;
+  font-style: normal;
+  src: url('Neue_Plak_Regular.ttf');
+}
+
+:root {
+  --powder-blue: #C3E1E5;
+  --carribean-green: #3AD6B3;
+  --pacifix-blue: #50B0C0;
+  --african-violet: #BA7AC8;
+  --fuchsia-crayola: #C747C9;
+}
+
+body {
+  font-family: "neue", sans-serif;
+}
+
+.home-banner {
+  height: 564px;
+}
+
+.home-banner-content-title {
+  font-family: "neue", sans-serif;
+  color: var(--pacifix-blue);
+}
+.title-second {
+  color: var(--african-violet);
+}
+.home-banner-content-desc {
+  font-size: 19px;
+  font-family: "neue", sans-serif;
+}

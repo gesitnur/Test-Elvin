@@ -1,0 +1,83 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Surveys</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="survey-header mb-3 border-b pb-4">
+    <h1 class="font-bold text-xl"><%= @survey.title %></h1>
+    <p><%= @survey.description %></p>
+  </div>
+  <div class="survey-content">
+    <div class="survey-question">
+      <%= form_tag user_surveys_path, method: :post, class: '' do %>
+        <%= hidden_field_tag 'user_id', current_user.id %>
+        <%= hidden_field_tag 'survey_id', @survey.id %>
+        <% @survey.survey_questions.each.with_index(1) do |survey_question, key| %>
+          <% if survey_question.question_type.eql?('Text') %>
+            <% survey_question.inspect %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-1"><%= survey_question.question %></p>
+                <%= text_area_tag "answer[#{survey_question.id}]", '', { class: 'w-full lg:w-1/2 border focus:border-pacifixBlue focus:outline-none px-2 py-[7px] rounded h-32', placeholder: 'Answer', required: true } %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if survey_question.question_type.eql?('Range 1 - 10') %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-2"><%= survey_question.question %></p>
+                <div class="range-wrap w-full lg:w-1/2">
+                  <div class="flex items-center gap-3">
+                    <label>1</label>
+                    <!-- <input type="range" min="1" max="10" value="0" class="input-range w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" placeholder="Answer"> -->
+
+                    <%= range_field_tag "answer[#{survey_question.id}]", 0, min: 1, max: 10, class: 'input-range w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700', placeholder: 'Answer' %>
+
+                    <label class="block">10</label>
+                  </div>
+                  <div class="output-range bg-pacifixBlue m-auto text-white flex w-8 h-8 rounded top-8">
+                    <p class="block text-center m-auto">1</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <% if survey_question.question_type.eql?('Custom Option') %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-1"><%= survey_question.question %></p>
+                <% survey_question.option['value'].each do |option| %>
+                  <div class="form-check flex items-center mb-1">
+                    <!-- <input type="radio" id="form-check-input-1" name="form-check-input<%= survey_question.id %>" class=" appearance-none w-5 h-5 mr-2 border-gray-300 checked:bg-pacifixBlue checked:border-pacifixBlue transition duration-200 border align-middle rounded-full" value="<%= option[0] %>">
+                    <label for="form-check-input-1" class="w-full"><%= option[1] %></label> -->
+
+                    <%= radio_button_tag "answer[#{survey_question.id}]", option[0], false, { class: 'appearance-none w-5 h-5 mr-2 border-gray-300 checked:bg-pacifixBlue checked:border-pacifixBlue transition duration-200 border align-middle rounded-full', required: true } %>
+                    <label for="form-check-input-1"><%= option[1] %></label>
+                    <!-- <label for="">Cash (you owe tax upon payment receipt)</label> -->
+                    <%#= f.radio_button "answer[]", true %>
+                  </div>
+                <% end%>
+              </div>
+            </div>
+          <% end %>
+
+        <% end %>
+        <div class="form-group flex gap-2">
+          <%= submit_tag 'Submit', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+        </div>
+      <% end %>
+    </div>  
+  </div>
+</div>

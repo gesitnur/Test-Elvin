@@ -1,0 +1,45 @@
+<div class="sidebar fixed h-full z-10 w-56 bg-pacifixBlue sm:block">
+  <div class="container mx-auto px-3">
+    <div class="sidebar-brand p-5 mb-5 flex justify-between">
+      <%= link_to 'Super Admin', admin_contact_requests_url, class: 'text-white text-xl font-bold' %>
+      <button class="btn-close block sm:hidden"><i class="fas fa-times text-2xl text-white"></i></button>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_users_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('users', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Pegawai
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_positions_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('positions', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Jabatan
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_projects_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('projects', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Project
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_work_leave_requests_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('work_leave_requests', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Pengajuan Cuti
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_interviews_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('interviews', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Calon Pegawai
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_gameplays_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('gameplays', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Assestment
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-2">
+        <%= link_to admin_leave_types_path, class: "flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('leave_types', controller_name)}" do %>
+          <!-- <i class="fa fa-phone w-8"></i> --> Tipe Cuti
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</div>

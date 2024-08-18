@@ -1,0 +1,102 @@
+<style type="text/css">
+  .popup {
+    position: relative;
+  }
+
+  .popup .popuptext {
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -50px;
+  }
+
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+</style>
+<div class="detail-modal"></div>
+<div class="overflow-x-auto lg:overflow-visible" id="user-table">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border p-2 whitespace-nowrap">Tanggal</th>
+        <th class="border p-2">Presensi Masuk</th>
+        <th class="border p-2 whitespace-nowrap">Presensi Pulang</th>
+        <th class="border p-2">Mulai Lembur</th>
+        <th class="border p-2">Selesai Lembur</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <%= no_table_record(attendances, 6) %> -->
+      <% dates.each.with_index(1) do |date, idx| %>
+        <tr>
+          <td class="border p-2 whitespace-nowrap"><%= date.strftime('%d %B %Y') %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_presence_data(date, current_user) == nil %>
+              <%= link_to attendance_in_user_attendance_path(current_user), method: :post, data: { confirm: 'Apa Anda Yakin?' } do %>
+                <span class="inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear"><!-- <i class="fa fa-lock w-7" aria-hidden="true"></i> -->Presensi Masuk</span>
+              <% end %>
+            <% else %>
+            <%= get_presence_data(date, current_user) %>
+
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_checkout_data(date, current_user) == nil %>
+              <%= link_to attendance_out_user_attendance_path(current_user), method: :post, data: { confirm: 'Apa Anda Yakin?' } do %>
+                <span class="inline-block bg-orange-500 text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear"><!-- <i class="fa fa-lock w-7" aria-hidden="true"></i> -->Presensi Pulang</span>
+              <% end %>
+            <% else %>
+            <%= get_checkout_data(date, current_user) %>
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_overtime_in_data(date, current_user) == nil %>
+              <%= link_to overtime_in_user_attendance_path(current_user), method: :post, data: { confirm: 'Apa Anda Yakin?' } do %>
+                <span class="inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear"><!-- <i class="fa fa-lock w-7" aria-hidden="true"></i> -->Mulai Lembur</span>
+              <% end %>
+            <% else %>
+            <%= get_overtime_in_data(date, current_user) %>
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if get_overtime_in(date, current_user) != nil %>
+              <% if Time.now < get_overtime_in(date, current_user) + 1.hour %>
+                <%= link_to overtime_out_user_attendance_path(current_user), method: :post, data: { confirm: 'Durasi lembur belum mencapai waktu 1 jam, data lembur hari ini akan dihapus' } do %>
+                  <span class="inline-block bg-orange-500 text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear"><!-- <i class="fa fa-lock w-7" aria-hidden="true"></i> -->Selesai Lembur</span>
+                <% end %>
+              <% elsif date == Date.today && get_overtime_out_data(date, current_user) == nil %>
+                <%= link_to overtime_out_user_attendance_path(current_user), method: :post, data: { confirm: 'Apa Anda Yakin?' } do %>
+                  <span class="inline-block bg-orange-500 text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear"><!-- <i class="fa fa-lock w-7" aria-hidden="true"></i> -->Selesai Lembur</span>
+                <% end %>
+              <% else %>
+              <%= get_overtime_out_data(date, current_user) %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info attendances, entry_name: 'Work Leave Request' if attendances.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate attendances, window: 2 %>
+  </div>
+</div>

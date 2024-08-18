@@ -1,0 +1,39 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Website Setting</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded border">
+  <%= form_for(@website_setting, url: user_website_settings_path, method: :put, html: {class: 'grid grid-cols-1 gap-3'}) do |f| %>
+    <p class="text-1xl font-bold text-black text-opacity-50">Coming Soon Section</p>
+    <hr>
+    <div class="form-group">
+      <%= f.label :coming_soon_title, 'Title', class: 'font-bold block' %>
+      <%= f.text_field :coming_soon_title, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Title', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :coming_soon_description, 'Description', class: 'font-bold block' %>
+      <%= f.text_area :coming_soon_description, class: 'border focus:border-pacifixBlue outline-none p-2 w-full rounded transition ease-in website-setting-form', id: 'testyh', placeholder: 'Description', required: true %>
+    </div>
+    <p class="text-1xl font-bold text-black text-opacity-50">Leave Request</p>
+    <hr>
+    <div class="form-group">
+      <%= f.label :pending_leave_request_message, 'Pending Message', class: 'font-bold block' %>
+      <%= f.text_area :pending_leave_request_message, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Pending Message', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :accepted_leave_request_message, 'Accepted Message', class: 'font-bold block' %>
+      <%= f.text_area :accepted_leave_request_message, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Accepted Message', required: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :rejected_leave_request_message, 'Rejected Message', class: 'font-bold block' %>
+      <%= f.text_area :rejected_leave_request_message, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Rejected Message', required: true %>
+    </div>
+    <div class="form-group flex gap-2">
+      <%= f.submit 'Save', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+      <%= link_to user_website_settings_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in', id: 'btn-reset' do %>
+        Back
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,68 @@
+:root {
+  --font-size-head: 40px;
+  --font-size-title: 35px;
+  --font-size-secondaryTitle: 20px;
+  --font-size-description: 16px;
+  --color-primary: #000000;
+  --color-secondary: #3e74b9;
+  --color-tertiary: #8f8f8f;
+  --color-querternary: #fff;
+}
+
+.invoice-header-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-head);
+}
+
+#main-content {
+  border-color: var(--color-secondary);
+}
+
+.invoice-people-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-people-details {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-people-identity-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-people-identity-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-total {
+  border-color: var(--color-primary);
+}
+
+.invoice-total-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-total-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-details-table-head {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-details-table-body {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-amount-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}

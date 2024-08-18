@@ -1,0 +1,7 @@
+$('.detail-access-modal').html(`<%= render partial: 'user/positions/partials/detail_access',
+                          locals: { hrd_levels: @hrd_levels, emp_levels: @emp_levels, position: @position, } %>`);
+
+$('.hideModal').click(function(){
+  $(this).parents('#modal').fadeOut(100)
+  $(this).parents('body').css("overflow", "auto")
+})

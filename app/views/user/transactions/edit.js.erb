@@ -1,0 +1,22 @@
+$('#transaction-form').html(`<%= render partial: 'user/transactions/partials/transaction_form',
+                          locals: { expenses: @expenses, incomes: @incomes,
+                          url: user_transaction_path(@transaction), title: "Update #{@transaction.transaction_type}" } %>`);
+
+$('.select-type').val("<%= @transaction.transaction_type %>");
+
+$.ajax({
+        url: $('.select-type').data('url'),
+        type: "GET",
+        dataType:"script",
+        data: {
+          type: $('.select-type').val(),
+          category: $('.category-id-field').val()
+        },
+      })
+
+format_number_field()
+
+$('.select-type').select2({
+  width: '100%',
+  minimumResultsForSearch: Infinity
+})

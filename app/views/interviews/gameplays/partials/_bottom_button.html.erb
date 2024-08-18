@@ -1,0 +1,14 @@
+<div class="main-content-button fixed right-0 z-0 w-full p-3 bg-white shadow-md bottom-0">
+  <div class="flex justify-center gap-3 sm:ml-60 ">
+    <input type="submit" class="bg-pacifixBlue text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in w-32 submit-button cursor-pointer" value="Submit" form="gameplay_form">
+    <a class="bg-pacifixBlue text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in w-32 text-center btn-quest cursor-pointer" id="btn-quest-multiples" data-section="tab-multiple-choice">Multiple Choice</a>
+    <a class="bg-pacifixBlue text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in w-32 text-center btn-quest cursor-pointer" id="btn-quest-essays" data-section="tab-essay">Essay</a>
+    <%= link_to_add_nested(@form, :question_multiples, '#multiples', partial: 'question_multiple_fields', link_classes: 'bg-africanViolet text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in w-32 text-center btn-add-question-multiples cursor-pointer') do %>
+      <i class="fa fa-plus" aria-hidden="true"></i> Add Question
+    <% end %>
+    <%= link_to_add_nested(@form, :question_essays, '#essays', link_text: 'Add Question', partial: 'question_essay_fields', link_classes: 'bg-africanViolet w-32 text-center text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in btn-add-question-essays cursor-pointer') do %>
+      <i class="fa fa-plus" aria-hidden="true"></i> Add Question
+    <% end %>
+    <button type="reset" class="border border-slate-300 shadow-sm text-sm bg-white p-2 rounded inline-block hover:shadow-lg transition ease-in w-32" form="gameplay_form">Reset</button>
+  </div>
+</div>

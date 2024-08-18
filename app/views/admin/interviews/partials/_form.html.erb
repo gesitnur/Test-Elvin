@@ -1,0 +1,129 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+
+<%= form_for(interview, url: url, html: {class: 'main-content-form grid grid-cols-1 gap-5', id: 'interview_form'}) do |f| %>
+  <div class="main-content-card w-full bg-white rounded p-6 grid border shadow-lg grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2">
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :name, "Nama", class: 'block font-bold mb-1' %>
+      <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Nama', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :gender, "Jenis Kelamin", class: 'block font-bold mb-2' %>
+      <div class="flex gap-10">
+        <div class="form-radio">
+          <%= f.radio_button :gender, 'Man', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'gender', checked: true, required: true %>
+          <%= label :gender, 'Laki laki', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+        <div class="form-check">
+          <%= f.radio_button :gender, 'Woman', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'gender', required: true %>
+          <%= label :gender, 'Perempuan', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :date_of_birth, "Tanggal Lahir", class: 'block font-bold mb-1' %>
+      <%= f.date_field :date_of_birth, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Date Of Birth', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :email, "Email", class: 'block font-bold mb-1' %>
+      <%= f.text_field :email, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Email', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :graduated, "Asal Sekolah", class: 'block font-bold mb-1' %>
+      <%= f.text_field :graduated, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Asal Sekolah', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :domicile, "Alamat", class: 'block font-bold mb-1' %>
+      <%= f.text_field :domicile, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Alamat', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :phone_number, "Nomor Telepon", class: 'block font-bold mb-1' %>
+      <%= f.text_field :phone_number, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Nomor Telepon', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :fresh_graduated, "Fresh Graduated", class: 'block font-bold mb-2' %>
+      <div class="flex gap-10">
+        <div class="form-radio">
+          <%= f.radio_button :fresh_graduated, true, class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'fresh_graduated', checked: true, required: true %>
+          <%= label :fresh_graduated, 'Ya', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+        <div class="form-check">
+          <%= f.radio_button :fresh_graduated, false, class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'fresh_graduated', required: true %>
+          <%= label :fresh_graduated, 'Tidak', class: 'form-check-label inline-block text-gray-800' %>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :major, "Major", class: 'block font-bold mb-1' %>
+      <%= f.text_field :major, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Major', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :apply_for_job, "Posisi Yang Dilamar", class: 'block font-bold mb-1' %>
+      <%= f.select :apply_for_job, options_for_select(@apply_for_jobs, f.object.apply_for_job), {include_blank: 'Please Choose'}, {class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-dropdown", id: 'job-position'} %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :interview_link, "Link Interview", class: 'block font-bold mb-1' %>
+      <%= f.text_field :interview_link, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Link Interview', required: true %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :scheduled_interview, "Jadwal Wawancara", class: 'block font-bold mb-1' %>
+      <%= f.datetime_field :scheduled_interview, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Jadwal Wawancara', required: true %>
+    </div>
+    <div class="form-group col-span-2 lg:col-span-4">
+      <%= f.label :gameplay_ids, "Daftar Assesment", class: 'block font-bold mb-1' %>
+      <%= f.collection_select(:gameplay_ids, @gameplays, :id, :name, {:prompt => false}, { multiple: true, id: 'gameplay' }) %>
+    </div>
+    <div class="form-group col-span-2 lg:col-span-4">
+      <%= f.label :work_experience, "Pengalaman Kerja", class: 'block font-bold mb-1' %>
+      <%= f.text_area :work_experience, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', id: 'work-experience', cols: 30, rows: 4, placeholder: 'Pengalaman Kerja', required: true %>
+    </div>
+    <% if f.object.new_record? %>
+    <div class="form-group flex gap-2">
+      <input type="submit" class="bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in" value="Simpan" form="interview_form">
+      <%= link_to 'Kembali', user_interviews_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+    </div>
+    <% end %>
+  </div>
+  <% unless f.object.new_record? %>
+    <div class="card-content bg-white p-6 rounded shadow-lg border">
+      <div class="form-group mb-4">
+        <label for="hrd-notes" class="block font-bold mb-1">HRD Notes</label>
+        <%= f.text_area :hrd_notes, id: 'hrd-notes', placeholder: 'HRD Notes', cols: 30, rows: 10 %>
+      </div>
+      <div class="formn-group-wrap grid gap-x-5 mb-2 grid-cols-1 sm:grid-cols-2">
+        <div class="form-group flex items-center mb-1">
+          <div class="form-check w-1/2">
+            <%= f.check_box :is_training, class: 'form-check-input accent-pacifixBlue rounded-sm outline-none mt-1 mr-2 cursor-pointer', id: 'check-training' %>
+            <label class="form-check-label inline-block text-gray-800" for="check-training">
+              Training
+            </label>
+          </div>
+          <div class="flex">
+            <%= f.number_field :training_duration, class: 'duration rounded-none rounded-l bg-gray-50 border  outline-none flex-1 py-[7px] px-3 focus:border-pacifixBlue focus:shadow-sm block w-full transition ease-in', placeholder: 'Duration', id: 'training-duration' %>
+            <span class="inline-flex items-center px-3 bg-gray-200 rounded-r border border-r-0 w-20 text-sm">
+              / Month
+            </span>
+          </div>
+        </div>
+        <div class="form-group flex items-center ">
+          <div class="form-check w-1/2">
+            <%= f.check_box :is_trial, class: 'form-check-input accent-pacifixBlue rounded-sm outline-none mt-1 mr-2 cursor-pointer', id: 'check-trial' %>
+            <label class="form-check-label inline-block text-gray-800" for="check-trial">
+              Trial
+            </label>
+          </div>
+          <div class="flex">
+            <%= f.number_field :trial_duration, class: 'duration rounded-none rounded-l bg-gray-50 border  outline-none flex-1 py-[7px] px-3 focus:border-pacifixBlue focus:shadow-sm block w-full transition ease-in', placeholder: 'Duration', id: 'trial-duration' %>
+            <span class="inline-flex items-center px-3 bg-gray-200 rounded-r border border-r-0 w-20 text-sm">
+              / Days
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group flex gap-2">
+        <input type="submit" class="bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in" value="Submit" form="interview_form">
+        <%= link_to 'Back', user_interviews_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

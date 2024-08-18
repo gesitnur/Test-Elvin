@@ -1,0 +1,116 @@
+<div class="overflow-x-scroll lg:overflow-visible" id="user-table">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2">Nama</th>
+        <th class="border p-2">Email</th>
+        <th class="border p-2">Jabatan</th>
+        <th class="border p-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(users, 5, 'Tidak ada data pegawai...') %>
+      <% users.each.with_index(1) do |user, idx| %>
+        <tr>
+          <td class="border p-2"><%= idx %></td>
+          <td class="border p-2"><%= user.name %></td>
+          <td class="border p-2"><%= user.email %></td>
+          <td class="border p-2"><%= user.position.name %></td>
+          <td class="border p-2 relative whitespace-nowrap action-column">
+            <% unless  user.eql?(current_user) %>
+              <div class="group relative inline-block">
+                <button class="bg-pacifixBlue rounded text-white w-7 h-7"><i class="fas fa-chevron-down m-auto"></i></button>  
+                <nav tabindex="0" class="border z-10 bg-white invisible rounded w-60 absolute border border-gray-300 right-0 shadow-xl transition-all duration-300 opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1">
+                  <ul class="py-2">
+                    <li>
+                      <%= link_to reset_password_user_user_path(user), method: :patch, class: 'block px-4 py-2 hover:bg-gray-100 text-[#4f4f4f]', data: { confirm: 'Are you sure?' } do %>
+                        <span><i class="fa fa-lock w-7" aria-hidden="true"></i> Reset Password</span>
+                      <% end unless user.eql?(current_user) %>
+                    </li>
+                    <li>
+                      <%= link_to user_user_path(user), class: 'block px-4 py-2 hover:bg-gray-100 text-[#4f4f4f]' do %>
+                        <span><i class="fa fa-eye w-7" aria-hidden="true"></i> Detail</span>
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to edit_user_user_path(user), class: 'block px-4 py-2 hover:bg-gray-100 text-[#4f4f4f]' do %>
+                        <span><i class="fa fa-edit w-7" aria-hidden="true"></i> Edit</span>
+                      <% end unless user.eql?(current_user) %>
+                    </li>
+                    <li>
+                      <%= link_to generate_work_leave_link_user_user_path(user), class: 'block px-4 py-2 hover:bg-gray-100 text-[#4f4f4f]', remote: true do %>
+                        <span class="w-full "><i class="fas fa-link w-7"></i> Generate Link</span>
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to attendances_user_user_path(user), class: 'block px-4 py-2 hover:bg-gray-100 text-[#4f4f4f]', remote: true do %>
+                        <span class="w-full "><i class="fas fa-link w-7"></i> Presensi</span>
+                      <% end %>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+              <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              </button>
+              <div class="modal fixed z-50 hidden" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                  <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                    <div class="modal-content mb-4">
+                      <span>Are you sure?</span>
+                    </div>
+                    <div class="modal-footer text-right">
+                      <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                      <%= link_to user_user_path(user), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                         Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                  <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+                </button>
+                <div class="modal fixed z-50 hidden" id="modal">
+                  <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                  <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                    <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                      <div class="modal-content mb-4">
+                        <span>Are you sure?</span>
+                      </div>
+                      <div class="modal-footer text-right">
+                        <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                        <%= link_to user_work_leave_request_path(user), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                           Delete
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <div class="show-link-modal"></div>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info users, entry_name: 'users' if users.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate users, window: 2 %>
+  </div>
+</div>
+<script type="text/javascript">
+  $('.btn-action-dropdown').click(function(){
+    $(this).parent().find('.dropdown-action').toggleClass('hidden')
+    $(this).parent().parent().siblings().children('.action-column').find('.dropdown-action').addClass('hidden')
+  })
+</script>

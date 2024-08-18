@@ -1,0 +1,10 @@
+$('#modal').fadeIn(200)
+$('body').css("overflow", "hidden")
+
+$('#modal').html(`<%= render partial: 'admin/help_center_categories/partials/form',
+                            locals: { forum_category: @forum_category, url: admin_help_center_categories_path } %>`)
+
+$('.hideModal').click(function(){
+  $(this).parents('#modal').fadeOut(100)
+  $(this).parents('body').css("overflow", "auto")
+})

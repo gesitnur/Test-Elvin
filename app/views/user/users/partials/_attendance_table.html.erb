@@ -1,0 +1,119 @@
+<style type="text/css">
+  .popup {
+    position: relative;
+  }
+
+  .popup .popuptext {
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -50px;
+  }
+
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+</style>
+<div class="detail-modal"></div>
+<div class="overflow-x-auto lg:overflow-visible" id="user-table">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border p-2 whitespace-nowrap">Tanggal</th>
+        <th class="border p-2">Presensi Masuk</th>
+        <th class="border p-2 w-20 whitespace-nowrap">Presensi Pulang</th>
+        <th class="border p-2">Mulai Lembur</th>
+        <th class="border p-2">Selesai Lembur</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <%= no_table_record(attendances, 6) %> -->
+      <% dates.each.with_index(1) do |date, idx| %>
+        <tr>
+          <td class="border p-2 whitespace-nowrap"><%= date.strftime('%d %B %Y') %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <div>
+              <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              </button>
+              <div class="modal fixed z-50 hidden" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                  <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                    <%= form_with url: set_attendance_in_user_user_path(user), method: :post do %>
+                      <%= datetime_field_tag :datetime %>
+                      <br>
+                      <%= date_field_tag :date %>
+                      <%= submit_tag "Presensi Pulang", class: "inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" %>
+                    <% end %>
+                    <div class="modal-content mb-4">
+                      <span>Are you sure?</span>
+                    </div>
+                    <div class="modal-footer text-right">
+                      <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                      <%= link_to user_work_leave_request_path(user), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                         Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% if date == Date.today && get_presence_data(date, user) == nil %>
+            	<%= form_with url: attendance_in_user_attendance_path(user), method: :post do %>
+              	<!-- <%= date_field_tag :date, selected: date %>	 -->
+        			  <%= submit_tag "Presensi Masuk", class: "inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" %>
+        			<% end %>
+            <% else %>
+            <%= get_presence_data(date, user) %>
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_checkout_data(date, user) == nil %>
+              <%= form_with url: attendance_out_user_attendance_path(user), method: :post do %>
+                <!-- <%= date_field_tag :date, selected: date %>   -->
+                <%= submit_tag "Presensi Pulang", class: "inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" %>
+              <% end %>
+            <% else %>
+            <%= get_checkout_data(date, user) %>
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_overtime_in_data(date, user) == nil %>
+              <%= form_with url: overtime_in_user_attendance_path(user), method: :post do %>
+                <!-- <%= date_field_tag :date, selected: date %>   -->
+                <%= submit_tag "Mulai Lembur", class: "inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" %>
+              <% end %>
+            <% else %>
+            <%= get_checkout_data(date, user) %>
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if date == Date.today && get_overtime_out_data(date, user) == nil %>
+              <%= form_with url: overtime_out_user_attendance_path(user), method: :post do %>
+                <!-- <%= date_field_tag :date, selected: date %>   -->
+                <%= submit_tag "Selesai Lembur", class: "inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" %>
+              <% end %>
+            <% else %>
+            <%= get_checkout_data(date, user) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+

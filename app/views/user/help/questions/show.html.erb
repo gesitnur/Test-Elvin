@@ -1,0 +1,73 @@
+<div class="p-7">
+  <div class="main-content-header mb-3 flex justify-between items-center">
+    <h1 class="interview-header-title text-3xl font-bold">Show Thread</h1>
+    <div class="form-group flex gap-2 text-right col-span-1">
+      <span>
+        <%= link_to 'Back', user_help_questions_path, class: 'inline-block bg-white border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+      </span>
+    </div>
+  </div>
+  <div class="main-content-card bg-white p-7 rounded shadow-md mb-10">
+    <div class="help-center">
+      <div class="help-center-question-text mb-5">
+        <h1 class="help-center-title text-3xl font-bold mb-5"><%= @forum.title.humanize %></h1>
+        <div class="flex gap-2 justify-between mb-5">
+          <div class="flex gap-2 items-center">
+            <span class="block w-10 h-10 rounded-full">
+              <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="w-10 h-10">
+            </span>
+            <span>
+              <p class="font-bold"><%= @forum.user&.name || 'Admin' %></p>
+              <p class="text-sm"><%= date_formater(@forum.created_at, '%a, %d %B %Y') %> <span class="ml-2"><i class="far fa-clock"></i> <%= date_formater(@forum.created_at, '%I:%M %p') %></span></p>
+            </span>
+          </div>
+        </div>
+        <div class="help-center-desc mb-5 prose text-black max-w-full ">
+          <%= @forum.description.html_safe %>
+        </div>
+        <div class="help-center-tags">
+          <% @forum.tag.split(",").each do |tag| %>
+            <%= link_to user_help_questions_path('q[tag_cont]':  tag, 'filter':  'all') do %>
+              <span class="bg-pacifixBlue text-sm bg-opacity-20 text-pacifixBlue hover:bg-opacity-30 font-bold py-2 px-4 rounded-full"><%= tag.humanize %></span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <% if current_user.present? %>
+        <% unless @forum.is_admin %>
+          <div class="help-center-action">
+            <div class="flex justify-between items-center border-t pt-4">
+              <span class="inline-flex gap-3">
+                <button class="inline-flex items-center gap-2 hover:text-pacifixBlue text-gray-500 transition rounded btn-help-center-reply">
+                  <i class="fas fa-reply"></i>
+                  <span>Reply</span>
+                </button>
+                <div class="" id="forum-vote">
+                  <%= render partial: 'user/help/questions/partials/forum_vote', locals: { forum: @forum } %>
+                </div>
+              </span>
+              <span class="inline-flex gap-3">
+                <span class="text-gray-500"><i class="far fa-comment-dots"></i> <span id="total-answer-count"><%= @forum.forum_replies.count %></span></span>
+              </span>
+            </div>
+            <%= form_for(@forum_reply, url: user_forum_replies_path, method: :post, remote: true, html: {class: 'form-answer editor hidden mt-4'}) do |f| %>
+              <%= f.text_area :message, class: 'text-editor', placeholder: 'Message', required: true %>
+              <%= f.hidden_field :user_id, value: current_user.id %>
+              <%= f.hidden_field :forum_id, value: @forum.id %>
+
+              <%= f.submit 'Submit', class: 'bg-pacifixBlue text-white border border-pacifixBlue mr-1 px-4 hover:shadow-md transition py-1 rounded mt-4 btn-submit-reply' %>
+              <button type="button" class="border border-pacifixBlue px-4 hover:shadow-md transition py-1 rounded mt-4 btn-help-center-reply">Cancel</button>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <% unless @forum.is_admin %>
+    <div class="reply-section">
+      <div class="help-center-answer">
+        <%= render partial: 'user/help/questions/partials/answer_section', locals: { forum_replies: @forum_replies, forum: @forum } %>
+      </div>
+    </div>
+  <% end %>
+</div>

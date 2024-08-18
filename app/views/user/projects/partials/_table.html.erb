@@ -1,0 +1,94 @@
+<style type="text/css">
+  .popup {
+    position: relative;
+  }
+
+  .popup .popuptext {
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -50px;
+  }
+
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+</style>
+<div class="detail-modal"></div>
+<div class="overflow-x-auto lg:overflow-visible" id="user-table">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2 whitespace-nowrap">Name</th>
+        <th class="border p-2 whitespace-nowrap">Anggota</th>
+        <th class="border p-2 w-28"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(projects, 6) %>
+      <% projects.each.with_index(1) do |project, idx| %>
+        <div class="modal fixed z-50 hidden" id="modalApprove<%= idx %>">
+          <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+          <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+            <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px]">
+              <div class="modal-content py-6 px-4">
+                <span>Are you sure?</span>
+              </div>
+              <div class="modal-footer border-t text-right p-4">
+                <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalApprove" data-modal="modalApprove<%= idx %>">Close</button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fixed z-50 hidden" id="modalReject<%= idx %>">
+          <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+          <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+            
+          </div>
+        </div>
+        <tr>
+          <td class="border p-2"><%= idx %></td>
+          <td class="border p-2 whitespace-nowrap"><%= project.name %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <% project.user_projects.each.with_index(1) do |user_project, idx| %>
+              <%= user_project.user.name %>
+              <%= button_to "Delete", destroy_user_user_project_path(user_project), data: { confirm: "Are you sure?" }, method: :delete %>
+            <% end %>
+
+            <!-- <%= project.user_projects.map { |user_project| user_project.user.name }.join(', ') %></td> -->
+          <td class="border p-2 whitespace-nowrap">
+            <%= link_to list_user_admin_project_path(project), class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear', remote: true do %>
+              <i class="fa fa-plus" aria-hidden="true"></i> Tambah Anggota
+            <% end %>
+            <%= link_to edit_user_project_path(project), class: 'bg-orange-400 w-7 h-7 rounded inline-block mb-1', remote: true do %>
+              <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info projects, entry_name: 'Work Leave Request' if projects.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate projects, window: 2 %>
+  </div>
+</div>

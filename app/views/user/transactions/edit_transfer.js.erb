@@ -1,0 +1,16 @@
+$('#transaction-form').html(`<%= render partial: 'user/transactions/partials/transfer_form',
+                          locals: { recurring_transfers: @recurring_transfers, expenses: @expenses, incomes: @incomes, url: update_transfer_user_transaction_path(@transaction) } %>`);
+
+$('.select-type').val("<%= params[:type] %>");
+
+$.ajax({
+        url: $('.select-type').data('url'),
+        type: "GET",
+        dataType:"script",
+        data: {
+          type: $('.select-type').val(),
+          category: $('.category-id-field').val()
+        },
+      })
+
+format_number_field()

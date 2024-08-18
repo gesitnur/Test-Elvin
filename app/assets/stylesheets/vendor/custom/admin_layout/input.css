@@ -1,0 +1,173 @@
+@font-face {
+  font-family: "neue";
+  font-weight: 700;
+  font-style: normal;
+  src: url('Neue\ Plak\ SemiBold.ttf');
+}
+
+@font-face {
+  font-family: "neue";
+  font-weight: normal;
+  font-style: normal;
+  src: url('Neue_Plak_Regular.ttf');
+}
+
+body {
+  font-family: "neue", sans-serif;
+}
+
+.input-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #50B0C0;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: .4s;
+}
+
+.select2-selection {
+  min-height: 40px;
+  vertical-align:center;
+  vertical-align:right; 
+  vertical-align:middle;
+  border: 1px solid rgb(203 213 225 / 1) !important; 
+}
+.select2-selection:focus {
+  border: 1px solid #50B0C0 !important;
+  transition: .3s !important;
+}
+
+.select2-selection--multiple {
+  height: 35px !important;
+  width: 100% !important;
+}
+
+.select2-selection__rendered,
+.select2-selection__arrow {
+  margin-top: 6px !important;
+} 
+
+.select2-dropdown {
+  z-index: 11 !important;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 2px;
+  position: absolute;
+  right: 0;
+} 
+
+.sidebar-menu-item a.active {
+  background-color: #ffffff;
+  color: #000;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+.sidebar::-webkit-scrollbar-thumb {
+  background: #ffffff; 
+  border-radius: 10px;
+}
+
+.arrow-dropdown {
+  transition: .2s;
+}
+
+.arrow-dropdown.active {
+  transform: rotate(89deg);
+} 
+
+.sidebar-menu-link.active {
+  @apply bg-white text-gray-900
+}
+
+.dropdown-button.active {
+  background: #fff;
+  color: #000;
+}
+
+.dropdown.active {
+  display: block !important;
+}
+
+.tabs ul {
+  width: 100%;
+}
+
+.tabs ul li.active {
+  border-bottom: 4px solid #50B0C0;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  text-align: center;
+  padding: 4px 8px;
+  position: absolute;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.default-label {
+  transform-origin: 182px 162px;
+}
+
+.is-filtered {
+  border-bottom-width: 1px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.text-limiter {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+           line-clamp: 2;
+   -webkit-box-orient: vertical;
+}
+
+@media screen and (max-width: 768px){
+	.sidebar {
+		left: -260px;
+		transition:  .5s ease;
+	}
+	.sidebar.active {
+		left: 0;
+	}
+}
+
+@media only screen and (max-width: 550px) {
+  .tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    padding:  6px 0px;
+  }
+
+  .tabs ul {
+    display: flex;
+    max-width: 440px;
+  }
+
+  .tabs li {
+    white-space: nowrap;
+
+  }
+}

@@ -1,0 +1,15 @@
+<div class="flex justify-between">
+  <div>
+    <span class="text-2xl font-bold">Income</span><br>
+    <span class="text-xs"><%= date %></span>
+  </div>
+  <div class="form-group">
+    <select class="p-2 bg-white outline-none border rounded focus:border-pacifixBlue transition ease-linear chart-dashboard income-dashboard" data-url=<%= chart_dashboard_user_dashboard_index_path %>>
+      <option value="daily" <%= 'selected' if type.eql?('daily') %>>Daily</option>
+      <option value="weekly" <%= 'selected' if type.eql?('weekly') %>>Weekly</option>
+      <option value="monthly" <%= 'selected' if type.eql?('monthly') %>>Monthly</option>
+      <option value="annually" <%= 'selected' if type.eql?('annually') %>>Annually</option>
+    </select>
+  </div>
+</div>
+<%= pie_chart income_reports, colors: ["#3AD6B3", "#86d0c0", "#00d0a2"], donut: true,  width: "100%", height: "300px" %>

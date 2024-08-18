@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Elvin.com</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "admin_layout", "data-turbo-track": "reload" %>
+    <%#= javascript_pack_tag "application.js", "data-turbolinks-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-slate-100">
+    <div class="main-app min-h-screen relative flex flex-col">
+      <%= render 'layouts/shared/sidebar_interview' %>
+      <nav class="navbar sticky top-0 right-0 w-full p-3 bg-white shadow-md z-30 ">
+        <div class="flex justify-between items-center">
+          <div class="sidebar-brand hidden tablet:block">
+            <a href="" class="text-pacifixBlue text-xl font-bold">Calon Pegawai</a>
+          </div>
+          <button class="navbar-toggle bg-pacifixBlue h-10 w-10 text-white flex p-2 rounded shadow tablet:invisible">
+            <i class="fas fa-bars m-auto"></i>
+          </button>
+          <div class="user-profile flex items-center gap-2 cursor-pointer">
+            <p class="text-sm hidden sm:block">Halo, <%= current_interview.name %></p>
+            <div class="p-2 h-8 w-8 flex bg-slate-400 rounded-full">
+              <i class="fa fa-user m-auto text-slate-300" aria-hidden="true"></i>
+            </div>
+            <div class="user-profile-menu w-36 sm:w-40 rounded absolute bg-white shadow-sm right-4 sm:right-14 md:right-5 top-14 py-2 px-4 border hidden">
+              <ul>
+                <li>
+                  <%= button_to destroy_interview_session_path, method: :delete do %>
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="main-content tablet:ml-56 py-5">
+        <div class="container mx-auto px-4 md:px-6">
+          <%= yield %>
+        </div>
+      </div>
+      <div class="footer tablet:ml-56 px-10 py-3 mt-auto text-center flex items-center justify-center text-slate-500">
+        <span>Proudly created with </span>
+        <%= image_tag asset_image("elvin/love-footer.svg"), class: 'w-8 mx-1' %>
+        <a href=""> Nineod</a>
+      </div>
+    </div>
+  </body>
+</html>

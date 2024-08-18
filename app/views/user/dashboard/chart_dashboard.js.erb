@@ -1,0 +1,4 @@
+$('.dashboard-income-section').html(`<%= render partial: 'user/dashboard/partials/income_chart',
+                                locals: { income_reports: @income_reports, date: @income_date_header, type: @income_type } %>`);
+$('.dashboard-expense-section').html(`<%= render partial: 'user/dashboard/partials/expense_chart',
+                                locals: { expense_reports: @expense_reports, date: @expense_date_header, type: @expense_type } %>`);

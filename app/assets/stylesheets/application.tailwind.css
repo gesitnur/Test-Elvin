@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .pagination {
+    @apply inline-flex -space-x-px;
+  }
+  .page {
+    @apply py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+  }
+  .current {
+    @apply py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white;
+  }
+
+  .select2-dropdown {
+    @apply rounded-b-lg shadow-md border;
+  }
+
+  .select2-selection {
+    @apply bg-sky-500
+  }
+
+  .select2-container--default.select2-container--focus .select2-selection--multiple  {
+    @apply border-pacifixBlue border shadow transition ease-in
+  }
+
+  .select2-container .select2-search--inline .select2-search__field  {
+    @apply mt-0
+  }
+
+  .select2-container--default .select2-selection--multiple {
+    @apply border border-slate-300
+  }
+
+  .select2-results__group {
+    @apply text-lg font-bold text-gray-900;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    @apply bg-pacifixBlue border-none text-white
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    @apply text-white border-r border-white hover:bg-pacifixBlue hover:text-white
+  }
+
+  .trumbowyg-editor {
+    @apply prose max-w-full text-black
+  }
+
+  .tagify-field:focus-within {
+    @apply border border-pacifixBlue !important;
+  }
+  /*.active {
+    @apply bg-gray-100 text-gray-900 !important
+  }*/
+}

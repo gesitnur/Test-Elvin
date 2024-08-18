@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Block Leave</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "admin_layout", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  
+  <style>
+    .progress {
+      width: 70px;
+      height: 70px;
+    }
+  </style>
+  </head>
+  <body class="bg-slate-100">
+    <div class="work-leave w-full">
+      <div class="container mx-auto px-4">
+        <div class="h-screen flex justify-center items-center">
+          <div class="work-leave-card bg-white w-full sm:w-3/4 lg:w-2/5 shadow rounded-lg">
+            <div class="work-leave-header border-b px-5 py-3 text-center justify-between">
+              <div class="work-leave-title">
+                <h1 class="font-bold text-2xl">Request Rejected<h1>
+              </div>
+            </div>
+            <div class="work-leave-content px-5 py-3 gap-3 text-center">
+              <%= image_tag asset_image("elvin/request-rejected.svg"), class: 'w-60 m-auto' %>
+              <p><%= simple_format employee_website_setting(@employee).rejected_leave_request_message %></p>
+            </div>
+            <div class="work-leave-footer border-t px-5 py-3 justify-center flex items-center gap-x-4">
+              <button class="border-pacifixBlue bg-pacifixBlue rounded border py-1 px-5 text-white shadow transition showModal ease-linear hover:shadow-lg btn-submit-leave flex" type="button">
+                <span class="">Detail</span>
+              </button>
+              <%= render partial: 'work_leaves/partials/leave_request_modal',
+                          locals: { leave_request: @leave_request, employee: @employee } %>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var colorAnimate = '#50B0C0';
+    $('.progress').each(function(i) {
+      var circle = new ProgressBar.Circle(this, {
+        color: colorAnimate,
+        easing: 'linear',
+        strokeWidth: 8,
+        duration: 1500,
+        trailColor: '#C3E1E5',
+        trailWidth: 8,
+      });
+      var value = ($(this).attr('value') / 100);
+      circle.animate(value);
+    });
+  </script>
+</html>

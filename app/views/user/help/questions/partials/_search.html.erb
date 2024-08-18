@@ -1,0 +1,19 @@
+<%= search_form_for q, url: user_help_questions_path,
+                        html: { method: :get, class: 'mb-5', remote: true } do |f| %>
+  <div class="relative">
+    <div class="absolute inset-y-0 right-3 flex items-center pl-3 pointer-events-none">
+      <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </div>
+    <% if params[:q].blank? %>
+      <% title_value = nil %>
+      <% tag_value = nil %>
+    <% else %>
+      <% title_value = params[:q][:title_or_description_or_tag_cont] %>
+      <% tag_value = params[:q][:tag_cont] %>
+    <% end %>
+    <% search_value = title_value || tag_value %>
+
+    <input type="hidden" value="<%= params[:filter] %>" name="filter">
+    <%= f.text_field :title_or_description_or_tag_cont, value: search_value, class: 'block w-full p-3 text-sm text-gray-900 shadow border-gray-300 rounded-md bg-white focus:ring-blue-500 outline-none transition focus:border-pacifixBlue', placeholder: 'Search question' %>
+  </div>
+<% end %>

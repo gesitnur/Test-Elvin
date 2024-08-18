@@ -1,0 +1,64 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(user, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Name", class: 'font-bold block' %>
+    <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Name', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :gender, "Jenis Kelamin", class: 'block font-bold mb-2' %>
+    <div class="flex gap-10">
+      <div class="form-radio">
+        <%= f.radio_button :gender, 'Man', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'gender', checked: true, required: true %>
+        <%= label :gender, 'Laki laki', class: 'form-check-label inline-block text-gray-800' %>
+      </div>
+      <div class="form-check">
+        <%= f.radio_button :gender, 'Woman', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', id: 'gender', required: true %>
+        <%= label :gender, 'Perempuan', class: 'form-check-label inline-block text-gray-800' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :date_of_birth, "Tanggal Lahir", class: 'block font-bold mb-1' %>
+    <%= f.date_field :date_of_birth, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Date Of Birth', required: true %>
+  </div>
+  <div class="form-group">
+    <%= f.label :email, "Email", class: 'font-bold block' %>
+    <%= f.text_field :email, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Email', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :graduated, "Asal Sekolah", class: 'block font-bold mb-1' %>
+    <%= f.text_field :graduated, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Asal Sekolah', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :address, "Alamat", class: 'block font-bold mb-1' %>
+    <%= f.text_field :address, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Alamat', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :nik, "NIK", class: 'block font-bold mb-1' %>
+    <%= f.text_field :nik, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'NIK', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :npwp, "NPWP", class: 'block font-bold mb-1' %>
+    <%= f.text_field :npwp, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'NPWP', required: true %>
+  </div>
+  <div class="form-group col-span-2 sm:col-span-1">
+    <%= f.label :phone_number, "Nomor Telepon", class: 'block font-bold mb-1' %>
+    <%= f.text_field :phone_number, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', placeholder: 'Nomor Telepon', required: true %>
+  </div>
+  <% if f.object.new_record? %>
+  <div class="form-group">
+    <%= f.label :password, "Password", class: 'font-bold block' %>
+    <%= f.password_field :password, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Password', required: true %>
+    <%= f.hidden_field :email_confirmed, value: true %>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.label :position_id, "Jabatan", class: 'font-bold block' %>
+    <%= f.select :position_id, options_for_select(@positions, f.object.position_id), {include_blank: 'Pilih Jabatan'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", id: 'domain-access'} %>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', user_users_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

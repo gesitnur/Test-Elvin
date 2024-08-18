@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nineod.com</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application_nineod", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <div class="links-wrap">
+      <div class="background-info-thin w-100 vh-100 d-flex align-items-center">
+        <div class="container py-4">
+          <div class="links-header text-center mb-5">
+            <%= image_tag asset_image("nineod/nine_circle.png"), class: 'nineod-logo-circle', alt: 'nine_circle' %>
+          </div>
+          <div class="links-content-list">
+            <div class="links-content-items text-center mb-3">
+              <a href="http://www.nineod.com/" class="text-uppercase m-auto w-75 py-2 d-inline-block text-decoration-none rounded-pill">Nineod Website</a>
+            </div>
+            <div class="links-content-items text-center mb-3">
+              <a href="https://www.nineod.com/services" class="text-uppercase m-auto w-75 py-2 d-inline-block text-decoration-none rounded-pill">Nineod Web Services</a>
+            </div>
+            <div class="links-content-items text-center mb-3">
+              <a href="https://api.whatsapp.com/send?phone=+628112108020&text=Saya%20ingin%20bertanya%20perihal%20pembuatan%20custom%20web%20apps" class="text-uppercase m-auto w-75 py-2 d-inline-block text-decoration-none  rounded-pill">Custom Web App</a>
+            </div>
+            <div class="links-content-items text-center mb-3">
+              <a href="https://api.whatsapp.com/send?phone=+628112108020&text=Saya%20ingin%20bertanya%20perihal%20pembuatan%20toko%20online" class="text-uppercase m-auto w-75 py-2 d-inline-block text-decoration-none  rounded-pill">Buat Toko Online</a>
+            </div>
+            <div class="links-content-items text-center mb-4">
+              <a href="https://api.whatsapp.com/send?phone=+628112108020&text=Saya%20ingin%20bertanya%20perihal%20pembuatan%20website%20pribadi" class="text-uppercase m-auto w-75 py-2 d-inline-block text-decoration-none  rounded-pill">Buat Website Pribadi</a>
+            </div>
+            <div class="links-social-media d-flex justify-content-center">
+              <a href="https://www.facebook.com/nineod/" target="_blank" class="d-flex text-black bg-white text-decoration-none rounded-circle me-3"><i class="fab fa-facebook-f m-auto"></i></a>
+              <a href="https://www.instagram.com/nineodofficial/" target="_blank" class="d-flex text-black bg-white text-decoration-none rounded-circle me-3"><i class="fab fa-instagram m-auto"></i></a>
+              <a href="https://twitter.com/nineodofficial" target="_blank" class="d-flex text-black bg-white text-decoration-none rounded-circle me-3"><i class="fab fa-twitter m-auto"></i></a>
+              <a href="https://www.youtube.com/channel/UC5i3z--8T9DPZR7JcGye94w" target="_blank" class="d-flex text-black bg-white text-decoration-none rounded-circle"><i class="fab fa-youtube m-auto"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

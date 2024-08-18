@@ -1,0 +1,11 @@
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">New Worker</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded">
+  <%= render partial: 'user/users/partials/form',
+              locals: {
+                user: @user,
+                text_submit: 'Save',
+                url: user_users_path
+              } %>
+</div>

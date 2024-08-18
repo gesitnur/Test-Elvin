@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "neue";
+  font-weight: bold;
+  font-style: normal;
+  src: url('Neue_Plak_Black.ttf');
+}
+
+@font-face {
+  font-family: "neue";
+  font-weight: normal;
+  font-style: normal;
+  src: url('Neue_Plak_Regular.ttf');
+}
+
+body {
+  font-family: "neue", sans-serif;
+}

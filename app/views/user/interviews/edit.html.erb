@@ -1,0 +1,8 @@
+<div class="main-content-header flex justify-between items-center">
+  <h1 class="text-2xl sm:text-3xl font-bold mb-5 main-content-title">Update Interview</h1>
+</div>
+<%= render partial: 'user/interviews/partials/form',
+            locals: {
+              interview: @interview,
+              url: user_interview_path
+            } %>

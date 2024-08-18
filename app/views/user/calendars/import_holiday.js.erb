@@ -1,0 +1,9 @@
+<% if flash[:alert].present? %>
+  $('.flash_alert').html(`<%= render partial: 'shared/global/components/alert_modal',
+                                        locals: { alert: flash[:alert] } %>`);
+  $('.btn-close-alert').click(function(){
+    $(this).parent().hide()
+  })
+<% else %>
+  location.reload();
+<% end %>

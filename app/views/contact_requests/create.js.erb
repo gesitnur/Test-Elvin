@@ -1,0 +1,6 @@
+<% if @contact_request.errors.any? %>
+  toastr.warning("<%= @contact_request.errors.full_messages.to_sentence %>")
+<% else %>
+  toastr.success('Thank You For Contacting Us')
+  $('.contact-input').val('');
+<% end %>

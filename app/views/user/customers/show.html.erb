@@ -1,0 +1,110 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5"><%= @customer.display_name %></h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flex justify-between flex-row-reverse mb-3">
+    <%= link_to edit_user_customer_path(@customer), class: 'inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+      <i class="fa fa-edit" aria-hidden="true"></i> Edit
+    <% end %>
+    <%= link_to user_customers_path, class: 'inline-block border border-pacifixBlue rounded py-2 px-4 hover:shadow-md transition ease-linear' do %>
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+  <h1 class="text-xl py-2 mb-3 border-b"><i class="fas fa-building mr-1"></i> <%= @customer.company_name %></h1>
+  <div class="grid grid-cols-1 md:grid-cols-2  gap-5">
+    <div class="customer">
+      <div class="customer-wrap flex gap-5 mb-5 ">
+        <div class="customer-image w-28">
+          <%= image_tag asset_image("elvin/img-customer-default.png"), alt: "whatsapp-image", class: 'w-20 h-20 rounded-full border' %>
+        </div>
+        <div class="customer-details w-full">
+          <h2 class="text-2xl sm:text-3xl font-bold"><%= @customer.display_name %></h2>
+          <p><i class="far fa-envelope mr-2"></i> <%= @customer.email %></p>
+          <p><i class="fas fa-globe mr-2"></i> <%= @customer.website %></p>
+          <p><i class="fas fa-phone-alt mr-2"></i> <%= @customer.phone %></p>
+        </div>
+      </div>
+    </div>
+    <div class="other-details mb-4">
+      <h1 class="font-bold uppercase text-xl text-slate-500">other details</h1>
+      <table class="w-full">
+        <tr>
+          <td class="font-bold">Customer Type</td>
+          <td><%= @customer.customer_type %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Currency</td>
+          <td><%= @customer.currency.code %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Payment Term</td>
+          <td><%= @customer.payment_term.name %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Status Portal</td>
+          <td><%= @customer.enable_portal %></td>
+        </tr>
+        <tr>
+          <td class="font-bold">Portal Language</td>
+          <td><%= @customer.portal_language %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="address-billing w-full">
+      <h1 class="text-xl text-slate-500 font-bold uppercase">Billing address</h1>
+      <table>
+        <tr>
+          <td><%= @customer.billing_address.attention %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.billing_address.street1 %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.billing_address.street2 %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.billing_address.city %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.billing_address.state.name %> <%= @customer.billing_address.zip_code %> </td>
+        </tr>
+        <tr>
+          <td><%= @customer.billing_address.country.name %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="address-shipping">
+      <h1 class="text-xl text-slate-500 font-bold uppercase">shipping address</h1>
+      <table>
+        <tr>
+          <td><%= @customer.shipping_address.attention %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.shipping_address.street1 %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.shipping_address.street2 %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.shipping_address.city %></td>
+        </tr>
+        <tr>
+          <td><%= @customer.shipping_address.state&.name %> <%= @customer.shipping_address.zip_code %> </td>
+        </tr>
+        <tr>
+          <td><%= @customer.shipping_address.country&.name %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+  <%= form_for(@customer, url: '', html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+    
+    <div class="form-group remark-section hidden">
+      <%= f.label :remark, "Remark", class: 'font-bold block' %>
+      <%= f.text_area :remark, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', rows: 4, placeholder: 'Remark', required: true %>  
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,21 @@
+<section class="login-superadmin h-screen w-full bg-pacifixBlue flex justify-center items-center">
+  <div class="container mx-auto px-4 max-w-md">
+    <h1 class="login-superadmin-title text-center text-white text-3xl mb-4">Log In Admin</h1>
+    <%= form_for(resource, as: resource_name, data: { turbo: false }, :html => {:class => 'login-superadmin-form shadow-xl flex flex-col bg-white py-7 px-5 sm:p-10 rounded mb-5'}, url: session_path(resource_name)) do |f| %>
+      <% if flash[:alert].present? %>
+        <p class="alert"><%= flash[:alert] %></p>
+      <% end %>
+      <div class="login-superadmin-form-group mb-2">
+        <%= f.text_field :login_uniq, autocomplete: "login_uniq", class: 'w-full text-slate-600 rounded bg-transparent border p-2 border-slate-300 focus:outline-none focus:border-pacifixBlue', placeholder: 'Username', required: true %>
+      </div>
+
+      <div class="login-superadmin-form-group mb-2">
+        <%= f.password_field :password, autocomplete: "current-password", class: 'w-full rounded bg-transparent border p-2 border-slate-300 focus:outline-none focus:border-pacifixBlue', placeholder: 'Password', required: true  %>
+      </div>
+
+      <div class="login-superadmin-form-group">
+        <%= f.submit "Login", class: 'bg-africanViolet w-full text-white py-2 rounded hover:shadow-xl transition ease-in duration-200' %>
+      </div>
+    <% end %>
+  </div>
+</section>

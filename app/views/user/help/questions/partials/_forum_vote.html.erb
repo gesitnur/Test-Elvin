@@ -1,0 +1,8 @@
+<% if current_user.present? %>
+  <button class="text-gray-500 inline-flex items-center gap-2 <%= 'text-pacifixBlue' if current_user.voted_for? forum %>">
+    <%= link_to upvote_user_help_question_path, method: :patch, class: '', remote: true do %>
+      <i class="fas fa-arrow-alt-circle-up mb-0.5"></i>
+    <% end %>
+    <span class="total-upvote"><%= forum.get_upvotes.size %></span>
+  </button>
+<% end %>

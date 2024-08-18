@@ -1,0 +1,12 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Bug Reports</h1>
+</div>
+<%= render 'admin/bug_reports/partials/search' %>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+  </div>
+  <%= render partial: 'admin/bug_reports/partials/table',
+              locals: { bug_reports: @bug_reports } %>
+</div>

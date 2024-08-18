@@ -1,0 +1,157 @@
+<style type="text/css">
+  .popup {
+    position: relative;
+  }
+
+  .popup .popuptext {
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -50px;
+  }
+
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+  }
+</style>
+<div class="detail-modal"></div>
+<div class="overflow-x-auto lg:overflow-visible" id="user-table">
+  <table class="w-full text-left shadow">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2 whitespace-nowrap">Nama</th>
+        <th class="border p-2">Tipe</th>
+        <th class="border p-2 w-20 whitespace-nowrap">Tanggal</th>
+        <th class="border p-2">Prioritas</th>
+        <th class="border p-2">Status</th>
+        <th class="border p-2 w-28">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(work_leave_requests, 6) %>
+      <% work_leave_requests.each.with_index(1) do |work_leave_request, idx| %>
+        <div class="modal fixed z-50 hidden" id="modalApprove<%= idx %>">
+          <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+          <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+            <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px]">
+              <%= form_tag approve_admin_work_leave_request_path(work_leave_request), method: :patch do %>
+                <div class="modal-content p-4 gap-4">
+                  <%= label_tag :user_id, "Pegawai Pengganti", class: 'font-bold block' %>
+                  <%= select_tag :user_id, options_for_select(@users, params[:q] ? params[:q][:user_id] : nil), {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue py-[6px] select-dropdown", id: 'admin-domain-access-field', 'data-url': admin_admins_path} %>
+                </div>
+                <div class="modal-footer p-4 border-t text-right">
+                  <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalReject" data-modal="modalReject<%= idx %>">Close</button>
+                  <%= button_tag(type: "submit", class: "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded") do %>
+                     Approve
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="modal fixed z-50 hidden" id="modalReject<%= idx %>">
+          <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+          <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+            <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+              <%= form_tag reject_user_work_leave_request_path(work_leave_request), method: :patch do %>
+                <div class="modal-content p-4 gap-4">
+                  <%= label_tag :reject_reason, 'Alasan Reject', class: 'font-bold block' %>
+                  <%= text_field_tag :reject_reason, '', class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: "Reject Reason", required: true, autocomplete: :off %>
+                </div>
+                <div class="modal-footer p-4 border-t text-right">
+                  <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModalReject" data-modal="modalReject<%= idx %>">Close</button>
+                  <%= button_tag(type: "submit", class: "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded") do %>
+                     Reject
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <tr>
+          <td class="border p-2"><%= idx %></td>
+          <td class="border p-2 whitespace-nowrap"><%= work_leave_request.user.name %></td>
+          <td class="border p-2 whitespace-nowrap"><%= work_leave_request.leave_type&.name || '-' %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <% if work_leave_request.start_date.present? %>
+              <%= leave_request_date_range(work_leave_request) %> (<%= calculate_day_off(work_leave_request) %> Day Off)
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <td class="border p-2 whitespace-nowrap"><%= work_leave_request.leave_type&.priority&.humanize %></td>
+          <td class="border p-2 whitespace-nowrap"><%= work_leave_request.status.humanize %></td>
+          <td class="border p-2 relative whitespace-nowrap action-column">
+            <div class="group relative inline-block">
+              <button class="bg-pacifixBlue rounded text-white w-7 h-7 btn-action-dropdown"><i class="fas fa-chevron-down m-auto"></i></button>  
+              <nav tabindex="0" class="border z-10 bg-white invisible rounded w-60 absolute border border-gray-300 right-0 shadow-xl transition-all duration-300 opacity-0">
+                <ul class="py-2">
+                  <% unless work_leave_request.not_filled? %>
+                    <li>
+                      <%= link_to admin_work_leave_request_path(work_leave_request), class: 'py-2 px-4 focus:bg-gray-100 hover:bg-gray-100 inline-block w-full text-[#4f4f4f]', remote: true do %>
+                        <span><i class="fa fa-eye w-7" aria-hidden="true"></i> Detail</span>
+                      <% end %>
+                    </li>
+                  <% end %>
+                  <% if work_leave_request.pending? %>
+                    <li>
+                      <button type="button" class="block px-4 py-2 w-full text-left hover:bg-gray-100 text-[#4f4f4f] focus:bg-gray-100 showModalApprove button-action" data-modal="modalApprove<%= idx %>">
+                        <span><i class="fa fa-check w-7" aria-hidden="true"></i> Approve</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button class="block px-4 py-2 hover:bg-gray-100 w-full text-left text-[#4f4f4f] focus:bg-gray-100 showModalReject button-action" data-modal="modalReject<%= idx %>">
+                        <span><i class="fa fa-ban w-7" aria-hidden="true"></i> Reject</span>
+                      </button>
+                    </li>
+                  <% end %>
+                </ul>
+              </nav>
+            </div>
+            <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+              <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+            </button>
+            <div class="modal fixed z-50 hidden" id="modal">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                  <div class="modal-content mb-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer text-right">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                    <%= link_to admin_work_leave_request_path(work_leave_request), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                       Delete
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info work_leave_requests, entry_name: 'Work Leave Request' if work_leave_requests.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate work_leave_requests, window: 2 %>
+  </div>
+</div>

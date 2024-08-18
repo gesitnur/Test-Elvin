@@ -1,0 +1,105 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">App Settings</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded border">
+  <div class="tabs">
+    <ul id="tabs-nav" class="border-b overflow-auto">
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab1">Company Info</a>
+      </li>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear ">
+        <a href="#tab2">Advance</a>
+      </li>
+    </ul>
+  </div>
+  <div id="tabs-content" class="py-3">
+    <div id="tab1" class="tab-content">
+      <div class="company-data grid grid-cols-1 lg:grid-cols-4 gap-2 mb-5">
+        <div class="text-center ">
+          <%= image_tag company_logo_image(@app_setting.company_logo&.url), class: 'w-[150px] h-[150px] object-cover m-auto rounded-full text-center mb-2', alt: 'company-logo-img' %>
+        </div>
+        <div class="company-data-field grid grid-cols-2 lg:grid-cols-3 gap-3 lg:col-span-3 items-center">
+          <div class="form-group col-span-2 lg:col-span-3 text-center sm:text-left justify-between">
+            <div class="company-title">
+              <h1 class="text-xl font-bold"><%= @app_setting.company_name %></h1>
+              <p><%= @app_setting.industry %> - <%= @app_setting.country&.name %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">Street 1</label>
+            <p><%= @app_setting.street1 %></p>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">Street 2</label>
+            <p><%= @app_setting.street2 %></p>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">City</label>
+            <p><%= @app_setting.city %></p>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">State</label>
+            <p><%= @app_setting.state&.name %></p>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">Zip Code</label>
+            <p><%= @app_setting.zip_code %></p>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">Fax</label>
+            <p><%= @app_setting.fax %></p>
+          </div>
+          <div class="form-group ">
+            <div class="break-words">
+              <label class="font-bold block">Website</label>
+              <a href="#" target="_blank" class="hover:underline"><%= @app_setting.website %></a>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="font-bold">Email</label>
+            <p><%= @app_setting.company_email %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tab2" class="tab-content mb-5">
+      <table class="w-full mb-5">
+        <tr>
+          <td class="py-1 lg:w-1/4 align-top"><p class="font-bold">Base Currency</p></td>
+          <td class="align-top"><p><%= @app_setting.currency.code %></p></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Fiscal Year</p></td>
+          <td class="align-top"><p><%= @app_setting.fiscal_year %></p></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Start Date</p></td>
+          <td class="align-top"><p><%= @app_setting.start_date %></p></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Report Basis</p></td>
+          <td class="align-top"><%= @app_setting.report_basis %></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Language</p></td>
+          <td class="align-top"><p><%= @app_setting.language&.name %></p></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Term & Conditions</p></td>
+          <td class="align-top"><p><%= @app_setting.term_and_condition %></p></td>
+        </tr>
+        <tr>
+          <td class="py-1 align-top"><p class="font-bold">Customer Notes</p></td>
+          <td class="align-top"><p><%= @app_setting.customer_note %></p></td> 
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= link_to edit_user_app_settings_path, class: 'bg-pacifixBlue py-3 px-4 text-white rounded' do %>
+      <i class="fa fa-edit" aria-hidden="true"></i> Edit
+    <% end %>
+  </div>
+</div>

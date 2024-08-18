@@ -1,0 +1,185 @@
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">App Settings</h1>
+</div>
+<div class="leave-type-modal"></div>
+<%= form_for(@app_setting, url: user_app_settings_path, method: :put, html: {class: ''}) do |f| %>
+<div class="main-content-card p-7 bg-white shadow-md rounded border">
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+  <div class="tabs">
+    <ul id="tabs-nav" class="border-b overflow-auto">
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear">
+        <a href="#tab1">Company Info</a>
+      </li>
+      <li class="float-left mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear ">
+        <a href="#tab2">Advance</a>
+      </li>
+    </ul>
+  </div>
+  <div id="tabs-content" class="pt-3">
+    <div id="tab1" class="tab-content">
+      <div class="main-content-card grid bg-white grid-cols-1 md:grid-cols-7 gap-x-5 mt-2">
+        <div class="col-span-1 md:col-span-3 mb-4">
+          <div class="grid grid-cols-1 gap-4">
+            <div class="form-group grid md:grid-cols-1 lg:grid-cols-7 gap-4">
+              <div class="md:col-span-1 lg:col-span-3">
+                <%= image_tag company_logo_image(@app_setting.company_logo&.url), class: 'w-[138px] h-[136px] object-cover rounded-full text-center shadow-md m-auto lg:m-0', alt: 'company-logo-img', id: 'blah' %>
+              </div>
+              <div class="img-box-company border text-sm cursor-pointer text-center text-slate-400 flex border-dashed border-2 rounded h-[136px] p-3 md:col-span-1 lg:col-span-4">
+                <div class="m-auto">
+                  <i class="fas fa-image text-2xl"></i>
+                  <p class="m-auto">Click to replace your <span class="block">Company Logo</span></p>
+                  <p class="m-auto">(PNG, JPG, JPEG)</p>
+                </div>
+              </div>
+              <%= f.file_field :company_logo, accept:".png, .jpg, .jpeg", id: 'imgInp', class: 'hidden' %>
+            </div>
+            <div class="form-group hidden">
+              <div class="drop-zone">
+                <span class="drop-zone__prompt">Drop your company logo here</span>
+                <input type="file" name="myFile" class="drop-zone__input">
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :company_name, 'Company Name', class: 'font-bold block' %>
+              <%= f.text_field :company_name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Name', required: true %>
+            </div>
+            <div class="form-group">
+              <%= f.label :industry, 'Industry', class: 'font-bold block' %>
+              <%= f.select :industry , options_for_select(@industries || [], f.object.industry), {include_blank: 'Select Industry'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-dropdown", style: "width: 100%"} %>
+            </div>
+            <div class="form-group">
+              <%= f.label :country_id, 'Country', class: 'font-bold block' %>
+              <%= f.select :country_id , options_for_select(@countries || [], f.object.country_id), {include_blank: 'Select Country'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-country select-dropdown", style: "width: 100%"} %>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-1 md:col-span-4  mb-7">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group col-span-2">
+              <%= f.label :street1, 'Street 1', class: 'font-bold block' %>
+              <%= f.text_field :street1, class: 'w-full border border-slate-300 py-[5px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Street 1', required: true %>
+            </div>
+            <div class="form-group col-span-2">
+              <%= f.label :street2, 'Street 2', class: 'font-bold block' %>
+              <%= f.text_field :street2, class: 'w-full border border-slate-300 py-[5px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Street 2', required: true %>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 col-span-2 gap-3">
+              <div class="form-group-item">
+                <%= f.label :city, "City", class: 'font-bold block' %>
+                <%= f.text_field :city, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'City', required: true %>
+              </div>
+              <div class="form-group-item">
+                <%= f.label :state_id, "State", class: 'font-bold block' %>
+                <%= f.select :state_id , options_for_select(@states || [], f.object.state_id), {include_blank: 'Select State'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%"} %>
+              </div>
+              <div class="form-group-item">
+                <%= f.label :zip_code, "Zip Code", class: 'font-bold block' %>
+                <%= f.text_field :zip_code, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Zip Code', required: true %>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-1 lg:grid-cols-3 col-span-2 gap-3">
+              <div class="form-group-item">
+                <%= f.label :website, "Website", class: 'font-bold block' %>
+                <%= f.text_field :website, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Website', required: true %>
+              </div>
+              <div class="form-group-item">
+                <%= f.label :phone, "Phone", class: 'font-bold block' %>
+                <%= f.text_field :phone, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Phone', required: true %>
+              </div>
+              <div class="form-group-item">
+                <%= f.label :fax, "Fax", class: 'font-bold block' %>
+                <%= f.text_field :fax, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Fax', required: true %>
+              </div>
+            </div>
+            <div class="form-group col-span-2">
+              <%= f.label :company_email, 'Email', class: 'font-bold block' %>
+              <%= f.email_field :company_email, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Email', required: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tab2" class="tab-content mb-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="form-group">
+          <%= f.label :currency_id, 'Base Currency', class: 'font-bold block' %>
+          <%= f.select :currency_id , options_for_select(@currencies || [], f.object.currency_id), {include_blank: 'Select Base Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-dropdown", style: "width: 100%" } %>
+        </div>
+        <div class="form-group">
+          <%= f.label :language_id, 'Language', class: 'font-bold block' %>
+          <%= f.select :language_id , options_for_select(@countries || [], f.object.language_id), {include_blank: 'Select Language'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in select-dropdown", style: "width: 100%" } %>
+        </div>
+        <div class="form-group">
+          <%= f.label :fiscal_year, "Fiscal Year", class: 'font-bold block' %>
+          <%= f.select :fiscal_year , options_for_select(@fiscal_years || [], f.object.fiscal_year), {include_blank: 'Select Fiscal Year'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%" } %>
+        </div>
+        <div class="form-group">
+          <%= f.label :start_date, "Start Date", class: 'font-bold block' %>
+          <%= f.select :start_date , options_for_select(@start_dates || [], f.object.start_date), {include_blank: 'Select Start Date'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-dropdown", style: "width: 100%" } %>
+        </div>
+        <div class="form-group sm:col-span-2 lg:col-span-1">
+          <%= f.label :report_basis, "Report Basis", class: 'font-bold block' %>
+          <div class="flex items-center">
+            <%= f.radio_button :report_basis, 'accrual', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', required: true, checked: true %>
+            <label for="">Accrual (you owe tax as of invoice date)</label>
+          </div>
+          <div class="flex items-center">
+            <%= f.radio_button :report_basis, 'cash', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer', required: true %>
+            <label for="">Cash (you owe tax upon payment receipt)</label>
+          </div>
+        </div>
+        <div class="form-group sm:col-span-2 lg:col-span-1">
+          <label class="font-bold block mb-1">Working days</label>
+          <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 auto-cols-max gap-2">
+            <%= f.fields_for :working_day do |o| %>
+              <div class="form-check">
+                <%= o.check_box :sunday, checked: (true if f.object[:working_day]['sunday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Sunday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :monday, checked: (true if f.object[:working_day]['monday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Monday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :tuesday, checked: (true if f.object[:working_day]['tuesday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Tuesday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :wednesday, checked: (true if f.object[:working_day]['wednesday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Wednesday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :thursday, checked: (true if f.object[:working_day]['thursday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Thursday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :friday, checked: (true if f.object[:working_day]['friday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Friday</label>
+              </div>
+              <div class="form-check">
+                <%= o.check_box :saturday, checked: (true if f.object[:working_day]['saturday'].eql?('1')), class: 'day-check-input accent-pacifixBlue' %>
+                <label for="">Saturday</label>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :term_and_condition, 'Term & Conditions', class: 'font-bold block' %>
+          <%= f.text_area :term_and_condition, class: 'w-full border border-slate-300 py-[5px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Term & Conditions', required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :customer_note, 'Customer Note', class: 'font-bold block' %>
+          <%= f.text_area :customer_note, class: 'w-full border border-slate-300 py-[5px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in website-setting-form', placeholder: 'Customer Note', required: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group flex gap-2 ">
+    <%= f.submit 'Save', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in'%>
+    <%= link_to user_app_settings_path, class: 'inline-block border border-pacifixBlue rounded py-2 px-4 hover:shadow-md transition ease-linear' do %>
+        Back
+    <% end %>
+  </div>
+</div>
+<% end %>

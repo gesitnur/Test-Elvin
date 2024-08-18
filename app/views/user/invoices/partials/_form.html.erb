@@ -1,0 +1,160 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(invoice, url: url, html: {class: 'grid grid-cols-1 gap-4 invoice-form', multipart: true
+}) do |f| %>
+  <div class="form-group">
+    <%= f.label :customer_id, 'Customer Name', class: 'font-bold block' %>
+    <%= f.select :customer_id , options_for_select(@customers || [], f.object.customer_id), {include_blank: 'Select Customer'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in",  style: 'width: 100%;', id: 'select-customer', 'data-url': find_billing_address_user_invoices_path, 'data-customer-url': new_user_customer_path, required: true } %>
+  </div>
+  <div class="form-group" id="invoice-address" hidden>
+  </div>
+  <div class="form-group">
+    <%= f.label :currency_id, 'Currency', class: 'font-bold block' %>
+    <%= f.select :currency_id , options_for_select(@currencies || [], f.object.currency_id || app_setting.currency.id), {include_blank: 'Select Currency'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in select-currency", style: 'width: 100%;', id: 'select-currency', 'data-url': find_currency_user_invoices_path} %>
+  </div>
+  <div class="form-group">
+    <div class="grid grid-cols-2 gap-4 mb-2">
+      <div class="col-span-2 sm:col-span-1">
+        <%= f.label :invoice_code, "Invoice#", class: 'font-bold block' %>
+        <%= f.text_field :invoice_code, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Invoice Code', required: true %>
+      </div>
+      <div class="col-span-2 sm:col-span-1">
+        <%= f.label :order_number, "Order Number", class: 'font-bold block' %>
+        <%= f.text_field :order_number, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Order Number' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+      <div class="col-span-3 sm:col-span-1">
+        <%= f.label :invoice_date, "Invoice Date", class: 'font-bold block' %>
+        <%= f.date_field :invoice_date, class: 'w-full bg-white border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in invoice-date', placeholder: 'Invoice Date', required: true, value: (f.object.invoice_date ||= Time.now).strftime('%Y-%m-%d') %>
+      </div>
+      <div class="col-span-3 sm:col-span-1">
+        <%= f.label :payment_term_id, "Terms", class: 'font-bold block' %>
+        <%= f.select :payment_term_id , options_for_select(@terms || [], f.object.payment_term_id), {}, {class: "p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in", id: 'select-term', 'data-url': find_billing_address_user_invoices_path, style: 'width: 100%; ', 'data-url': find_term_user_invoices_path } %>
+      </div>
+      <div class="col-span-3 sm:col-span-1">
+        <%= f.label :due_date, "Due Date", class: 'font-bold block' %>
+        <%= f.date_field :due_date, class: 'w-full bg-white border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in due-date', placeholder: 'Due Date', required: true, value: (f.object.due_date ||= Time.now).strftime('%Y-%m-%d'), 'data-custom-id': @custom_term %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :sales_person_id, 'Sales Person', class: 'font-bold block' %>
+    <%= f.select :sales_person_id , options_for_select(@sales_persons || [], f.object.sales_person_id), {include_blank: 'Select Sales Person'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3  transition ease-in", style: 'width: 100%;', id: 'select-sales', 'data-url': new_user_sales_person_path } %>
+  </div>
+  <div class="form-group overflow-x-auto">
+    <table class="w-full text-left shadow">
+      <thead>
+        <tr>
+          <th class="border p-2 w-80">Item Details</th>
+          <th class="border p-2">Quantity</th>
+          <th class="border p-2">Rate</th>
+          <th class="border p-2">Tax</th>
+          <th class="border p-2 text-right">Amount</th>
+        </tr>
+      </thead>
+      <tbody id='invoice-items'>
+        <%= f.fields_for :invoice_items do |invoice_item_f| %>
+          <%= render 'invoice_item_fields', form: invoice_item_f %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="d-flex">
+    <%= link_to_add_nested(f, :invoice_items, '#invoice-items', link_text: 'Add Item', partial: 'invoice_item_fields', link_classes: 'bg-africanViolet w-20 text-center text-white text-sm p-2 rounded hover:shadow-lg inline-block transition ease-in btn-add-item cursor-pointer') do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> Add
+    <% end %>
+  </div>
+  <div class="form-group grid grid-cols-1 lg:grid-cols-2 gap-7">
+    <div class="form-group-item col-span-2 md:col-span-1">
+      <div class="row-span-3">
+        <%= f.label :customer_notes, "Customer Notes", class: 'font-bold block' %>
+        <%= f.text_area :customer_notes, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', value: customer_notes_value(f.object), rows: 1, placeholder: 'Customer Notes', required: true %>
+      </div>
+      <div class="row-span-3">
+        <%= f.label :term_and_condition, "Terms & Conditions", class: 'font-bold block' %>
+        <%= f.text_area :term_and_condition, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', value: term_condition_value(f.object), rows: 1, placeholder: 'Terms & Conditions', required: true %>
+      </div>
+       <div class="form-group">
+        <label class="font-bold block">Attachment</label>
+        <input class="p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue px-3 transition ease-in w-full upload-multi-file" type="file">
+      </div> 
+    </div>
+    <div class="form-group-item col-span-2 md:col-span-1">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <div class="w-full text-left">
+          Sub Total
+        </div>
+        <div class="text-right">
+          <span class="subtotal"><%= @invoice.sub_total || '0.00' %></span>
+          <%= f.hidden_field :sub_total, class: 'w-full sm:w-24 subtotal-field' %>
+        </div>
+      </div>
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <div class="flex items-center">
+          <span class="w-36">Discount</span>
+          <%= f.number_field :discount_amount, id: 'discount-field', min: 0, class: 'w-full sm:w-32  border border-slate-300 py-1 px-3 rounded outline-none focus:border-pacifixBlue transition ease-in float-right' %>
+        </div>
+        <span class="text-right discount">-<span class="mr-1"></span><%= @invoice.discount_amount || '0.00' %></span>
+      </div>
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <div class="flex items-center">
+          <span class="w-36">Shipping Charges</span>
+          <%= f.number_field :shipping_charge, id: 'shipping-charges-field', min: 0, class: 'w-full sm:w-32 border border-slate-300 py-1 px-3 rounded outline-none focus:border-pacifixBlue transition ease-in float-right' %>
+        </div>
+        <span class="text-right shipping-charges"><%= @invoice.shipping_charge || '0.00' %></span>
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center">
+          <span class="w-36">Adjustment</span>
+          <%= f.number_field :adjusment, id: 'adjusment-field', min: 0, class: 'w-full sm:w-32 border border-slate-300 py-1 px-3 rounded outline-none focus:border-pacifixBlue transition ease-in float-right' %>
+        </div>
+        <span class="text-right adjusment"><%= @invoice.adjusment || '0.00' %></span>
+      </div>
+      <div id="list-tax-section"></div>
+      <div class="flex items-center justify-between gap-2 mb-2 mt-3">
+        <span class="w-36 font-bold text-total">Total <%= @invoice.currency&.symbol || app_setting.currency.symbol %></span>
+        <div class="text-right">
+          <span class="text-right total font-bold">0.00</span>
+          <%= f.hidden_field :total, class: 'w-full sm:w-24 total-field' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- onchange file input, akan generate inputan baru yang di hidden. dengan destroy nya juga -->
+  <%= f.fields_for :attachments do |attachment_f| %>
+    <%= attachment_f.hidden_field '_destroy', class: "upload-multi-file attachment-#{attachment_f.object.id}" %>
+  <% end %>
+  <div class="grid grid-cols-5 attachment-section">
+    <% f.object.attachments.each do |attachment| %>
+      <% if attachment.attachment.present? %>
+        <% if attachment.attachment.metadata['mime_type'].include?('image') %>
+          <% icon = 'fa-file-image' %>
+        <% elsif attachment.attachment.metadata['mime_type'].include?('pdf') %>
+          <% icon = 'fa-file-pdf' %>
+        <% elsif attachment.attachment.metadata['mime_type'].include?('spreadsheet') %>
+          <% icon = 'fa-file-excel' %>
+        <% elsif attachment.attachment.metadata['mime_type'].include?('csv') %>
+          <% icon = 'fa-file-csv' %>
+        <% else %>
+          <% icon = 'fa-file' %>
+        <% end %>
+        <div class="mt-2 ">
+          <i class="fa <%= icon %> m-auto text-pacifixBlue fa-6x" aria-hidden="true"></i><br>
+          <span><%= attachment.attachment.metadata['filename'] %></span><br>
+          <span class="remove-existing-attachment btn-delete-attachment" data-id="<%= attachment.id %>">
+            <i class="fa fa-trash text-red-400" aria-hidden="true"></i>
+            <span>delete</span>
+          </span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', back_url, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div> 
+<% end %>

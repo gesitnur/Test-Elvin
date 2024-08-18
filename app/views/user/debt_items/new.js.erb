@@ -1,0 +1,5 @@
+$('#account_item-form').html(`<%= render partial: 'user/debt_items/partials/account_item_form',
+                          locals: { debt_item: @debt_item, currencies: @currencies, income_categories: @income_categories,
+                                    cash_books: @cash_books, url: user_debt_items_path, type: params[:type] } %>`);
+format_number_field();
+debt_item_form()

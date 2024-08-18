@@ -1,0 +1,8 @@
+$('.user-project-modal').html(`<%= render partial: 'user/projects/partials/user_project_modal',
+                            locals: { project: @project, url: select_user_user_project_path } %>`)
+
+$('#UserProjectLink').fadeIn(200)
+
+$('.hideModal').click(function(){
+  $(this).parents('.modal').fadeOut(100)
+})

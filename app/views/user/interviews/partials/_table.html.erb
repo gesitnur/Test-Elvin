@@ -1,0 +1,59 @@
+<div class="interview-table overflow-x-auto" id="interview-table">
+  <table class="w-full text-left">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2">Nama</th>
+        <th class="border p-2">Asal Sekolah</th>
+        <th class="border p-2">Jenis Kelamin</th>
+        <th class="border p-2 whitespace-nowrap">Tanggal Lahir</th>
+        <th class="border p-2">Domisili</th>
+        <th class="border p-2">Status</th>
+        <th class="border p-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(interviews, 8, 'Tidak ada data calon pegawai...') %>
+      <% interviews.each.with_index(1) do |interview, key| %>
+        <tr>
+          <td class="border p-2"><%= key %></td>
+          <td class="border p-2 whitespace-nowrap"><%= interview.name %></td>
+          <td class="border p-2 whitespace-nowrap"><%= interview.graduated %></td>
+          <td class="border p-2 whitespace-nowrap"><%= interview.gender %></td>
+          <td class="border p-2 whitespace-nowrap"><%= interview.date_of_birth&.to_date %></td>
+          <td class="border p-2 whitespace-nowrap"><%= interview.domicile %></td>
+          <td class="border p-2 whitespace-nowrap"><%= label_trial_training interview %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <%= link_to user_interview_path(interview), class: 'bg-africanViolet w-7 h-7 rounded text-white inline-block mb-1' do %>
+              <span class="flex h-full"><i class="fa fa-eye text-xs m-auto" aria-hidden="true"></i></span>
+            <% end %>
+            <div class="modal fixed z-50 hidden" id="modal">
+              <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+              <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[450px] p-6">
+                  <div class="modal-content mb-4">
+                    <span>Are you sure?</span>
+                  </div>
+                  <div class="modal-footer text-right">
+                    <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                    <%= link_to user_interview_path(interview), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block' do %>
+                       Delete
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info interviews, entry_name: 'Interview' if interviews.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate interviews, window: 2 %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+Hi <%= @user.name %>,
+
+Thanks for registering! To confirm your registration click the URL below.<br/>
+
+Use this password to login : <%= @user.password %><br/>
+
+<%= link_to 'confirm', confirm_email_user_url(@user.confirm_token), target: "_blank" %>

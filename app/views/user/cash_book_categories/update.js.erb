@@ -1,0 +1,15 @@
+<% if @cash_book_category.errors.any? %>
+  $('.notification-section').html(`<%= render partial: 'shared/global/components/alert',
+                                  locals: { alert: @cash_book_category.errors.full_messages.to_sentence } %>`)
+<% else %>
+  $('.notification-section').html(`<%= render partial: 'shared/global/components/notice',
+                                  locals: { notice: flash[:notice] } %>`)
+<% end %>
+
+$('.btn-close-alert').click(function(){
+  $(this).parent().fadeOut()
+})
+
+$('#category-table').html(`<%= render partial: 'user/cash_book_categories/partials/table',
+                          locals: { expenses: @expenses, incomes: @incomes, category: @category, } %>`);
+cash_book_category_click()

@@ -1,0 +1,16 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Survey</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to admin_surveys_path, class: 'inline-block bg-orange-400 text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+        <i class="fa fa-edit" aria-hidden="true"></i> Edit Survey Form
+      <% end %>
+    </div>
+  </div>
+  <%= render partial: 'admin/survey_answers/partials/table',
+              locals: { survey_answers: @survey_answers } %>
+</div>

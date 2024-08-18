@@ -1,0 +1,35 @@
+<table class="w-full text-left shadow">
+  <thead>
+    <tr>
+      <th class="border border-slate-300 p-2 w-1">Type</th>
+      <th class="border border-slate-300 p-2 w-64">Description</th>
+      <th class="border border-slate-300 p-2 w-24">Type</th>
+      <th class="border border-slate-300 p-2 w-24">Amount</th>
+      <th class="border border-slate-300 p-2 w-1">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= no_table_record(@transactions, 7) %>
+    <% @transactions.each_with_index do |recurring, idx| %>
+      <tr class=" <%= transaction_class(recurring.transaction_type) %>">
+        <td class="border border-slate-300 p-2 text-sm"><%= transaction_icon(recurring.transaction_type).html_safe %></td>
+        <td class="border border-slate-300 p-2 text"><%= recurring.description %></td>
+        <td class="border border-slate-300 p-2 text"><%= recurring.transaction_type %></td>
+        <td class="border border-slate-300 p-2 text"><%= recurring_amount(recurring) %></td>
+        <td class="border border-slate-300 p-2 text-center">
+          <%= link_to edit_user_recurring_path(recurring), remote: true, class: 'bg-orange-400 w-7 h-7 rounded inline-block btn-modal-income' do %>
+            <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info @transactions, entry_name: 'Cash Book' if @transactions.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate @transactions, window: 2 %>
+  </div>
+</div>

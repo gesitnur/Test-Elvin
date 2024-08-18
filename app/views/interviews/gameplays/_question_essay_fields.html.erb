@@ -1,0 +1,26 @@
+<div id="essay-section" class="mt-5">
+  <div class="main-content-card bg-white p-5 rounded shadow-lg">
+    <div class="grid grid-cols-1">
+      <div class="form-group">
+        <%= form.label :question, 'Question', class: 'block font-bold' %>
+        <%= form.text_area :question, class: 'h-20 w-full outline-none border focus:border-pacifixBlue focus:shadow-sm transition ease-in p-2 rounded essay-field', required: true, placeholder: 'Question Essay' %>
+        <%= form.hidden_field :question_type, value: 'Essay' %>
+      </div>
+      <div class="form-group">
+        <%= form.label :hint_answer, 'Answer Hint', class: 'block font-bold' %>
+        <%= form.text_area :hint_answer, class: 'h-20 w-full outline-none border focus:border-pacifixBlue focus:shadow-sm transition ease-in p-2 rounded essay-field answer-hint', required: true, placeholder: 'Answer Hint' %>
+      </div>
+      <div class="form-group">
+        <%= form.label :point, 'Point', class: 'block font-bold point-label' %>
+        <%= form.number_field :point, class: "p-1 outline-none border rounded focus:border-pacifixBlue w-[65%] xl:w-[75%] transition ease-in point-question essay-point #{'hidden' if @gameplay.is_basic}", value: form.object.point || 5, required: true, placeholder: 'Point', min: 1 %>
+        <div class="float-right">
+          <div class="form-group bg-red-500 w-7 h-7 rounded text-white inline-block mb-1">
+            <%= link_to_remove_nested(form, link_classes: '', fields_wrapper_selector: '#essay-section') do %>
+              <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

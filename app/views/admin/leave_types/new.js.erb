@@ -1,0 +1,18 @@
+$('.leave-type-modal').html(`<%= render partial: 'admin/leave_types/partials/leave_type_modal',
+                            locals: { leave_type: @leave_type, url: admin_leave_types_path } %>`)
+
+$('#leaveTypeLink').fadeIn(200)
+
+$('.hideModal').click(function(){
+  $(this).parents('.modal').fadeOut(100)
+})
+
+// $('.copy-link').click(function(){
+//   Clipboard($(this).data('link'), {
+//     debug: false,
+//   });
+//   var popup = document.getElementById("copiedPopup");
+//   popup.classList.toggle("show");
+// })
+
+

@@ -1,0 +1,56 @@
+<style type="text/css">
+  .progress {
+    width: 70px;
+    height: 70px;
+  }
+</style>
+<div class="modal fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 px-4 hidden detail-access-modal" id="modal">
+  <div class="relative w-full sm:w-2/3 mx-auto my-10 bg-white rounded p-5 ">
+    <button type="button" class="absolute right-4 top-3 text-xl text-slate-400 hideModal"><i class="fas fa-times"></i></button>
+    <div class="modal-header mb-5 border-b pb-2">
+      <h1 class="text-2xl font-bold"><%= leave_request.user.name %></h1>
+      <p><%= calculate_day_off(leave_request) %> Day Off (<%= leave_request.leave_period %>)<span class=" ml-2 py-0.5 px-5 inline-work text-center text-sm text-white rounded-full font-bold uppercase" style="background-color: #<%= leave_request.leave_type.colour_code %>;"><%= leave_request.leave_type.name %></span></p>
+      <p><%= leave_request_date_range(leave_request) %></p>
+    </div>
+    <div class="modal-content">
+      <div class="form-group mb-3">
+        <label class="work font-bold">Alasan</label>
+        <p><%= leave_request.reason %></p>
+      </div>
+      <% if leave_request.rejected? %>
+        <div class="form-group mb-3">
+          <label class="work font-bold">Alasan Ditolak</label>
+          <p><%= leave_request.reject_reason %></p>
+        </div>
+      <% end %>
+      <% if leave_request.approved? %>
+        <div class="modal-card grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 py-2">
+          <div class="form-group mb-3">
+            <label class="work font-bold">Approved By</label>
+            <p><%= User.find(leave_request.approved_by)&.name %></p>
+          </div>
+          <div class="form-group mb-3">
+            <label class="work font-bold">Approval Date</label>
+            <p> <%= date_formater(leave_request.approval_date, '%a %d %b, %Y') %></p>
+          </div>
+        </div>
+      <% end %>
+      <!-- <div class="form-group">
+        <label class="block font-bold">Balance</label>
+        <div class="modal-card grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-2">
+          <% @leave_type_collections.each do |leave_type_collection| %>
+            <div class="modal-card-item border flex items-center gap-3 p-2 rounded">
+              <div class="title-balance-progress">
+                <div class="progress" value="<%= (employee.work_leave_requests.balance_data.where(leave_type: leave_type_collection).sum(&:number_of_day).to_f / leave_type_collection.leave_balance.to_f) * 100 %>"></div>
+              </div>
+              <div class="title-blance">
+                <p class="text-xl"><%= leave_type_collection.name %></p>
+                <p><%= employee.work_leave_requests.balance_data.where(leave_type: leave_type_collection).sum(&:number_of_day) %>/<%= leave_type_collection.leave_balance %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>

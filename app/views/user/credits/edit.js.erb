@@ -1,0 +1,8 @@
+$('#debt-form').html(`<%= render partial: 'user/credits/partials/debt_form',
+                          locals: { debt: @credit, currencies: @currencies, income_categories: @income_categories,
+                                    cash_books: @cash_books, url: user_credit_path(@credit) } %>`);
+format_number_field();
+credit_form()
+$('.select-currency').select2({
+  width: '100%'
+})

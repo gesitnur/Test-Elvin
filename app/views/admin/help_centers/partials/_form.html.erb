@@ -1,0 +1,25 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(forum, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <label class="font-bold block">Category</label>
+    <%= f.select :forum_category_id, options_for_select(@forum_categories, f.object.forum_category_id), {include_blank: 'Select Category'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-dropdown", required: true } %>
+  </div>
+  <div class="form-group">
+    <%= f.label :title, "Title", class: 'font-bold block' %>
+    <%= f.text_field :title, class: 'w-full border border-slate-300 py-[7px] px-3 rounded focus:outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Title', required: true %>  
+    <%= f.hidden_field :is_admin, value: true, class: '', placeholder: 'Title', required: true %>  
+  </div>
+  <div class="form-group">
+    <label class="font-bold block">Tags</label>
+    <%= f.text_field :tag, class: 'w-full rounded transition ease-in tagify-field', placeholder: 'Tag' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description, "Description", class: 'font-bold block' %>
+    <%= f.text_area :description, class: 'text-editor', placeholder: 'Description', required: true %>  
+  </div>
+  <div class="form-group flex gap-2">
+    <button type="submit" class="bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in">Submit</button>
+    <%= link_to 'Back', admin_help_centers_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

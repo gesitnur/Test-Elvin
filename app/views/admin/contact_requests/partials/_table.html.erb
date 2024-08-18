@@ -1,0 +1,45 @@
+<div class="overflow-x-auto" id="contact-request-table">
+  <table class="w-full text-left">
+    <thead>
+      <tr>
+        <th class="border p-2">No.</th>
+        <th class="border p-2">Name</th>
+        <th class="border p-2">Email</th>
+        <th class="border p-2">Subject</th>
+        <% if current_admin.domain_access.eql?('All') %>
+          <th class="border p-2 whitespace-nowrap">Domain Request</th>
+        <% end %>
+        <th class="border p-2">Status</th>
+        <th class="border p-2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= no_table_record(contact_requests, 7, 'There is no contact request available here...') %>
+      <% contact_requests.each.with_index(1) do |contact_request, index| %>
+        <tr>
+          <td class="border p-2"><%= index %></td>
+          <td class="border p-2 whitespace-nowrap"><%= contact_request.name %></td>
+          <td class="border p-2 whitespace-nowrap"><%= contact_request.email %></td>
+          <td class="border p-2 whitespace-nowrap"><%= contact_request.subject %></td>
+          <% if current_admin.domain_access.eql?('All') %>
+            <td class="border p-2 whitespace-nowrap"><%= contact_request.domain_request %></td>
+          <% end %>
+          <td class="border p-2 whitespace-nowrap"><%= label_read contact_request.read %></td>
+          <td class="border p-2 whitespace-nowrap">
+            <%= link_to admin_contact_request_path(contact_request), class: 'bg-africanViolet py-1 px-2 rounded' do %>
+              <i class="fa fa-eye text-xs text-white" aria-hidden="true"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info contact_requests, entry_name: 'Contact Request' if contact_requests.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate contact_requests, window: 2 %>
+  </div>
+</div>

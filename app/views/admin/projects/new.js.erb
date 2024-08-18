@@ -1,0 +1,18 @@
+$('.project-modal').html(`<%= render partial: 'admin/projects/partials/project_modal',
+                            locals: { project: @project, url: admin_projects_path } %>`)
+
+$('#leaveTypeLink').fadeIn(200)
+
+$('.hideModal').click(function(){
+  $(this).parents('.modal').fadeOut(100)
+})
+
+// $('.copy-link').click(function(){
+//   Clipboard($(this).data('link'), {
+//     debug: false,
+//   });
+//   var popup = document.getElementById("copiedPopup");
+//   popup.classList.toggle("show");
+// })
+
+

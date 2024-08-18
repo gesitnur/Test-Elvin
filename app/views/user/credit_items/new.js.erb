@@ -1,0 +1,6 @@
+// alert('bgh')
+$('#account_item-form').html(`<%= render partial: 'user/credit_items/partials/account_item_form',
+                          locals: { debt_item: @credit_item, currencies: @currencies, income_categories: @income_categories,
+                                    cash_books: @cash_books, url: user_credit_items_path, type: params[:type] } %>`);
+format_number_field();
+credit_item_form()

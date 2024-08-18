@@ -1,0 +1,86 @@
+<div class="main-content-header mb-3">
+  <div class="main-content-title flex flex-col md:flex-row justify-between mb-5">
+    <div class="balance-title text-left flex gap-4 mb-2">
+      <div class="balance-img md:block hidden">
+        <%= image_tag asset_image("elvin/debt_book_item.png"), alt: "whatsapp-image", class: 'w-32' %>
+      </div>
+      <div class="balance-detail text-center w-full md:text-left">
+        <p class="text-3xl">Debts from <%= @debt.client %></p>
+        <p class="text-slate-500"><%= @debt.description %></p>
+      </div>
+    </div>
+    <div class="balance-text text-center md:text-right">
+      <span class="block mb-2 text-xl">BALANCE</span>
+      <h1 class="block text-3xl md:text-4xl text-pacifixBlue"><%= number_to_currency(@debt.balance, unit: @debt.currency&.symbol || app_setting.currency.symbol) %></h1>
+      <p>Initial Balance : <%= number_to_currency(@debt.amount, unit: @debt.currency&.symbol || app_setting.currency.symbol) %></p>
+    </div>
+  </div>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-left">
+      <%= link_to user_debts_path, class: 'inline-block border border-pacifixBlue rounded px-4 py-2 hover:shadow-md transition ease-linear' do %>
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      <% end %>
+    </div>
+    <div class="float-right">
+      <%= link_to new_user_debt_item_path(debt_id: params[:debt_id], type: 'Expense'), class: 'inline-block bg-pacifixBlue text-white mr-2 mb-5 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear btn-modal-income', remote: true do %>
+        <i class="fa fa-minus-circle" aria-hidden="true"></i> Pay Debt
+      <% end %>
+      <%= link_to new_user_debt_item_path(debt_id: params[:debt_id], type: 'Income'), class: 'inline-block bg-africanViolet text-white mb-5 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear btn-modal-income', remote: true do %>
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Debt
+      <% end %>
+    </div>
+  </div>
+  <div class="relative flex justify-end">
+    <!-- Modal Income Start -->
+    <div class="rounded-lg shadow-lg w-full md:w-[35rem] flex absolute flex-col border -top-[10px] bg-white outline-none modal income focus:outline-none">
+      <div id="account_item-form"></div>
+    </div>
+    <!-- Modal Income End -->
+  </div>
+  <div class="overflow-x-auto" id="position-table">
+    <table class="w-full text-left shadow">
+      <thead>
+        <tr>
+          <th class="border border-slate-300 p-2 w-12">Type</th>
+          <th class="border border-slate-300 p-2">Date</th>
+          <th class="border border-slate-300 p-2">Amount</th>
+          <th class="border border-slate-300 p-2">Description</th>
+          <th class="border border-slate-300 p-2">Balance</th>
+          <th class="border border-slate-300 p-2 w-32">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= no_table_record(@debt_items, 6) %>
+        <% @debt_items.each_with_index do |debt_item, idx| %>
+          <tr class="<%= debt_class(debt_item.account_item_type, debt_item.is_initial) %>">
+            <td class="border border-slate-300 p-2"><%= debt_item_icon(debt_item.account_item_type).html_safe %></td>
+            <td class="border border-slate-300 p-2 whitespace-nowrap"><%= datetime_formater(debt_item.account_item_date, '%d %h %Y, %I:%M %p') %></td>
+            <td class="border border-slate-300 p-2"><%= number_to_currency(debt_item.amount, unit: @debt.currency&.symbol || app_setting.currency.symbol) %></td>
+            <td class="border border-slate-300 p-2"><%= debt_item.description %></td>
+            <td class="border border-slate-300 p-2"><%= number_to_currency(debt_item.balance, unit: @debt.currency&.symbol || app_setting.currency.symbol) %></td>
+            <td class="border border-slate-300 p-2 truncate">
+            <% unless debt_item.is_initial? %>
+              <%= link_to edit_user_debt_item_path(debt_item, debt_id: params[:debt_id], type: debt_item.account_item_type), class: 'bg-orange-400 w-7 h-7 rounded inline-block btn-modal-income', remote: true do %>
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end %>
+              <%= link_to user_debt_item_path(debt_item, debt_id: params[:debt_id]), method: :delete, class: 'bg-red-500 w-7 h-7 rounded text-white inline-block mb-1', data: { confirm: 'Are you sure?' } do %>
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              <% end %>
+            <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="flow-root mt-4">
+    <div class="float-left">
+      <%= page_entries_info @debt_items, entry_name: 'debt_items' if @debt_items.present? %>
+    </div>
+    <div class="float-right">
+      <%= paginate @debt_items, window: 2 %>
+    </div>
+  </div>
+</div>

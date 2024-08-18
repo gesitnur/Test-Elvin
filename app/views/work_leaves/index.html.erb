@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Work Leave</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<%= csrf_meta_tags %>
+	<%= csp_meta_tag %>
+
+	<%= javascript_pack_tag "admin_layout.js", "data-turbolinks-track": "reload" %>
+	<%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <style>
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #50B0C0;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #50B0C0;
+      transition: linear
+    }
+	</style>
+  </head>
+  <body class="bg-slate-100">
+	<div class="block-leave w-full">
+    <div class="container mx-auto px-4">
+      <div class="h-screen flex justify-center items-center">
+        <div class="block-leave-card bg-white w-full sm:w-3/4 lg:w-2/5 shadow rounded-lg">
+          <div class="block-leave-header border-b px-5 py-3 text-center justify-between">
+            <div class="block-leave-title">
+              <h1 class="font-bold text-2xl">Work Leave<h1>
+              <p class="text-slate-600">Alfred Takoi | Balance : 12</p>
+            </div>
+          </div>
+          <div class="block-leave-content px-5 py-3 grid grid-cols-1 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 items-center">
+              <div class="form-group-wrap w-full">
+                <div class="form-group">
+                  <label class="font-bold block mb-1">Type</label>
+                  <select class="p-2 bg-white focus:outline-none w-full border rounded focus:border-pacifixBlue transition ease-linear select-type-leave">
+                    <option value="leave">Leave</option>
+                    <option value="sick">Sick</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group flex sm:mt-7 mt-3 gap-x-4">
+                <div class="form-check">
+                  <input class="check-input-leave mt-[3px] appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="dayOff" id="flexRadioDefault1" value="fullday">
+                  <label class="check-label-leave inline-block text-gray-800" for="flexRadioDefault1">
+                    Full Day
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="check-input-leave mt-[3px] appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="dayOff" id="flexRadioDefault2" value="halfday">
+                  <label class="check-label-leave inline-block text-gray-800" for="flexRadioDefault2">
+                    Half Day
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-x-4">
+              <div class="form-group">
+                <label for="toggle" class="block sm:whitespace-nowrap font-bold mb-2">More than a day?</label>
+                <div class="flex justify-center">
+                  <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in float-right mr-2">
+                    <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group w-full">
+                <label class="font-bold block mb-1">Date</label>
+                <input type="text" name="date-range" class="focus:outline-none border py-1 px-2 focus:border-pacifixBlue rounded w-full date ease-linear hidden">
+                <input type="text" name="date-no-range" class="focus:outline-none border py-1 px-2 focus:border-pacifixBlue rounded w-full date ease-linear">
+              </div>
+             
+            </div>
+            <div class="form-group">
+              <label class="font-bold block mb-1">Reason</label>
+              <textarea class="focus:outline-none border py-1 px-2 focus:border-pacifixBlue rounded w-full input-reason"></textarea>
+            </div>
+            <div>
+              <span>Number of requested Days: 1</span>
+            </div>
+          </div>
+          <div class="block-leave-footer border-t px-5 py-3 flex items-center gap-x-4">
+            <div class="form-group hidden">
+              <input type="text" name="input-token" class="focus:outline-none border p-2 focus:border-pacifixBlue rounded w-full ease-linear" placeholder="Please input your token">
+            </div>
+            <button class="border-pacifixBlue bg-pacifixBlue rounded border py-2 px-4 text-white shadow transition ease-linear hover:shadow-lg btn-submit-leave flex" type="button">
+              <span class="">Submit</span>
+              <svg class="w-5 ml-2 text-gray-200 animate-spin hidden dark:text-gray-600 fill-pacifixBlue loading-spinner" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+  </body>
+</html>
+
+<script>
+  $('.btn-submit-leave').click(function(){
+    if($('.select-type-leave').val() && $('.date').val() && $('.input-reason').val() != ""){
+      $('.loading-spinner').css('display', 'inline-block');
+      $('.btn-submit-leave').prop('disabled', true).addClass('opacity-70');
+      setTimeout(() => {
+        $('.loading-spinner').hide()
+        $('.btn-submit-leave').prop('disabled', false).removeClass('opacity-70');
+        $(this).parent().find('.form-group').show()
+        $('input[name="input-token"]').focus()
+        $('.block-leave-content').addClass("opacity-70")
+        $(this).parent().parent().find('.check-input-leave, .select-type-leave, .toggle-checkbox, .date, .input-reason').attr('disabled', true)
+      }, 1000);
+    }
+  })
+
+  $('input[name="date-range"]').daterangepicker();
+  $('input[name="date-no-range"]').daterangepicker({
+     singleDatePicker: true,
+  });
+
+  $('.toggle-checkbox').change(function(){
+    if($(this).is(':checked')){
+      $('input[name="date-range"]').show()
+      $('input[name="date-no-range"]').hide()
+    } else {
+      $('input[name="date-range"]').hide()
+      $('input[name="date-no-range"]').show()
+    }
+  })
+
+  $('.select-type-leave').change(function(){
+    if($(this).val() != "leave"){
+      $('.check-input-leave').attr('disabled', true)
+      $('.check-label-leave').addClass('opacity-70')
+    } else {
+      $('.check-input-leave').attr('disabled', false)
+      $('.check-label-leave').removeClass('opacity-70')
+    }
+  })
+</script>

@@ -1,0 +1,13 @@
+<div class="main-content sm:ml-56 py-20 px-3">
+  <div class="main-content-header mb-3">
+    <h1 class="main-content-title text-3xl font-bold mb-5">Edit User Admin</h1>
+  </div>
+  <div class="main-content-card p-7 bg-white shadow-md rounded">
+    <%= render partial: 'admin/admins/partials/form',
+                locals: {
+                  admin: @admin,
+                  domain_accesses: @domain_accesses,
+                  url: admin_admin_path
+                } %>
+  </div>
+</div>

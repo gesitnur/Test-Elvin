@@ -1,0 +1,40 @@
+<div class="modal fixed z-50 hidden" id="leaveTypeLink">
+  <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+  <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+    <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+      <%= form_for(project, url: url, html: {class: 'modal-form ', remote: true}) do |f| %>
+        <div class="modal-header p-4 border-b">
+          <h1 class="text-xl font-bold">New Project</h1>
+        </div>
+        <div class="modal-content p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="form-group">
+            <%= f.label :name, 'Name', class: 'font-bold block' %>
+            <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, placeholder: "Name" %>
+          </div>
+        <div class="modal-header p-4 border-t text-right">
+          <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+          <button type="submit" class="bg-pacifixBlue hover:shadow-md text-white px-4 py-2 rounded mr-2 hideModal">Save</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  var colorSelected = []
+  $('.color-item').each(function(index, item){
+    colorSelected.push({
+      index: index,
+      value: $(item).data('color')
+    })
+    if($('.color-code').val() === colorSelected[index].value){
+      $(item).children().removeClass('hidden')
+      return false
+    }
+  })
+
+  $('.color-item').click(function(){
+    $(this).children().toggleClass('hidden')
+    $(this).siblings().children().addClass('hidden')
+    $('.color-code').val($(this).data('color'))
+  })
+</script>

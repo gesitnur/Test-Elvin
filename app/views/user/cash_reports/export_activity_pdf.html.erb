@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="column2 text-2xl"><%= params[:title] %>: Activity</div>
+  <div class="column2 text-2xl" style="text-align: right;"><%= @date_header %></div>
+</div>
+<div class="row text-slate-500" style="margin-bottom: 30px;">
+  <div class="column2 text-sm <%= 'invisible' if params[:currency_id].present? %>">All Currencies</div>
+  <div class="column2 text-xs" style="text-align: right;">Printed on <%= Date.today.strftime('%d %b %Y, %Y') %></div>
+</div>
+<% @expense_data.each do |key, data| %>
+  <% next if data[:Expense_test].blank? && data[:Income_test].blank? %>
+  <%# data.each do |key, value| %>
+  <div class="report-section mb-5">
+    <% currency = Currency.find_by_code(key) %>
+    <span class="form-custom-header p-3 border-b text-2xl bg-red-100 text-red-800 rounded-t-md border-red-500 flex justify-between font-bold mb-3"><%= Currency.find_by_code(key).code %> - Expense</span>
+    <table class="w-full">
+      <thead>
+        <% total = 0 %>
+        <% data[:Expense_test].each do |key, expense_datas| %>
+        <% idx = SecureRandom.alphanumeric %>
+          <tr class="border-y bg-slate-100">
+            <td class="p-2" colspan="2"><span class="cursor-pointer hover:underline categories-name" data-check="<%= "expense-#{idx}" %>"><%= key %></span></td>
+            <td class="p-2 w-24"><% currency.symbol %></td>
+            <td class="p-2 w-24"><% number_to_currency(expense_datas.sum(&:amount), :unit => "") %></td>
+            <% total += expense_datas.sum(&:amount) %>
+          </tr>
+          <% total_expense = 0 %>
+          <% expense_datas.each do |expense_data| %>
+            <tr class="cash-book-detail <%= "income-#{idx}" %>">
+              <td class="p-1 px-2 w-56"><%= datetime_formater(expense_data.transaction_date) %></td>
+              <td class="p-1 px-2"><%= expense_data.description %></td>
+              <td class="p-2 w-24"><%= expense_data.cash_book.currency.symbol %></td>
+              <td class="p-2 w-24"><%= number_to_currency(expense_data.amount, :unit => "") %></td>
+            </tr>
+            <% total_expense += expense_data.amount %>
+          <% end %>
+          <tr class="bg-slate-100 border-y-2 font-bold border-slate-300">
+            <td class="p-2">&nbsp;</td>
+            <td class="p-2 text-right">Total</td>
+            <td class="p-2 w-24"><%= currency.symbol %></td>
+            <td class="p-2 w-24"><%= number_to_currency(total_expense, :unit => "") %></td>
+          </tr>
+          <tr><td>&nbsp;</td></tr>
+        <% end %>
+
+        <tr class="bg-red-100 border-y-2 font-bold border-slate-300 text-red-800">
+          <td class="p-2">&nbsp;</td>
+          <td class="p-2 text-right">Total Expense</td>
+          <td class="p-2 w-24"><%= currency.symbol %></td>
+          <td class="p-2 w-24"><%= number_to_currency(total, :unit => "") %></td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="cash-report-income mb-10">
+    <span class="form-custom-header p-3 bg-green-100 border-b-2 border-green-500 mb-3 rounded-t-md text-2xl text-green-800 flex justify-between font-bold"><%= Currency.find_by_code(key).code %> - Income</span>
+    <table class="w-full">
+      <thead>
+        <% total = 0 %>
+        <% data[:Income_test].each do |key, income_datas| %>
+        <% idx = SecureRandom.alphanumeric %>
+          <tr class="border-y bg-slate-100">
+            <td class="p-2" colspan="2"><span class="cursor-pointer hover:underline categories-name" data-check="<%= "income-#{idx}" %>"><%= key %></span></td>
+            <td class="p-2 w-24"><%#= currency.symbol %></td>
+            <td class="p-2 w-24"><%#= number_to_currency(income_datas.sum(&:amount), :unit => "") %></td>
+            <% total += income_datas.sum(&:amount) %>
+          </tr>
+          <% total_income = 0 %>
+          <% income_datas.each do |income_data| %>
+            <tr class="cash-book-detail <%= "income-#{idx}" %>">
+              <td class="p-1 px-2 w-56"><%= datetime_formater(income_data.transaction_date) %></td>
+              <td class="p-1 px-2"><%= income_data.description %></td>
+              <td class="p-2 w-24"><%= income_data.cash_book.currency.symbol %></td>
+              <td class="p-2 w-24"><%= number_to_currency(income_data.amount, :unit => "") %></td>
+            </tr>
+            <% total_income += income_data.amount %>
+          <% end %>
+          <tr class="bg-slate-100 border-y-2 font-bold border-slate-300">
+            <td class="p-2">&nbsp;</td>
+            <td class="p-2 text-right">Total</td>
+            <td class="p-2 w-24"><%= currency.symbol %></td>
+            <td class="p-2 w-24"><%= number_to_currency(total_income, :unit => "") %></td>
+          </tr>
+          <tr><td>&nbsp;</td></tr>
+        <% end %>
+        <tr class="bg-green-100 border-y-2 font-bold border-slate-300 text-green-800">
+          <td class="p-2">&nbsp;</td>
+          <td class="p-2 text-right">Total Income</td>
+          <td class="p-2 w-24"><%= currency.symbol %></td>
+          <td class="p-2 w-24"><%= number_to_currency(total, :unit => "") %></td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+<% end %>

@@ -1,0 +1,63 @@
+<%= form_for(debt_item, url: url, remote: true, html: {class: 'grid grid-cols-1 gap-4 debt-item-form', autocomplete: 'off'}) do |f| %>
+  <% debt = Debt.find(params[:debt_id]) %>
+  <div class="flex items-start justify-between p-4 border-b border-solid border-slate-200 rounded-t">
+    <h3 class="text-2xl font-semibold">
+      <% if type.eql?('Income') %>
+        Debt Addition
+      <% else %>
+        Debt Payment
+      <% end %>
+    </h3>
+    <button class="btn-close" type="button"><i class="fas fa-times text-xl text-slate-400 cursor-pointer" aria-hidden="true"></i></button>
+  </div>
+  <div class="px-6 flash_alert"></div>
+  <div class="relative p-6 flex-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :account_item_date, "Date", class: 'block font-bold mb-1' %>
+      <%= f.datetime_field :account_item_date, class: 'w-full border border-slate-300 p-1 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', cols: 30, rows: 3, placeholder: 'Date', required: true, value: (f.object.account_item_date ||= Time.now).strftime('%Y-%m-%dT%H:%M') %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :amount, "Amount", class: 'block font-bold mb-1' %>
+
+      <div class="flex">
+        <span class="flex items-center text-xl justify-center border rounded-l bg-gray-200 border-r-0 px-3 py-[5px] font-bold"><%= debt.currency.symbol %></span>
+        <%= f.text_field :amount, class: 'w-full border px-2 py-[7px] outline-none rounded-r focus:border-pacifixBlue transition ease-linear format-currency', step: :any, min: 0, placeholder: 'Amount', required: true %>
+      </div>
+      <%= f.hidden_field :account_id, value: params[:debt_id] %>
+      <%= f.hidden_field :account_item_type, value: type %>
+    </div>
+    <div class="form-group col-span-2">
+      <%= f.label :description, "Description", class: 'block font-bold mb-1' %>
+      <%= f.text_area :description, class: 'w-full border border-slate-300 p-1 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', cols: 30, rows: 3, placeholder: 'Description', required: true %>
+    </div>
+    <div class="form-group col-span-2">
+      Also records as <%= type %> at Cash Book?
+      <select class="px-1 py-2 bg-white border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in record-income">
+        <option value="no">No</option>
+        <option value="yes" <%= 'selected' if f.object.cash_book.present? %>>Yes</option>
+      </select>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 record-income-field <%= 'hidden' if f.object.cash_book.blank? %>">
+      <%= f.label :cash_book_id, "Cash Book", class: 'block font-bold mb-1' %>
+
+      <%= f.select :cash_book_id , options_for_select(cash_books, f.object.cash_book_id), {include_blank: 'Select Cash Book'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in" } %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 record-income-field <%= 'hidden' if f.object.cash_book.blank? %>">
+      <%= f.label :cash_book_category_id, "Category", class: 'block font-bold mb-1' %>
+
+      <%= f.select :cash_book_category_id, options_for_select(income_categories, f.object.cash_book_category_id), {include_blank: 'Select Category'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in" } %>
+    </div>  
+  </div>
+  <div class="flow-root rounded-b border-t border-solid border-slate-200 px-6 py-3">
+    <div class="float-right text-green-800">
+      <button class="border-pacifixBlue btn-close mr-2 inline-block rounded border bg-white py-2 px-4 text-black shadow transition ease-linear hover:shadow-lg" type="button">Close</button>
+      <button class="border-pacifixBlue bg-pacifixBlue inline-block rounded border py-2 px-4 text-white shadow transition ease-linear hover:shadow-lg btn-submit-debt" type="submit">
+        <span class="inline-block">Save</span>
+        <svg class="w-5 ml-2 text-gray-200 hidden animate-spin dark:text-gray-600 fill-pacifixBlue loading-spinner" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,36 @@
+<table class="w-full text-left shadow">
+  <thead>
+    <tr>
+      <th class="border p-2">No.</th>
+      <th class="border p-2">Jabatan</th>
+      <th class="border p-2 w-28"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= no_table_record(positions, 5) %>
+    <% positions.each.with_index(1) do |position, idx| %>
+      <tr>
+        <td class="border p-2"><%= idx %></td>
+        <td class="border p-2"><%= position.name %></td>
+        <td class="border p-2">
+          <%= link_to show_access_detail_admin_position_path(position), class: 'bg-africanViolet w-7 h-7 rounded text-white inline-block showModal', remote: true do %>
+            <span class="flex h-full"><i class="fa fa-eye text-xs m-auto" aria-hidden="true"></i></span>
+          <% end %>
+          <div class="modal fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 px-4 detail-access-modal hidden" id="modal">
+          </div>
+          <%= link_to edit_admin_position_path(position), class: 'bg-orange-400 w-7 h-7 rounded inline-block' do %>
+            <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="flow-root mt-4">
+  <div class="float-left">
+    <%= page_entries_info positions, entry_name: 'positions' if positions.present? %>
+  </div>
+  <div class="float-right">
+    <%= paginate positions, window: 2 %>
+  </div>
+</div>

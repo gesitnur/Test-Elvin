@@ -1,0 +1,37 @@
+$('#question-table').html(`<%= render partial: 'user/help/questions/partials/table',
+                            locals: { forums: @forums } %>`)
+
+$('#question-pagination').html(`<%= render partial: 'user/help/questions/partials/pagination',
+                                locals: { forums: @forums } %>`)
+
+$('#filter-category').html(`<%= render partial: 'user/help/questions/partials/filter_category',
+                            locals: { categories: @categories } %>`)
+
+$('#search-forum').html(`<%= render partial: 'user/help/questions/partials/search',
+                            locals: { q: @q } %>`)
+
+$('#sorting-section').html(`<%= render partial: 'user/help/questions/partials/sort',
+                                locals: { sort: @sort } %>`)
+
+$("#question-table div:not(:first-child)").hide();
+setTimeout(function(){
+  $('#loading-help-center').hide()
+  $("#question-table div:not(:first-child)").show();
+  $('.modal').hide()
+}, 1000)
+
+$('.thread-desc').each(function(){
+  var thisText = $(this).text()
+  var converted = thisText.replace(/\&nbsp;/g, ' ').replace(/<\/?[^>]+(>|$)/g, " ") // convert value tag html use regex to string
+  $(this).text(converted)
+})
+
+$('.showModal').click(function(){
+  $(this).parents('body').css("overflow", "hidden")
+  $('#'+$(this).data('modal')).fadeIn(200)
+})
+
+$('.hideModal').click(function(){
+  $(this).parents('.modal').fadeOut(200)
+  $(this).parents('body').css("overflow", "auto")
+})

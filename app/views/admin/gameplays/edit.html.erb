@@ -1,0 +1,11 @@
+<div class="main-content-header flex justify-between">
+  <h1 class="text-3xl font-bold mb-3 main-content-title">Update Gameplay</h1>
+  <div class="main-content-button">
+  </div>
+</div>
+<%= render partial: 'user/gameplays/partials/form',
+            locals: {
+              gameplay: @gameplay,
+              url: user_gameplay_path
+            } %>
+<%= render partial: 'user/gameplays/partials/bottom_button' %>

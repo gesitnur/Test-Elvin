@@ -1,0 +1,39 @@
+<div id="survey-question-field">
+  <div class="main-content-card-question bg-white p-7 rounded shadow-md flex gap-3 mb-4">
+    <div class="main-content-number">
+      <p><%= @key %></p>
+    </div>
+    <div class="main-content-question w-full">
+      <div class="grid grid-cols-1 gap-4 mb-2">
+        <div class="form-group">
+          <%= form.label :question, 'Question', class: 'block font-bold' %>
+          <%= form.text_area :question, placeholder: 'Question', class: 'h-20 w-full border border-slate-300 py-[5px] px-3 rounded outline-none transition ease-in focus:border-pacifixBlue', required: true %>
+        </div>
+        <div class="form-group">
+          <%= form.label :question_type, 'Type', class: 'block font-bold' %>
+
+          <%= form.select :question_type , options_for_select(@question_types || [], form.object.question_type), {include_blank: 'Select Type'}, {class: "py-[9px] bg-white border rounded w-full outline-none transition ease-in focus:border-pacifixBlue px-2 select-survey-type", style: "width: 100%"} %>
+        </div>
+      </div>
+      <div class="form-custom-option" <%= 'hidden' unless form.object.question_type.eql?('Custom Option') %>>
+        <div class="option-section mb-2">
+          <% if form.object.option["value"].present? %>
+            <% form.object.option["value"].each.with_index(1) do |value, key| %>
+              <div class="form-custom-item flex items-center gap-3 mb-2">
+                <%= form.text_field "option[value][#{key}]", value: value[1], placeholder: 'Option', class: 'w-full sm:w-1/2 border h-9 px-2 rounded outline-none transition ease-in focus:border-pacifixBlue option-field', placeholder: 'Option' %><button type="button" class="btn-remove-option text-gray-500"><i class="fa fa-times"></i></button>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="form-custom-item flex items-center gap-3 mb-2">
+              <%= form.text_field "option[value][1]", value: '', placeholder: 'Option', class: 'w-full sm:w-1/2 border h-9 px-2 rounded outline-none transition ease-in focus:border-pacifixBlue option-field' %><button type="button" class="btn-remove-option text-gray-500"><i class="fa fa-times"></i></button>
+            </div>
+          <% end %>
+        </div>
+        <button type="button" class="bg-pacifixBlue py-1 disabled:opacity-80 outline-none transition ease-in px-2 rounded text-white btn-add-survey-option">Add option</button>
+      </div>
+    </div>
+    <%= link_to_remove_nested(form, link_classes: 'w-9 h-9 text-white bg-red-500 rounded mt-6 cursor-pointer btn-remove-survey-question', fields_wrapper_selector: '#survey-question-field') do %>
+      <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Thread</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md mb-10">
+  <div class="flex flex-row-reverse justify-between mb-5">
+    <div>
+      <% if @forum.is_admin %>
+        <%= link_to edit_admin_help_center_path(@forum), class: "inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" do %>
+          <i class="fa fa-edit" aria-hidden="true"></i> Edit
+        <% end %>
+      <% end %>
+    </div>
+    <%= link_to admin_help_centers_path, class: 'inline-block border border-pacifixBlue rounded py-2 px-4 hover:shadow-md transition ease-linear' do %>
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+  <div class="help-center">
+    <div class="help-center-question-text mb-5">
+      <h1 class="help-center-title text-3xl font-bold mb-5"><%= @forum.title.humanize %></h1>
+      <div class="flex gap-2 justify-between mb-5">
+        <div class="flex gap-2 items-center">
+          <span class="block w-10 h-10 rounded-full">
+            <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="w-10 h-10">
+          </span>
+          <span>
+            <p class="font-bold"><%= @forum.user&.name || 'Admin' %></p>
+            <p class="text-sm"><%= date_formater(@forum.created_at, '%a, %d %B %Y') %> <span class="ml-2"><i class="far fa-clock"></i> <%= date_formater(@forum.created_at, '%I:%M %p') %></span></p>
+          </span>
+        </div>
+      </div>
+      <div class="help-center-desc text-justify mb-5 text-black prose max-w-full ">
+        <%= @forum.description.html_safe %>
+      </div>
+      <span class="inline-flex items-center gap-3">
+        <span class="inline-flex items-center gap-2">
+          <i class="fas fa-tags text-gray-500"></i>
+          <p class="text-gray-500">
+            <% @forum.tag.split(",").each do |tag| %>
+              <%= tag.humanize %>
+              <%= ',' unless @forum.tag.split(",").last.eql?(tag) %>
+            <% end %>
+          </p>
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+  <div class="reply-section">
+    <h1 class="text-2xl font-bold mb-3">Replies</h1>
+    <div class="help-center-answer">
+      <% if @forum.forum_replies.blank? %>
+        <div class="reply-item bg-white p-7 shadow-lg rounded mb-3 text-center">
+          <%= image_tag asset_image("elvin/no-data-img.svg"), class: 'w-60 m-auto' %>
+          <p class="">No replies yet.</p>
+          <% if current_user.present? %>
+            <button type="button" class="bg-pacifixBlue text-white border border-pacifixBlue mr-1 px-4 hover:shadow-md transition py-1 rounded mt-4 btn-help-center-reply">Reply</button>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="answer-list">
+          <% @forum.forum_replies.each do |forum_reply| %>
+            <%#= forum_reply.inspect  %>
+            <div class="reply-item bg-white p-7 shadow-lg rounded mb-3">
+              <div class="flex justify-between items-center mb-2">
+                <div class="reply-person flex gap-2 items-center">
+                  <span class="block w-10 h-10 rounded-full">
+                    <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" class="w-10 h-10">
+                  </span>
+                  <span>
+                    <p class="font-bold"><%= forum_reply.user.name %></p>
+                    <p class="text-sm"><%= date_formater(forum_reply.created_at, '%a, %d %B %Y') %> <span class="ml-2"><i class="far fa-clock"></i> <%= date_formater(forum_reply.created_at, '%I:%M %p') %></span></p>
+                  </span>
+                </div>
+                  <div class="flex items-center">
+                    <div class="group relative">
+                      <button class="group-focus-within:text-gray-500 transition ease-in text-end w-5 "><i class="fas fa-ellipsis-v"></i></button>
+                      <div class="border z-10 bg-white invisible rounded w-48 absolute right-0 shadow-xl transition-all z-20 duration-300 opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1">
+                        <ul class="py-2">
+                            <button class="w-full text-left block px-4 py-2 focus:bg-gray-100 hover:bg-gray-100 btn-delete-reply">Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="modal fixed z-50 hidden" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+                  <div class="bg-white rounded-md m-auto p-5 shadow-lg w-full sm:w-[450px]">
+                    <div class="modal-content mb-4">
+                      <span>Are you sure?</span>
+                    </div>
+                    <div class="modal-footer text-right">
+                      <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 mr-2 rounded hideModal">Close</button>
+                      <%= link_to destroy_reply_admin_help_center_path(@forum, reply_id: forum_reply), method: :delete, class: 'bg-red-500 hover:bg-red-600 px-4 py-2 text-white mr-2 rounded hideModalApprove inline-block hideModal' do %>
+                        <i class="fas fa-trash"></i> Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="reply-detail prose text-black max-w-full">
+                <%= forum_reply.message.html_safe %>
+              </div>
+              <% if current_user.present? && forum_reply.user.eql?(current_user) %>
+                <%= form_for(forum_reply, url: user_forum_reply_path(forum_reply), remote: true, html: {class: 'editor hidden mt-2'}) do |f| %>
+                  <%= f.text_area :message, class: 'text-editor', placeholder: 'Message', required: true %>
+                  <%= f.hidden_field :user_id, value: current_user.id %>
+                  <%= f.hidden_field :forum_id, value: @forum.id %>
+
+                  <%= f.submit 'Submit', class: 'bg-pacifixBlue text-white border border-pacifixBlue mr-1 px-4 hover:shadow-md transition py-1 rounded mt-4 btn-edit-reply' %>
+                  <button type="button" class="border border-pacifixBlue px-4 hover:shadow-md transition py-1 rounded mt-4 btn-edit-reply">Cancel</button>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>

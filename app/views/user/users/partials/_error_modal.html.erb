@@ -1,0 +1,15 @@
+<div class="modal fixed z-50 hidden" id="modalLink">
+  <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+  <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+    <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+      <div class="modal-content p-4 gap-4 text-center">
+        <i class="far fa-times-circle text-red-500 text-7xl mb-4"></i>
+        <h1 class="font-bold text-xl error-title"><%= errors %></h1>
+        <p class="error-message">You have been generate link before</p>
+      </div>
+      <div class="modal-footer p-4 border-t text-right">
+        <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded hideModalApprove">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+$('#holiday-form-modal').html(`<%= render partial: 'user/company_holidays/partials/form',
+                                  locals: { company_holiday: @company_holiday, incomes: @incomes } %>`);
+$('#modal').fadeIn(200)
+$('.hideModal').click(function(){
+  $(this).parents('#modal').fadeOut(100)
+})

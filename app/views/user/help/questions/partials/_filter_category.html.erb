@@ -1,0 +1,17 @@
+<h1 class="text-xl font-bold p-3  sticky top-0 bg-white shadow-white shadow-xl border-b">Categories</h1>
+<ul class="shadow-inset-lg shadow-white p-5">
+  <%= link_to user_help_questions_path(filter: params[:filter]), remote: true do %>
+    <li class="py-2 group rounded border-gray-300 <%= 'bg-opacity-20 mb-2 text-pacifixBlue bg-pacifixBlue' if @params_category.blank? %> hover:bg-opacity-20 mb-2 hover:text-pacifixBlue hover:bg-pacifixBlue transition px-3 inline-flex justify-between w-full items-center cursor-pointer">
+      <span>All</span>
+      <i class="fas fa-angle-double-right group-hover:text-pacifixBlue <%= 'invisible opacity-0' if @params_category.present?  %> group-hover:opacity-100 group-hover:visible transition ease-in"></i>
+    </li>
+  <% end %>
+  <% categories.each do |category| %>
+    <%= link_to user_help_questions_path('q[forum_category_id_eq]':  category, filter: params[:filter]), remote: true do %>
+      <li class="py-2 group rounded border-gray-300 <%= 'bg-opacity-20 mb-2 text-pacifixBlue bg-pacifixBlue' if @params_category.eql?(category.id.to_s) %> hover:bg-opacity-20 mb-2 hover:text-pacifixBlue hover:bg-pacifixBlue transition px-3 inline-flex justify-between w-full items-center cursor-pointer">
+        <span><%= category.name.humanize %></span>
+        <i class="fas fa-angle-double-right group-hover:text-pacifixBlue <%= 'invisible opacity-0' unless @params_category.eql?(category.id.to_s) %> group-hover:opacity-100 group-hover:visible transition ease-in"></i>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

@@ -1,0 +1,62 @@
+<div id="multiple-section" class="mt-5">
+  <div class="main-content-card bg-white p-5 rounded shadow-lg">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <div class="form-group col-span-2 order-1">
+        <%= form.label :question, 'Question', class: 'block font-bold' %>
+        <%= form.text_area :question, placeholder: 'Question', class: 'h-20 outline-none border rounded focus:border-pacifixBlue w-full p-2 transition ease-in focus:shadow-sm multiple-choice-field', required: true %>
+        <%= form.hidden_field :question_type, value: 'Multiple' %>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-2">
+        <%= form.label :option_1, 'Option 1', class: 'block font-bold' %>
+        <div class="flex items-center gap-2">
+          <%= form.text_field :option_1, class: 'p-1 outline-none border rounded focus:border-pacifixBlue w-[65%] xl:w-[70%] transition ease-in multiple-choice-field', required: true, placeholder: 'Option 1' %>
+          <div class="flex items-center correct-answer-section">
+            <%= form.radio_button :answer, 'option_1', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer correct-answer-radio', id: 'answer',  required: true %>
+            <%= form.label :option_1, 'Correct Answer', class: 'correct-answer-label', id: 'label_option_1' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-3">
+        <%= form.label :option_2, 'Option 2', class: 'block font-bold' %>
+        <div class="flex items-center gap-2">
+          <%= form.text_field :option_2, class: 'p-1 outline-none border rounded focus:border-pacifixBlue w-[65%] xl:w-[70%] transition ease-in multiple-choice-field', required: true, placeholder: 'Option 1' %>
+          <div class="flex items-center correct-answer-section">
+            <%= form.radio_button :answer, 'option_2', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer correct-answer-radio', id: 'answer',  required: true %>
+            <%= form.label :option_2, 'Correct Answer', class: 'correct-answer-label', id: 'label_option_2' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-2">
+        <%= form.label :option_3, 'Option 3', class: 'block font-bold' %>
+        <div class="flex items-center gap-2">
+          <%= form.text_field :option_3, class: 'p-1 outline-none border rounded focus:border-pacifixBlue w-[65%] xl:w-[70%] transition ease-in multiple-choice-field', required: true, placeholder: 'Option 1' %>
+          <div class="flex items-center correct-answer-section">
+            <%= form.radio_button :answer, 'option_3', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer correct-answer-radio', id: 'answer',  required: true %>
+            <%= form.label :option_3, 'Correct Answer', class: 'correct-answer-label', id: 'label_option_3' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-4">
+        <%= form.label :option_4, 'Option 4', class: 'block font-bold' %>
+        <div class="flex items-center gap-2">
+          <%= form.text_field :option_4, class: 'p-1 outline-none border rounded focus:border-pacifixBlue w-[65%] xl:w-[70%] transition ease-in multiple-choice-field', required: true, placeholder: 'Option 1' %>
+          <div class="flex items-center correct-answer-section">
+            <%= form.radio_button :answer, 'option_4', class: 'form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-pacifixBlue checked:border-pacifixBlue outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer correct-answer-radio', id: 'answer',  required: true %>
+            <%= form.label :option_4, 'Correct Answer', class: 'correct-answer-label', id: 'label_option_4' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-5">
+        <%= form.label :point, 'Point', class: 'block font-bold point-label' %>
+        <%= form.number_field :point, class: "p-1 outline-none border rounded focus:border-pacifixBlue w-full transition ease-in point-question multiple-choice-point #{'hidden' if @gameplay.is_basic}", value: form.object.point || 1, required: true, placeholder: 'Point', min: 1 %>
+      </div>
+      <div class="form-group col-span-2 sm:col-span-1 order-6">
+          <div class="form-group bg-red-500 w-7 h-7 rounded text-white inline-block mb-1 float-right mt-5">
+            <%= link_to_remove_nested(form, link_classes: '', fields_wrapper_selector: '#multiple-section') do %>
+              <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+            <% end %>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

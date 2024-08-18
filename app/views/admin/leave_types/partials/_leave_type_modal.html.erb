@@ -1,0 +1,98 @@
+<div class="modal fixed z-50 hidden" id="leaveTypeLink">
+  <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+  <div class="modal-wrap fixed inset-0 flex items-center justify-center z-50 px-5">
+    <div class="bg-white rounded-md m-auto shadow-lg w-full sm:w-[500px]">
+      <%= form_for(leave_type, url: url, html: {class: 'modal-form ', remote: true}) do |f| %>
+        <div class="modal-header p-4 border-b">
+          <h1 class="text-xl font-bold">Tambah Tipe Cuti</h1>
+        </div>
+        <div class="modal-content p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="form-group">
+            <%= f.label :name, 'Name', class: 'font-bold block' %>
+            <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, placeholder: "Name" %>
+          </div>
+          <div class="form-group">
+            <%= f.label :leave_balance, 'Balance', class: 'font-bold block' %>
+            <%= f.number_field :leave_balance, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', required: true, placeholder: "Balance" %>
+          </div>
+          <div class="form-group">
+            <%= f.label :priority, 'Priority', class: 'font-bold block' %>
+            <%= f.select :priority, LeaveType.priorities.keys.map { |priority| [priority.humanize, priority] }, {}, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in' %>
+          </div>
+          <div class="form-group sm:col-span-2">
+            <%= f.label :colour_code, 'Color Code', class: 'font-bold block' %>
+            <div class="flex flex-col sm:flex-row gap-3 p-2 border rounded">
+              <div class="color-pallete grid grid-cols-6 gap-1 w-full sm:w-1/2">
+                <span class="color-item w-full h-8 rounded cursor-pointer inline-block bg-[#FF6900] flex" data-color="FF6900">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#FCB900] flex" data-color="FCB900">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#7BDCB5] flex" data-color="7BDCB5">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#00D084] flex" data-color="00D084">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#8ED1FC] flex" data-color="8ED1FC">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#0693E3] flex" data-color="0693E3">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#ABB8C3] flex" data-color="ABB8C3">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#EB144C] flex" data-color="EB144C">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#F78DA7] flex" data-color="F78DA7">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#9900EF] flex" data-color="9900EF">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#50B0C0] flex" data-color="50B0C0">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+                <span class="color-item inline-block w-full h-8 rounded cursor-pointer bg-[#BA7AC8] flex" data-color="BA7AC8">
+                  <i class="fa fa-check m-auto text-white hidden"></i>
+                </span>
+              </div>
+              <div class="w-full sm:w-1/2">
+                <div class="flex">
+                  <span class="flex items-center text-xl justify-center border rounded-l bg-gray-200 border-r-0 px-3 py-[5px] font-bold">#</span>
+                  <%= f.text_field :colour_code, class: 'w-full border px-2 py-[7px] outline-none rounded-r focus:border-pacifixBlue transition ease-linear color-code', placeholder: 'Color', required: true, readonly: true %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-header p-4 border-t text-right">
+          <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+          <button type="submit" class="bg-pacifixBlue hover:shadow-md text-white px-4 py-2 rounded mr-2 hideModal">Save</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  var colorSelected = []
+  $('.color-item').each(function(index, item){
+    colorSelected.push({
+      index: index,
+      value: $(item).data('color')
+    })
+    if($('.color-code').val() === colorSelected[index].value){
+      $(item).children().removeClass('hidden')
+      return false
+    }
+  })
+
+  $('.color-item').click(function(){
+    $(this).children().toggleClass('hidden')
+    $(this).siblings().children().addClass('hidden')
+    $('.color-code').val($(this).data('color'))
+  })
+</script>

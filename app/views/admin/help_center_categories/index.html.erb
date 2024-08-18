@@ -1,0 +1,19 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Thread Category</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_admin_help_center_category_path, remote: true, class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+        New Category
+      <% end %>
+    </div>
+  </div>
+  <div class="modal fixed z-50 hidden" id="modal">
+	  
+	</div>
+  <%= render partial: 'admin/help_center_categories/partials/table',
+              locals: { forum_categories: @forum_categories } %>
+</div>

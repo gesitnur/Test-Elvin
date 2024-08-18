@@ -1,0 +1,77 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3 flex justify-between items-center">
+  <h1 class="main-content-title text-3xl font-bold mb-3">Invoices</h1>
+</div>
+<div class="main-card-wrap grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+  <div class="main-card-item col-span-2 md:col-span-1">
+    <%= link_to user_invoices_path('q[status_eq]': 1, date_filter: params[:date_filter]) do %>
+      <div class="card-invoice w-full p-3 bg-white shadow-md rounded border-l-4 border-pacifixBlue items-center cursor-pointer hover:bg-slate-50 transition ease-linear <%= invoice_filter_class(params[:q][:status_eq].eql?('1')) %>">
+        <p class="text-3xl"><%= @paid_invoices.count %></p>
+        <h1 class="text-xl">Paid</h1>
+      </div>
+    <% end %>
+  </div>
+  <div class="main-card-item">
+    <%= link_to user_invoices_path('q[status_eq]': 0, date_filter: params[:date_filter]) do %>
+      <div class="card-invoice w-full p-3 bg-white shadow-md rounded border-l-4 border-red-500 items-center cursor-pointer hover:bg-slate-50 transition ease-linear <%= invoice_filter_class(params[:q][:status_eq].eql?('0') && params[:q][:due_date_lteq].blank?) %>">
+        <p class="text-3xl"><%= @unpaid_invoices.count %></p>
+        <h1 class="text-xl">Unpaid</h1>
+      </div>
+    <% end %>
+  </div>
+  <div class="main-card-item">
+    <%= link_to user_invoices_path('q[status_eq]': 0, 'q[due_date_lteq]': Date.today.strftime(('%d/%m/%Y')), date_filter: params[:date_filter]) do %>
+      <div class="card-invoice w-full p-3 bg-white shadow-md rounded border-l-4 border-yellow-500 items-center cursor-pointer hover:bg-slate-50 transition ease-linear <%= invoice_filter_class(params[:q][:due_date_lteq].present?) %>">
+        <p class="text-3xl"><%= @overdue_invoices.count %></p>
+        <h1 class="text-xl">Overdue</h1>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="main-content-card bg-white p-5 sm:p-7 rounded shadow-md">
+  <div class="flex justify-between mb-2 gap-2">
+    <div class="main-content-form flex gap-2 mb-2">
+      <select name="date_filter" id="" class="bg-white p-3 border rounded focus:outline-none focus:border-pacifixBlue date-filter w-32 select-filter-invoice" data-url=<%= user_invoices_path('q': params[:q].except(:invoice_date_between).permit!) %>>
+        <option value="3" <%= 'selected' if params[:date_filter].eql?('3') %>>3 days</option>
+        <option value="7" <%= 'selected' if params[:date_filter].eql?('7') %>>7 days</option>
+        <option value="14" <%= 'selected' if params[:date_filter].eql?('14') %>>2 weeks</option>
+        <option value="" <%= 'selected' if params[:date_filter].blank? %>>All</option>
+      </select>
+      <%= link_to user_invoices_path(date_filter: 7), class: 'bg-africanViolet flex items-center justify-center tooltip text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear relative' do %>
+        <span class="tooltip-text bg-gray-500 shadow text-white -bottom-10 left-0 rounded whitespace-nowrap">Refresh</span><i class="fas fa-sync-alt"></i>
+      <% end %>
+    </div>
+    <div class="main-content-btn">
+      <%= link_to new_user_invoice_path, class: 'inline-block hidden sm:block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> New Invoice
+      <% end %>
+      <%= link_to new_user_invoice_path, class: 'inline-block block sm:hidden bg-pacifixBlue text-white rounded py-2 px-4 tooltip shadow hover:shadow-lg transition ease-linear' do %>
+        <span class="tooltip-text bg-gray-500 shadow text-white -bottom-10 left-0 rounded whitespace-nowrap">New Invoice</span><i class="fas fa-plus"></i>
+      <% end %>
+    </div>
+  </div>
+  <div class="relative">
+    <div class="form-custom-date w-full lg:w-[35rem] bg-white rounded shadow-md absolute border hidden z-10">
+      <div class="form-custom-header p-4 border-b flex justify-between">
+        <h1 class="font-bold text-xl">Custom Date Range</h1>
+          <button typ="button" id="btn-close-custom"><i class="fas fa-times text-xl text-slate-400 cursor-pointer" aria-hidden="true"></i></button>
+      </div>
+      <form class="form-customer-content grid grid-cols-2 gap-4  p-4">
+        <div class="form-group">
+          <label for="start-date" class="font-bold block">Start Date</label>
+          <input type="date" class="border p-2 rounded w-full start-date-input">
+        </div>
+        <div class="form-group">
+          <label for="end-date" class="font-bold block">End Date</label>
+          <input type="date" class="border p-2 rounded w-full end-date-input">
+        </div>
+      </form>
+      <div class="form-custom-footer p-4 border-t flex justify-end">
+        <button type="button" class="py-2 px-4 bg-pacifixBlue rounded text-white" id="btn-filter-custom">Filter</button>
+      </div>
+    </div>
+  </div>
+  <%= render partial: 'user/invoices/partials/table',
+                locals: { invoices: @invoices } %>
+</div>

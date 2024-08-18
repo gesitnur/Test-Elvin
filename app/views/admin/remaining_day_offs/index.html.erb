@@ -1,0 +1,44 @@
+<div class="leave-type-modal"></div>
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Tipe Cuti</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_admin_remaining_day_off_path, class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear', remote: true do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> Tambah Sisa Cuti Tahun <%= Time.now.year %>
+      <% end %>
+    </div>
+  </div>
+  <div class="overflow-x-auto" id="position-table">
+    <table class="w-full text-left shadow">
+      <thead>
+        <tr>
+          <th class="border p-2">Tahun</th>
+          <th class="border p-2">Sisa Cuti</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= no_table_record(@remaining_day_offs, 2) %>
+        <% @remaining_day_offs.each.with_index(1) do |remaining_day_off, idx| %>
+          <tr>
+            <td class="border p-2 items-center whitespace-nowrap">
+              <%= remaining_day_off.remaining %></td>
+            </td>
+            <td class="border p-2"><%= remaining_day_off.year %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="flow-root mt-4">
+    <div class="float-left">
+      <%= page_entries_info @remaining_day_offs, entry_name: 'Remaining Day Off' if @remaining_day_offs.present? %>
+    </div>
+    <div class="float-right">
+      <%= paginate @remaining_day_offs, window: 2 %>
+    </div>
+  </div>
+</div>

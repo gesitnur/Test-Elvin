@@ -1,0 +1,238 @@
+<%= form_for(@transaction, url: url, remote: true, html: {class: 'grid grid-cols-1 gap-3 form-transfer'}) do |f| %>
+  <%= f.hidden_field :transaction_type, value: 'Transfer' %>
+  <div class="flex items-start justify-between p-4 border-b border-solid border-slate-200 rounded-t">
+    <h3 class="text-2xl font-semibold">
+      New Transfer 
+    </h3>
+    <button class="btn-close" type="button"><i class="fas fa-times text-xl text-slate-400 cursor-pointer" aria-hidden="true"></i></button>
+  </div>
+  <div class="px-6 flash_alert"></div>
+  <div class="relative px-6 py-1 flex-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="form-group col-span-2">
+      <%= f.label :transaction_type, "Use Recurring Transfer ?", class: 'block font-bold mb-1' %>
+      <%= f.select :transaction_type , options_for_select(recurring_transfers || [], f.object.transaction_type), { include_blank: 'Dont use recurring transfer' }, {class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-recurring-transfer", 'data-url': find_recurring_user_transactions_path, disabled: f.object.persisted?  } %>
+      <%= f.hidden_field :cash_book_id %>
+      <%= f.hidden_field :transfer_ref %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 amount-form">
+      <%= f.label :amount, "Amount", class: 'block font-bold mb-1' %>
+      <%= f.text_field :amount, class: 'w-full border border-slate-300 px-1 py-[7px] rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in amount-transfer format-currency', step: :any, min: 0, placeholder: 'Amount', required: true %>
+
+      <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+      <%= f.hidden_field :cash_book_id %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 date-section">
+      <%= f.label :transaction_date, "Date", class: 'block font-bold mb-1' %>
+      <%= f.datetime_field :transaction_date, class: 'w-full border border-slate-300 px-1 py-[6px] rounded outline-none focus:border-pacifixBlue', placeholder: 'Date', required: true, value: (f.object.transaction_date ||= Time.now).strftime('%Y-%m-%dT%H:%M') %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :transfer_from, "From", class: 'block font-bold mb-1' %>
+
+      <%= f.select :transfer_from , options_for_select(@cash_books || [], params[:cash_book_id]), {include_blank: 'Select Transfer From'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-transfer select-transfer-from", disabled: true, required: true, 'data-url': find_cash_book_user_transactions_path } %>
+      <input type="hidden" class="transfer-currency" value='' id="transfer-from-currency" >
+      <input type="hidden" class="category-id-field" value="<%= f.object.transfer_from %>">
+      <%= f.hidden_field :transfer_from, class: '', value: params[:cash_book_id] %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :transfer_to, "To", class: 'block font-bold mb-1' %>
+
+      <%= f.select :transfer_to , options_for_select(@cash_books || [], f.object.transfer_to), {include_blank: 'Select Transfer To'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in select-transfer select-transfer-to", required: true, 'data-url': find_cash_book_user_transactions_path } %>
+      <input type="hidden" class="transfer-currency" value='' id="transfer-to-currency" >
+      <input type="hidden" class="category-id-field" value="<%= f.object.transfer_to %>">
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <label class="font-bold mb-1 transfer-different-currency hidden">Amount From</label>
+
+      <%= f.text_field :transfer_from_amount, class: 'px-1 py-[7px] bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in hidden transfer_from_amount transfer-different-currency format-currency' %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <label class="font-bold mb-1 transfer-different-currency hidden">Amount To</label>
+
+      <%= f.text_field :transfer_to_amount, class: 'px-1 py-[7px] bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in hidden transfer_to_amount transfer-different-currency format-currency' %>
+    </div>
+    <div class="form-group col-span-2">
+      <%= f.label :description, "Description", class: 'block font-bold mb-1' %>
+
+      <%= f.text_area :description, class: 'w-full border border-slate-300 p-2 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in description-field', cols: 30, rows: 3, placeholder: 'Description', required: true %>
+    </div>
+  </div>
+  <div class="flow-root rounded-b border-t border-solid border-slate-200 px-6 py-3">
+    <% unless f.object.new_record? %>
+      <div class="float-left">
+        <button type="button" class="bg-red-500 text-white mr-2 inline-block rounded py-2 px-4 shadow transition ease-linear hover:shadow-lg showModal">
+          Delete
+        </button>
+        <div class="modal fixed z-50 hidden" id="modal">
+          <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+            <div class="modal-content fixed inset-0 flex items-center justify-center z-50 px-5">
+              <div class="bg-white p-6 rounded-md m-auto shadow-lg w-full sm:w-1/2 lg:w-1/3">
+                <p class="mb-4">Are you sure?</p>
+                <div class="flex justify-end">
+                <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+                <%= link_to destroy_transfer_user_transactions_path(f.object, cash_book_id: params[:cash_book_id], transfer_ref: f.object.transfer_ref), method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' do %>
+                  Delete
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fixed z-50 overflow-y-auto top-0 w-full hidden left-0 " id="modal">
+          <div class="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity">
+              <div class="absolute inset-0 bg-gray-900 opacity-40"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+              <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <span>Are you sure?</span>
+              </div>
+              <div class="bg-gray-200 px-4 py-3 text-right">
+                <button type="button" class="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 hideModal"><i class="fas fa-times"></i> Cancel</button>
+                <%= link_to destroy_transfer_user_transactions_path(f.object, cash_book_id: params[:cash_book_id], transfer_ref: f.object.transfer_ref), method: :delete, class: 'px-4 py-3 bg-red-500 text-white rounded mr-2' do %>
+                  <i class="fas fa-trash"></i> Delete
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="float-right text-green-800">
+      <button class="border-pacifixBlue btn-close mr-2 inline-block rounded border bg-white py-2 px-4 text-black shadow transition ease-linear hover:shadow-lg" type="button">Close</button>
+      <button class="border-pacifixBlue bg-pacifixBlue inline-block rounded border py-2 px-4 text-white shadow transition ease-linear hover:shadow-lg btn-submit-transaction" type="submit">
+          <span class="inline-block">Save</span>
+          <svg class="w-5 ml-2 text-gray-200 hidden animate-spin dark:text-gray-600 fill-pacifixBlue loading-spinner" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+ $('.showModal').click(function(){
+    $(this).parent().find('#modal').fadeIn(200)
+    $(this).parents('body').css("overflow", "hidden")
+  })
+  $('.hideModal').click(function(){
+    $(this).parents('#modal').fadeOut(100)
+    $(this).parents('body').css("overflow", "auto")
+  })
+
+  $('.form-transfer').submit(function(){
+    if ($('.select-transfer-from').val() == $('.select-transfer-to').val()) {
+      alert('Cannot transfer to same cash book')
+      return false
+    }else{
+      $('.loading-spinner').css('display', 'inline-block');
+      $('.btn-submit-transaction').prop('disabled', true).addClass('opacity-70')
+    }
+  })
+  
+  $.ajax({
+  url: $('.select-transfer-from').data('url'),
+    type: "GET",
+    dataType:"script",
+    data: {
+    cash_book_id: $('.select-transfer-from').val()
+    },
+    success: function(data){
+      parent = $('.select-transfer-from').parent();
+      parent.find('.transfer-currency').val(JSON.parse(data)['currency_id'])
+    },
+    error: function(error){
+      console.log("Error:");
+    }
+  })
+
+  $.ajax({
+  url: $('.select-transfer-to').data('url'),
+    type: "GET",
+    dataType:"script",
+    data: {
+    cash_book_id: $('.select-transfer-to').val()
+    },
+    success: function(data){
+      parent = $('.select-transfer-to').parent();
+      parent.find('.transfer-currency').val(JSON.parse(data)['currency_id'])
+      if($('#transfer-from-currency').val() == $('#transfer-to-currency').val()){
+        $('.transfer-different-currency').addClass("hidden")
+          $( ".date-section" ).addClass( "sm:col-span-1" )
+          $('.amount-form').removeClass("hidden")
+      }else{
+        $('.transfer-different-currency').removeClass("hidden")
+          $( ".date-section" ).removeClass( "sm:col-span-1" )
+          $('.amount-form').addClass("hidden")
+      }
+    },
+    error: function(error){
+      console.log("Error:");
+    }
+  })
+
+  $('#transaction-form').on('change', '.amount-transfer', function(e) {
+    $('.transfer-different-currency').val($(this).val())
+  })
+
+  $('#transaction-form').on('change', '.select-transfer', function(e) {
+    parent = $(this).parent();
+    $.ajax({
+      url: $(this).data('url'),
+      type: "GET",
+      dataType:"script",
+      data: {
+        cash_book_id: $(this).val()
+      },
+      success: function(data){
+        parent.find('.transfer-currency').val(JSON.parse(data)['currency_id'])
+        if(($('#transfer-from-currency').val() != $('#transfer-to-currency').val()) && $('#transfer-from-currency').val() != '' && $('#transfer-to-currency').val() != ''){
+          $('.transfer-different-currency').removeClass("hidden")
+          $( ".date-section" ).removeClass( "sm:col-span-1" )
+          $('.amount-form').addClass("hidden")
+        }else{
+          $('.transfer-different-currency').addClass("hidden")
+          $( ".date-section" ).addClass( "sm:col-span-1" )
+          $('.amount-form').removeClass("hidden")
+        }
+      },
+      error: function(error){
+        console.log("Error:");
+      }
+    })
+  })
+
+  $('.select-recurring-transfer').change(function(){
+    $.ajax({
+      url: $(this).data('url'),
+      type: "GET",
+      dataType:"script",
+      data: {
+        recurring_id: $(this).val()
+      },
+      success: function(data){
+        $('.select-transfer-from').val(JSON.parse(data)['transfer_from']);
+        $('.select-transfer-to').val(JSON.parse(data)['transfer_to']);
+        $('.transfer_from_amount').val(JSON.parse(data)['transfer_from_amount']);
+        $('.transfer_to_amount').val(JSON.parse(data)['transfer_to_amount']);
+        $('.amount-transfer').val(JSON.parse(data)['amount']);
+        $('.description-field').val(JSON.parse(data)['description']);
+        $('.select-transfer-from').change();
+        var delayInMilliseconds = 100; //1 second
+
+        setTimeout(function() {
+          $('.select-transfer-to').change();
+        }, delayInMilliseconds);
+      },
+      error: function(error){
+        console.log("Error:");
+        $('.amount-field').val('');
+        $('.select-category').val('');
+        $('.description-field').val('');
+      }
+    })
+  })
+  $('.select-transfer, .select-recurring-transfer').select2({
+    width: '100%'
+  })
+</script>

@@ -1,0 +1,12 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<div class="main-content-header mb-3">
+  <h1 class="gameplay-header-title text-3xl mb-5 font-bold">Assestment</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    
+  </div>
+  <%= render partial: 'interviews/gameplays/partials/table',
+                locals: { gameplays: @gameplays } %>
+</div>

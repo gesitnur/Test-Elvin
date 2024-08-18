@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Elvin.com</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" charset="utf-8">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+    <style>
+      @font-face {
+        font-family: "neue";
+        font-weight: bold;
+        font-style: normal;
+        src: url('../../../assets/font/Neue_Plak_Black.ttf');
+      }
+
+      @font-face {
+        font-family: "neue";
+        font-weight: normal;
+        font-style: normal;
+        src: url('../../../assets/font/Neue_Plak_Regular.ttf');
+      }
+      body {
+        font-family: "neue", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-content" class="max-w-2xl mx-auto relative min-h-screen border-y-8 flex flex-col">
+      <div class="invoice-header py-4 flex justify-between items-center mb-2">
+        <div class="invoice-header-item">
+          <span class="font-semibold uppercase invoice-header-title block">Slip Gaji Karyawan</span>
+          <span class="uppercase invoice-people-title">Periode <%= @start_month.strftime('%d %B %Y') %> - <%= @period_this_month.strftime('%d %B %Y') %></span>
+        </div>
+      </div>            
+      <div class="invoice-people mb-4">
+        <div class="flex justify-between mb-5">
+          <table class="invoice-people-identity">
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Nama</td>
+              <td class="invoice-people-identity-detail text-end"><%= @user.name %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Jabatan</td>
+              <td class="invoice-people-identity-detail text-end"><%= "Backend Developer" %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">&nbsp;</td>
+              <td class="invoice-people-identity-detail text-end">&nbsp;</td>
+            </tr>
+          </table>
+          <table class="invoice-people-identity">
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Hari Kerja</td>
+              <td class="invoice-people-identity-detail text-end"><%= @weekday_count %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Absen (cuti)</td>
+              <td class="invoice-people-identity-detail text-end"><%= 0 %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Total Kehadiran</td>
+              <td class="invoice-people-identity-detail text-end"><%= 23 %></td>
+            </tr>
+          </table>
+        </div>
+        <br>
+        <div class="flex justify-between mb-5">
+          <table class="invoice-people-identity">
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title"><u>Penghasilan</u></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Gaji Pokok</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.gaji_pokok.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Tj. Jabatan</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.tunjangan_jabatan.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Tj. Makan</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.tunjangan_makan.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Tj. Transport</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.tunjangan_transport.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Tj. Laptop</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.tunjangan_laptop.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">OverTime</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@over_time_salary, delimiter: '.') %></td>
+            </tr>
+            <% total_a = @contract.gaji_pokok + @contract.tunjangan_jabatan + @contract.tunjangan_makan + @contract.tunjangan_transport + @contract.tunjangan_laptop + @over_time_salary %>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Total (A)</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(total_a, delimiter: '.') %></td>
+            </tr>
+          </table>
+          <table class="invoice-people-identity">
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title"><u>Potongan</u></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">BPJS Kesehatan</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.bpjs_kesehatan.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">BPJS Ketenagakerjaan</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.bpjs_ketenagakerjaan.to_i, delimiter: '.') %></td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">PPH 21</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(@contract.pph_21.to_i, delimiter: '.') %></td>
+            </tr>
+            <% total_b = @contract.bpjs_kesehatan + @contract.bpjs_ketenagakerjaan + @contract.pph_21 %>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title"></td>
+              <td class="invoice-people-identity-detail text-end">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title"></td>
+              <td class="invoice-people-identity-detail text-end">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title"></td>
+              <td class="invoice-people-identity-detail text-end">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="font-bold uppercase pr-6 invoice-people-identity-title">Total(B)</td>
+              <td class="invoice-people-identity-detail text-end"><%= number_with_delimiter(total_b.to_i, delimiter: '.') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="invoice-total py-3 mb-4 flex justify-between border-y-2">
+        <span class="font-bold">PENERIMAAN BERSIH (A - B)</span>
+        <p class="font-bold">RP. <%= number_with_delimiter((total_a.to_i - total_b), delimiter: '.') %></p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  :root {
+  --font-size-head: 40px;
+  --font-size-title: 35px;
+  --font-size-secondaryTitle: 20px;
+  --font-size-description: 16px;
+  --color-primary: #000000;
+  --color-secondary: #3e74b9;
+  --color-tertiary: #8f8f8f;
+  --color-querternary: #fff;
+}
+
+.invoice-header-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-head);
+}
+
+.separator-section {
+  background-color: var(--color-secondary);
+}
+
+#main-content {
+  border-color: var(--color-secondary);
+}
+
+.invoice-people-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-people-details {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-people-identity-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-people-identity-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-description) ;
+}
+
+.invoice-total {
+  border-color: var(--color-primary);
+}
+
+.invoice-total-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-total-detail {
+  color: var(--color-primary);
+  font-size: var(--font-size-title);
+}
+
+.invoice-details-table-head {
+  color: var(--color-primary);
+  font-size: var(--font-size-secondaryTitle);
+}
+
+.invoice-details-table-body {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+
+.invoice-amount-title {
+  color: var(--color-primary);
+  font-size: var(--font-size-description);
+}
+</style>

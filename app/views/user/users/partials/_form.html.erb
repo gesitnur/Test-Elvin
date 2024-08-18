@@ -1,0 +1,28 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(user, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Name", class: 'font-bold block' %>
+    <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Name', required: true %>
+  </div>
+  <div class="form-group">
+    <%= f.label :email, "Email", class: 'font-bold block' %>
+    <%= f.text_field :email, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Email', required: true %>
+  </div>
+  <% if f.object.new_record? %>
+  <div class="form-group">
+    <%= f.label :password, "Password", class: 'font-bold block' %>
+    <%= f.password_field :password, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Password', required: true %>
+    <%= f.hidden_field :email_confirmed, value: true %>
+    <%= f.hidden_field :company_id, value: current_user.company.id %>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.label :position_id, "Position", class: 'font-bold block' %>
+    <%= f.select :position_id, options_for_select(@positions, f.object.position_id), {include_blank: 'Select Position'}, {class: "w-full p-2 rounded outline-none bg-white border border-slate-300 focus:border-pacifixBlue transition ease-in select-dropdown", id: 'domain-access'} %>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', user_users_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

@@ -1,0 +1,123 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+
+<div class="main-content-header flex justify-between">
+  <h1 class="text-3xl font-bold mb-3 main-content-title">Detail Interview</h1>
+</div>
+<%= form_for(@interview, url: user_interview_path, html: {class: 'grid grid-cols-1 gap-6', id: 'interview_form'}) do |f| %>
+  <div class="main-content-card bg-white p-6 rounded w-full shadow-lg">
+    <div class="main-content-button flex justify-between items-center flex-row-reverse mb-3">
+      <div class="flex flex-col sm:flex-row gap-2 text-right">
+        <div class="button-link">
+          <a href="#" class="inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear" target="_blank"><i class="fas fa-video mr-1"></i> Go Interview</a>
+        </div>
+        <div class="button-link">
+          <%= link_to edit_user_interview_path(@interview), class: 'inline-block bg-pacifixBlue text-white rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear' do %>
+            <i class="fa fa-edit" aria-hidden="true"></i> Edit
+          <% end %>
+        </div>
+      </div>
+      <%= link_to user_interviews_path, class: 'border border-pacifixBlue inline-block mb-3 rounded hover:bg-slate-100 px-4 py-2 shadow hover:shadow-lg transition ease-linear' do %>
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      <% end %>
+    </div>
+    <div class="flex items-center mb-3">
+      <div class="w-full">
+        <h1 class="text-xl font-semibold leading-none"><%= @interview.name %></h1>
+        <p class="text-slate-500 text-lg"><%= @interview.apply_for_job %></p>
+        <p><%= @interview.gender %></p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="group">
+        <label for="date-of-birth" class="font-semibold">Date Of Birth</label>
+        <p><%= date_formater @interview.date_of_birth %></p>
+      </div>
+      <div class="group">
+        <label for="email" class="font-semibold">Email</label>
+        <p><%= @interview.email %></p>
+      </div>
+      <div class="group">
+        <label for="major" class="font-semibold">Major</label>
+        <p><%= @interview.major %></p>
+      </div>
+      <div class="group">
+        <label for="graduated" class="font-semibold">Graduated</label>
+        <p><%= @interview.graduated %></p>
+      </div>
+      <div class="group">
+        <label for="domicile" class="font-semibold">Domicile</label>
+        <p><%= @interview.domicile %></p>
+      </div>
+      <div class="group">
+        <label for="phone-number" class="font-semibold">Phone Number</label>
+        <p><%= @interview.phone_number %></p>
+      </div>
+      <div class="group">
+        <label for="schedule-interview" class="font-semibold">Schedule Interview</label>
+        <p><%= datetime_formater @interview.scheduled_interview %></p>
+      </div>
+      <div class="group">
+        <label for="interview-question" class="font-semibold block">Interview Question</label>
+        <!-- <% if @interview.interview_gameplays.present? %> -->
+          <!-- <%= link_to 'Link For User' , interview_new_answers_path(@encrypt_interview_id), class: 'interview-question bg-powderBlue text-pacifixBlue font-semibold mr-2 px-2.5 py-0.5 rounded', target: '_blank' %> -->
+        <!-- <% end %> -->
+        <% @interview.interview_gameplays.each do |interview_gameplay| %>
+          <div>
+            <%= link_to interview_gameplay.gameplay.name, user_gameplay_path(interview_gameplay.gameplay), class: 'interview-question bg-powderBlue text-pacifixBlue font-semibold mr-2 px-2.5 py-0.5 rounded' %>
+            <% if interview_gameplay.completed? %>
+              <%= link_to 'Beri Nilai' , admin_evaluate_answers_user_interview_path(@interview, interview_gameplay.gameplay.id), class: 'interview-question bg-powderBlue text-pacifixBlue font-semibold mr-2 px-2.5 py-0.5 rounded', target: '_blank' %>
+            <% end %>
+            <%= display_score(interview_gameplay) %><br>
+          </div>
+        <% end %>
+      </div>
+      <div class="group sm:col-span-2">
+        <label for="work-experience" class="font-semibold">Work Experience</label>
+        <p><%= @interview.work_experience %></p>
+      </div>
+    </div>
+  </div>
+  <div class="main-content-card bg-white p-6 rounded w-full shadow-lg border">
+    <div class="form-group mb-4">
+      <label for="hrd-notes" class="block font-bold mb-1">HRD Notes</label>
+      <%= f.text_area :hrd_notes, cols: 30, rows: 10, placeholder: 'HRD Notes', id: 'hrd-notes' %>
+    </div>
+    <div class="grid gap-5 mb-2 grid-cols-1 sm:grid-cols-2">
+      <div class="form-group flex items-center mb-1">
+        <div class="form-check w-1/2">
+          <%= f.check_box :is_training, class: 'form-check-input accent-pacifixBlue rounded-sm focus:outline-none mt-1 mr-2 cursor-pointer', id: 'check-training' %>
+          <label class="form-check-label inline-block text-gray-800" for="check-training">
+            Training
+          </label>
+        </div>
+        <div class="flex">
+          <%= f.number_field :training_duration, class: 'duration rounded-none rounded-l bg-gray-50 border py-2 focus:outline-none flex-1 px-1 focus:border-pacifixBlue focus:shadow-sm block w-full transition ease-in', placeholder: 'Duration', id: 'training-duration' %>
+          <span class="inline-flex items-center px-3 bg-gray-200 rounded-r border border-r-0 w-20 text-sm">
+            / Month
+          </span>
+        </div>
+      </div>
+      <div class="form-group flex items-center ">
+        <div class="form-check w-1/2">
+          <%= f.check_box :is_trial, class: 'form-check-input accent-pacifixBlue rounded-sm focus:outline-none mt-1 mr-2 cursor-pointer', id: 'check-trial' %>
+          <label class="form-check-label inline-block text-gray-800" for="check-trial">
+            Trial
+          </label>
+        </div>
+        <div class="flex">
+          <%= f.number_field :trial_duration, class: 'duration rounded-none rounded-l py-2 bg-gray-50 border focus:outline-none flex-1 px-1 focus:border-pacifixBlue focus:shadow-sm block w-full transition ease-in', placeholder: 'Duration', id: 'trial-duration' %>
+          <span class="inline-flex items-center px-3 bg-gray-200 rounded-r border border-r-0 w-20 text-sm">
+            / Days
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <h2 class="text-xl font-bold">Score Gameplay : <span>82.0</span></h2>
+    </div>
+    <div class="form-group flex gap-2">
+      <input type="submit" class="bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in" value="Save" form="interview_form">
+    </div>
+  </div>
+<% end %>

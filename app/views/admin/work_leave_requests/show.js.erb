@@ -1,0 +1,21 @@
+$('.detail-modal').html(`<%= render partial: 'work_leaves/partials/leave_request_modal',
+                              locals: { leave_request: @work_leave_request, employee: @work_leave_request.user } %>`);
+
+$('#modal').fadeIn(200)
+$('.hideModal').click(function(){
+  $(this).parents('#modal').fadeOut(100)
+})
+
+var colorAnimate = '#50B0C0';
+$('.progress').each(function(i) {
+  var circle = new ProgressBar.Circle(this, {
+    color: colorAnimate,
+    easing: 'linear',
+    strokeWidth: 8,
+    duration: 1500,
+    trailColor: '#C3E1E5',
+    trailWidth: 8,
+  });
+  var value = ($(this).attr('value') / 100);
+  circle.animate(value);
+});

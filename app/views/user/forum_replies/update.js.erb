@@ -1,0 +1,22 @@
+setTimeout(function() {
+  $('.help-center-answer').html(`<%= render partial: 'user/help/questions/partials/answer_section', 
+                                locals: { forum_replies: @forum_replies, forum: @forum }  %>`)
+
+  $('#total-answer-count').html("<%= @forum_replies.count %>")
+
+  $('.text-editor').trumbowyg({
+    svgPath: 'https://raw.githubusercontent.com/Alex-D/Trumbowyg/main/dist/ui/icons.svg',
+    resetCss: true,
+    btns: [
+      ['undo', 'redo'], // Only supported in Blink browsers
+      ['formatting'],
+      ['strong', 'em', 'del'],
+      ['link'],
+      ['insertImage'],
+      ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+      ['unorderedList', 'orderedList'],
+      ['horizontalRule'],
+      ['fullscreen']
+    ]
+  });
+}, 500);

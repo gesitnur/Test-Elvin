@@ -1,0 +1,56 @@
+<%= form_for(debt_item, url: url, remote: true, html: {class: 'grid grid-cols-1 gap-4', autocomplete: 'off'}) do |f| %>
+  <% debt = Credit.find(params[:credit_id]) %>
+  <div class="flex items-start justify-between p-4 border-b border-solid border-slate-200 rounded-t">
+    <h3 class="text-2xl font-semibold">
+      <% if type.eql?('Income') %>
+        Credit Addition
+      <% else %>
+        Credit Payment
+      <% end %>
+    </h3>
+    <button class="btn-close" type="button"><i class="fas fa-times text-xl text-slate-400 cursor-pointer" aria-hidden="true"></i></button>
+  </div>
+  <div class="relative p-6 flex-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :account_item_date, "Date", class: 'block font-bold mb-1' %>
+      <%= f.datetime_field :account_item_date, class: 'w-full border border-slate-300 p-1 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', cols: 30, rows: 3, placeholder: 'Date', required: true, value: (f.object.account_item_date ||= Time.now).strftime('%Y-%m-%dT%H:%M') %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1">
+      <%= f.label :amount, "Amount", class: 'block font-bold mb-1' %>
+
+      <div class="flex">
+        <span class="flex items-center text-xl justify-center border rounded-l bg-gray-200 border-r-0 px-3 py-[5px] font-bold"><%= debt.currency.symbol %></span>
+        <%= f.text_field :amount, class: 'w-full border px-2 py-[7px] outline-none rounded-r focus:border-pacifixBlue transition ease-linear format-currency', step: :any, min: 0, placeholder: 'Amount', required: true %>
+      </div>
+      <%= f.hidden_field :account_id, value: params[:credit_id] %>
+      <%= f.hidden_field :account_item_type, value: type %>
+    </div>
+    <div class="form-group col-span-2">
+      <%= f.label :description, "Description", class: 'block font-bold mb-1' %>
+      <%= f.text_area :description, class: 'w-full border border-slate-300 p-1 rounded outline-none focus:border-pacifixBlue focus:shadow-sm transition ease-in', cols: 30, rows: 3, placeholder: 'Description', required: true %>
+    </div>
+    <div class="form-group col-span-2">
+      Also records as <%= type %> at Cash Book? 
+      <select class="px-1 py-2 bg-white border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in record-income">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 record-income-field <%= 'hidden' if f.object.cash_book.blank? %>">
+      <%= f.label :cash_book_id, "Cash Book", class: 'block font-bold mb-1' %>
+
+      <%= f.select :cash_book_id , options_for_select(cash_books, f.object.cash_book_id), {include_blank: 'Select Cash Book'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in" } %>
+    </div>
+    <div class="form-group col-span-2 sm:col-span-1 record-income-field <%= 'hidden' if f.object.cash_book.blank? %>">
+      <%= f.label :cash_book_category_id, "Category", class: 'block font-bold mb-1' %>
+
+      <%= f.select :cash_book_category_id , options_for_select(income_categories, f.object.cash_book_category_id), {include_blank: 'Select Category'}, { class: "px-1 py-2 bg-white w-full border focus:border-pacifixBlue rounded outline-none focus:shadow-sm transition ease-in" } %>
+    </div>  
+  </div>
+  <div class="flow-root rounded-b border-t border-solid border-slate-200 px-6 py-3">
+    <div class="float-right text-green-800">
+      <button class="border-pacifixBlue btn-close mr-2 inline-block rounded border bg-white py-2 px-4 text-black shadow transition ease-linear hover:shadow-lg" type="button">Close</button>
+      <button class="border-pacifixBlue bg-pacifixBlue inline-block rounded border py-2 px-4 text-white shadow transition ease-linear hover:shadow-lg" type="submit">Save</button>
+    </div>
+  </div>
+<% end %>

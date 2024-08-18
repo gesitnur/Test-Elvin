@@ -1,0 +1,40 @@
+<style>
+ 
+</style>
+<div class="flex justify-between flex-col sm:flex-row gap-3 mb-4">
+  <div class="form-group flex items-center gap-3">
+    <label for="select-cash-report inline m-5">Report With Currency : </label>
+    <select name="select-cash-repost" id="select-cash-report" class="py-3 px-2 bg-white outline-none border rounded  focus:border-pacifixBlue w-32 filter-date filter-currency" data-url=<%= url %>>
+      <option value="">All</option>
+      <% @currency_list.each do |currency| %>
+        <option value="<%= currency.id %>" <%= 'selected' if currency.id.eql?(params[:currency_id].to_i) %>><%= currency.code %></option>
+      <% end %>
+    </select>
+    <%= link_to daily_report_url, class: 'inline-block bg-pacifixBlue text-white tooltip  rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear sm:relative', target: '_blank' do %>
+      <span class="tooltip-text bg-gray-500 shadow text-white -bottom-10 left-0 rounded whitespace-nowrap">Download PDF</span>
+      <i class="fa fa-file-pdf"></i>
+    <% end %>
+  </div>
+  <div class="form-group flex items-center gap-4">
+   <input type="date" name="" id="select-cash-report-date" class="p-2 w-full bg-white border rounded outline-none  focus:border-pacifixBlue filter-date transition ease-in" data-url=<%= url %> value=<%= (params[:date].to_date || Time.now).strftime('%Y-%m-%d') %> >
+  </div>
+</div>
+<div class="tabs mb-4">
+  <ul id="report-nav" class="border-b">
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('daily', action_name) %>">
+      <%= link_to daily_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        General
+      <% end %> 
+    </li>
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('daily_expense', action_name) %>">
+      <%= link_to daily_expense_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        Expense & Income
+      <% end  %>
+    </li>
+    <li class="inline-block mr-5 py-2 px-3 hover:border-b-4 hover:border-b-pacifixBlue cursor-pointer transition ease-linear <%= active_section?('daily_transfer', action_name) %>">
+      <%= link_to daily_transfer_user_cash_reports_path(date: params[:date], currency_id: params[:currency_id]) do %>
+        Transfer List
+      <% end %>
+    </li>
+  </ul>
+</div>

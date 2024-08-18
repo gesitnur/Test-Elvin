@@ -1,0 +1,33 @@
+<div class="sidebar fixed h-full z-10 w-56 bg-pacifixBlue sm:block overflow-auto">
+  <div class="container mx-auto px-3">
+    <ul class="sidebar-menu list-none py-20">
+      <li class="sidebar-menu-item mb-1">
+        <%= link_to user_attendances_path, class: "sidebar-menu-link flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('attendances', controller_name)}" do %>
+          <!-- <i class="fa fa-user-tie w-8"></i> --> Presensi
+        <% end %>
+      </li>
+      <li class="sidebar-menu-item mb-1">
+        <%= link_to user_work_leave_requests_path, class: "sidebar-menu-link outline-none flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('work_leave_requests', controller_name)}" do %>
+          <!-- <i class="fa fa-user-clock w-8"></i> --> Pengajuan Cuti
+        <% end %>
+      </li>
+      <% if current_user.is_pic? %>
+        <li class="sidebar-menu-item mb-1">
+          <%= link_to user_interviews_path, class: "sidebar-menu-link outline-none flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{class_active(params[:controller], 'user/interviews')}" do %>
+            <!-- <i class="fa fa-user w-8"></i> --> Calon Pegawai
+          <% end %>
+        </li>
+      <% end %>
+      <li class="sidebar-menu-item mb-1">
+        <%= link_to user_salary_slips_path, class: "sidebar-menu-link outline-none flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('salary_slips', controller_name)}" do %>
+          <!-- <i class="fa fa-user-clock w-8"></i> --> Slip Gaji
+        <% end %>
+      </li>
+      <!-- <li class="sidebar-menu-item mb-1">
+        <%= link_to user_bug_reports_path, class: "sidebar-menu-link flex items-center text-md py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out #{active_section?('bug_reports', controller_name)}" do %>
+          <i class="fa fa-file w-8"></i> Bug Report
+        <% end %>
+      </li> -->
+    </ul>
+  </div>
+</div>

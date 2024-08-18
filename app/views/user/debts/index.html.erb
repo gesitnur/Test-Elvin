@@ -1,0 +1,93 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <div class="main-content-title flex justify-between mb-5">
+    <div class="balance-title text-left flex gap-4">
+      <div class="balance-img">
+        <%= image_tag asset_image("elvin/debt_book.png"), alt: "whatsapp-image", class: 'w-14 md:w-24' %>
+      </div>
+      <div class="balance-detail">
+        <p class="text-3xl">Debts Book</p>
+        <p class="text-slate-500">Manage Your Debts</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_user_debt_path, class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear btn-modal-income', remote: true do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> New Debt
+      <% end %>
+    </div>
+  </div>
+  <div class="relative flex justify-end">
+    <!-- Modal Income Start -->
+    <div class="rounded-lg shadow-lg w-full md:w-[35rem] flex absolute flex-col border top-0 bg-white outline-none modal income focus:outline-none">
+      <div id="debt-form"></div>
+    </div>
+    <!-- Modal Income End -->
+  </div>
+  <div class="overflow-x-auto" id="position-table">
+    <table class="w-full text-left">
+      <thead>
+        <tr>
+          <th class="border border-slate-300 p-2 w-12">Status</th>
+          <th class="border border-slate-300 p-2">Date</th>
+          <th class="border border-slate-300 p-2">Client</th>
+          <th class="border border-slate-300 p-2">Description</th>
+          <th class="border border-slate-300 p-2">Balance</th>
+          <th class="border border-slate-300 p-2 w-32">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= no_table_record(@debts, 7) %>
+        <% @debts.each_with_index do |debt, idx| %>
+          <tr class="<%= debt_index_class(debt.balance) %>">
+            <td class="border border-slate-300 p-2 text-center"><%= debt_icon_class(debt.balance) %></td>
+            <td class="border border-slate-300 p-2 whitespace-nowrap">
+              <span class="block"><%= datetime_formater(debt.account_date, '%d %h %Y, %I:%M %p') %></span>
+              <span class="text-xs text-slate-500">Due Date: <%= datetime_formater(debt.due_date, '%d %h %Y, %I:%M %p') %></span>
+            </td>
+            <td class="border border-slate-300 p-2"><%= debt.client %></td>
+            <td class="border border-slate-300 p-2"><%= debt.description %></td>
+            <td class="border border-slate-300 p-2"><%= number_to_currency(debt.balance, unit: debt.currency&.symbol || app_setting.currency.symbol) %></td>
+            <td class="border border-slate-300 p-2 truncate">
+              <%= link_to edit_user_debt_path(debt), class: 'bg-orange-400 w-7 h-7 rounded inline-block btn-modal-income', remote: true do %>
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end %>
+              <%= link_to user_debt_items_path(debt_id: debt), class: 'bg-africanViolet w-7 h-7 rounded inline-block' do %>
+                <span class="flex h-full"><i class="fa fa-eye text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end %>
+              <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              </button>
+              <div class="modal fixed z-50 hidden" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                  <div class="modal-content fixed inset-0 flex items-center justify-center z-50 px-5">
+                    <div class="bg-white p-6 rounded-md m-auto shadow-lg w-full sm:w-1/2 lg:w-1/3">
+                      <p class="mb-4">Are you sure?</p>
+                      <div class="flex justify-end">
+                      <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+                      <%= link_to user_debt_path(debt), method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' do %>
+                        Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="flow-root mt-4">
+    <div class="float-left">
+      <%= page_entries_info @debts, entry_name: 'debts' if @debts.present? %>
+    </div>
+    <div class="float-right">
+      <%= paginate @debts, window: 2 %>
+    </div>
+  </div>
+</div>

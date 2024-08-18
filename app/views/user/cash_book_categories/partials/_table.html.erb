@@ -1,0 +1,121 @@
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="w-full md:w-1/2 flex flex-col">
+    <label class="block font-bold text-2xl border-b">Expense</label>
+    <div class="expense-list mb-2">
+      <% expenses.each do |expense| %>
+        <div class="expense-section">
+          <div class="update-expense-form hidden py-[5px] border-b">
+            <%= form_for(expense, url: user_cash_book_category_path(expense), remote: true, html: {class: 'flex gap-2' }) do |f| %>
+              <div class="form-group">
+                <%= f.text_field :name, class: 'border border-slate-300 py-1 px-3 w-full rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'expense-name', placeholder: 'name', required: true %>
+                <%= f.hidden_field :category_type, class: '', value: 'Expense', required: true %>
+                <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+              </div>
+              <span class="truncat">
+                <%= f.submit 'Save', class: 'bg-pacifixBlue px-5 py-1 border border-pacifixBlue rounded hover:border-md cursor-pointer transition text-white ease-in' %>
+              </span>
+            <% end %>
+          </div>
+          <div class="grid grid-cols-2 gap-4 expense-data items-center border-b py-2">
+            <div class="cols-span-1">
+              <p><%= expense.name %></p>
+            </div>
+            <div class="cols-span-1 text-right">
+              <button class="bg-orange-400 w-7 h-7 rounded inline-block btn-edit-expense">
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              </button>
+              <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              </button>
+              <div class="modal fixed z-50 hidden text-left" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                  <div class="modal-content fixed inset-0 flex items-center justify-center z-50 px-5">
+                    <div class="bg-white p-6 rounded-md m-auto shadow-lg w-full sm:w-1/2 lg:w-1/3">
+                      <p class="mb-4">Are you sure?</p>
+                      <div class="flex justify-end">
+                      <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+                      <%= link_to user_cash_book_category_path(expense), method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' do %>
+                        Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-auto">
+      <%= form_for(category, url: user_cash_book_categories_path, remote: true, html: {class: 'grid grid-cols-1 gap-4' }) do |f| %>
+        <div class="form-group">
+          <%= f.text_field :name, class: 'w-full border border-slate-300 mb-3 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Expense', required: true %>
+          <%= f.hidden_field :category_type, class: '', value: 'Expense', required: true %>
+          <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+          <%  %>
+          <%= f.submit 'Add Expense category', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-md transition ease-linear cursor-pointer mt-1' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="w-full md:w-1/2 flex flex-col">
+    <label class="block font-bold text-2xl border-b">Income</label>
+    <div class="income-list mb-2">
+      <% incomes.each do |income| %>
+        <div class="income-section">
+          <div class="update-income-form hidden py-[5px] border-b">
+            <%= form_for(income, url: user_cash_book_category_path(income), remote: true, html: {class: 'flex gap-2' }) do |f| %>
+              <div class="form-group">
+                <%= f.text_field :name, class: 'border border-slate-300 py-1 px-3 w-full rounded outline-none focus:border-pacifixBlue transition ease-in', id: 'income-name', placeholder: 'name', required: true %>
+                <%= f.hidden_field :category_type, class: '', value: 'Income', required: true %>
+                <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+              </div>
+              <span class="truncat">
+                <%= f.submit 'Save', class: 'bg-pacifixBlue px-5 py-1 border border-pacifixBlue rounded hover:border-md cursor-pointer transition text-white ease-in' %>
+              </span>
+            <% end %>
+          </div>
+          <div class="grid grid-cols-2 gap-4 income-data items-center border-b py-2">
+            <div class="cols-span-1">
+              <p><%= income.name %></p>
+            </div>
+            <div class="cols-span-1 text-right">
+              <button class="bg-orange-400 w-7 h-7 rounded inline-block btn-edit-income">
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              </button>
+              <button class="bg-red-500 w-7 h-7 rounded text-white inline-block showModal">
+                <span class="flex h-full"><i class="fa fa-trash text-xs m-auto" aria-hidden="true"></i></span>
+              </button>
+              <div class="modal fixed z-50 hidden text-left" id="modal">
+                <div class="modal-backdrop fixed inset-0 bg-gray-900 opacity-40"></div>
+                  <div class="modal-content fixed inset-0 flex items-center justify-center z-50 px-5">
+                    <div class="bg-white p-6 rounded-md m-auto shadow-lg w-full sm:w-1/2 lg:w-1/3">
+                      <p class="mb-4">Are you sure?</p>
+                      <div class="flex justify-end">
+                      <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hideModal">Cancel</button>
+                      <%= link_to user_cash_book_category_path(income), method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' do %>
+                        Delete
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-auto">
+      <%= form_for(category, url: user_cash_book_categories_path, remote: true, html: {class: 'grid grid-cols-1 gap-4' }) do |f| %>
+        <div class="form-group">
+          <%= f.text_field :name, class: 'w-full border border-slate-300 py-[7px] px-3 mb-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Income', required: true %>
+          <%= f.hidden_field :category_type, class: '', value: 'Income', required: true %>
+          <%= f.hidden_field :company_id, class: '', value: current_user.company.id, required: true %>
+          <%= f.submit 'Add Income category', class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-md transition ease-linear cursor-pointer mt-1' %>
+          <%  %>
+          <%  %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Survey Answer</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="survey-header mb-3 border-b pb-4">
+    <div class="grid gap-4">
+      <div class="group">
+        <label for="date-of-birth" class="font-semibold">Name</label>
+        <p><%= @survey_answer.user.name %></p>
+      </div>
+      <div class="group">
+        <label for="email" class="font-semibold">Company</label>
+        <p><%= @survey_answer.user.company.name %></p>
+      </div>
+      <div class="group">
+        <label for="email" class="font-semibold">Submitted Date</label>
+        <p><%= date_formater(@survey_answer.created_at, '%d %h %Y, %I:%M %p') %></p>
+      </div>
+    </div>
+  </div>
+  <div class="survey-content">
+    <div class="survey-question">
+      <%= form_tag user_surveys_path, method: :post, class: '' do %>
+        <%= hidden_field_tag 'survey_id', @survey.id %>
+        <% @survey.survey_questions.each.with_index(1) do |survey_question, key| %>
+          <% if survey_question.question_type.eql?('Text') %>
+            <% survey_question.inspect %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-1"><%= survey_question.question %></p>
+                <%= text_area_tag "answer[#{key}]", @survey_answer.answer[survey_question.id.to_s], { class: 'w-full lg:w-1/2 border focus:border-pacifixBlue outline-none transition ease-in px-2 py-[7px] rounded h-32', placeholder: 'Answer', required: true, disabled: true } %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if survey_question.question_type.eql?('Range 1 - 10') %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-2"><%= survey_question.question %></p>
+                <div class="range-wrap w-full lg:w-1/2">
+                  <div class="flex items-center gap-3">
+                    <label>1</label>
+                    <!-- <input type="range" min="1" max="10" value="0" class="input-range w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" placeholder="Answer"> -->
+                    <%= @survey_answer.answer[survey_question.id.to_s] %>
+                    <%= range_field_tag "answer[#{key}]", @survey_answer.answer[survey_question.id.to_s] || 1, min: 1, max: 10, class: 'input-range w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700', placeholder: 'Answer', disabled: true %>
+
+                    <label class="block">10</label>
+                  </div>
+                  <div class="output-range bg-pacifixBlue m-auto text-white flex w-8 h-8 rounded top-8">
+                    <p class="block text-center m-auto"><%= @survey_answer.answer[survey_question.id.to_s] || 1 %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <% if survey_question.question_type.eql?('Custom Option') %>
+            <div class="survey-question-item gap-2 flex mb-6">
+              <div class="survey-question-number w-8">
+                <p><%= key %></p>
+              </div>
+              <div class="survey-question-text w-full">
+                <p class="mb-1"><%= survey_question.question %></p>
+                <% survey_question.option['value'].each do |option| %>
+                  <div class="form-check flex items-center mb-1">
+                    <%= radio_button_tag "answer[#{key}]", option[0], (true if @survey_answer.answer[survey_question.id.to_s].eql?(option[0])), { class: 'appearance-none w-5 h-5 mr-2 border-gray-300 checked:bg-pacifixBlue checked:border-pacifixBlue transition duration-200 border align-middle rounded-full', required: true, disabled: true } %>
+                    <label for="form-check-input-1" class="w-full"><%= option[1] %></label>
+                  </div>
+                <% end%>
+              </div>
+            </div>
+          <% end %>
+
+        <% end %>
+        <div class="form-group flex gap-2">
+          <%= link_to 'Back', admin_survey_answers_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+        </div>
+      <% end %>
+    </div>  
+  </div>
+</div>

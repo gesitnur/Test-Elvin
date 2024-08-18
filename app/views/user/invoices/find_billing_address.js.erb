@@ -1,0 +1,11 @@
+<% if @customer.present? %>
+  $("#invoice-address").show();
+
+  $('#invoice-address').html(`<%= render partial: 'user/invoices/partials/customer_address',
+                          locals: { customer: @customer } %>`);
+
+// $(".text-total").text("Total ( <%= @customer.currency.symbol %> )");
+// To do change currency select field
+<% else %>
+  $("#invoice-address").hide();
+<% end %>

@@ -1,0 +1,22 @@
+<%= load_flash_alert %>
+<%= load_flash_notice %>
+<%= form_for(bug_report, url: url, html: {class: 'grid grid-cols-1 gap-4'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :title, "Title", class: 'font-bold block' %>
+    <%= f.text_field :title, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Title', required: true %>
+  </div>
+  <div class="form-group">
+    <%= f.label :url, "Url (Optional)", class: 'font-bold block' %>
+    <%= f.text_field :url, class: 'w-full border border-slate-300 py-[7px] px-3 rounded outline-none focus:border-pacifixBlue transition ease-in', placeholder: 'Url' %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <%= f.hidden_field :company_id, value: current_user.company.id %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description, "Description", class: 'font-bold block' %>
+    <%= f.text_area :description, id: 'hrd-notes', placeholder: 'Description', cols: 30, rows: 10 %>
+  </div>
+  <div class="form-group flex gap-2">
+    <%= f.submit text_submit, class: 'bg-pacifixBlue text-white px-5 py-2 rounded hover:shadow-lg transition ease-in' %>
+    <%= link_to 'Back', user_bug_reports_path, class: 'border border-pacifixBlue px-5 py-2 rounded hover:bg-slate-100 transition ease-in' %>
+  </div>
+<% end %>

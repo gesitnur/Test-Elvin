@@ -1,0 +1,14 @@
+<% @gameplay.question_multiples.each do |question_multiple| %>
+  <% user_answer = @interview_answers.find_by(question: question_multiple)&.answer %>
+  <div class="main-content-card bg-white p-5 rounded mb-5">
+    <h2 class="mb-3"><%= question_multiple.question.html_safe %></h2>
+    <% %W[ option_1 option_2 option_3 option_4 ].each do |opt| %>
+    <%#= "display_option : #{display_option(opt, user_answer, question_multiple.answer, @gameplay.is_basic)}" %>
+      <div class="form-check mb-1 p-2 <%= display_option(opt, user_answer, question_multiple.answer, @gameplay.is_basic) %>">
+        <label class="form-check-label inline-block text-gray-800">
+          <%= question_multiple.send(opt) %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+<% end %>

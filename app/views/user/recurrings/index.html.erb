@@ -1,0 +1,29 @@
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Recurrings</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_user_recurring_path, remote: true, class: 'inline-block bg-pacifixBlue text-white mb-5 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear btn-modal-income mr-2' do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> New Reccuring
+      <% end %>
+    </div>
+  </div>
+  <div class="relative flex justify-end">
+    <!-- Modal Income Start -->
+    <div class="rounded-lg shadow-lg w-full lg:w-[35rem] flex absolute flex-col border -top-[10px] bg-white outline-none modal income focus:outline-none">
+      <div id="recurring-form"></div>
+    </div>
+    <!-- Modal Income End -->
+  </div>
+  <div class="overflow-x-auto">
+    <div id="transaction-table">
+      <%= render partial: 'user/recurrings/partials/table',
+                  locals: {
+                    expenses: @expenses,
+                    incomes: @incomes,
+                    category: @category,
+                  } %>
+    </div>
+  </div>
+</div>

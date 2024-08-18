@@ -1,0 +1,57 @@
+<div class="leave-type-modal"></div>
+<div class="main-content-header mb-3">
+  <%= load_flash_alert %>
+  <%= load_flash_notice %>
+  <h1 class="main-content-title text-3xl font-bold mb-5">Leave Types</h1>
+</div>
+<div class="main-content-card bg-white p-7 rounded shadow-md">
+  <div class="flow-root">
+    <div class="float-right">
+      <%= link_to new_user_leave_type_path, class: 'inline-block bg-pacifixBlue text-white mb-3 rounded py-2 px-4 shadow hover:shadow-lg transition ease-linear', remote: true do %>
+        <i class="fa fa-plus" aria-hidden="true"></i> New Leave Type
+      <% end %>
+    </div>
+  </div>
+  <div class="overflow-x-auto" id="position-table">
+    <table class="w-full text-left shadow">
+      <thead>
+        <tr>
+          <th class="border p-2">No.</th>
+          <th class="border p-2">Name</th>
+          <th class="border p-2">Balance</th>
+          <th class="border p-2">Priority</th>
+          <th class="border p-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= no_table_record(@leave_types, 4) %>
+        <% @leave_types.each.with_index(1) do |leave_type, idx| %>
+          <tr>
+            <td class="border p-2"><%= idx %></td>
+            <td class="border p-2 items-center whitespace-nowrap">
+              <div class="flex items-center">
+                <span class="w-4 h-4 rounded-full text-white mr-2 inline-block" style="background-color: #<%= leave_type.colour_code %>"></span>
+                <span><%= leave_type.name %></span>  
+              </div>
+            </td>
+            <td class="border p-2"><%= leave_type.leave_balance %></td>
+            <td class="border p-2"><%= leave_type.priority %></td>
+            <td class="border p-2">
+              <%= link_to edit_user_leave_type_path(leave_type), class: 'bg-orange-400 w-7 h-7 rounded inline-block mb-1', remote: true do %>
+                <span class="flex h-full"><i class="fa fa-edit text-xs text-white m-auto" aria-hidden="true"></i></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="flow-root mt-4">
+    <div class="float-left">
+      <%= page_entries_info @leave_types, entry_name: 'Leave Type' if @leave_types.present? %>
+    </div>
+    <div class="float-right">
+      <%= paginate @leave_types, window: 2 %>
+    </div>
+  </div>
+</div>

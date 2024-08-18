@@ -1,0 +1,12 @@
+<div class="main-content-header mb-3">
+  <h1 class="main-content-title text-3xl font-bold mb-5">Edit Transaction</h1>
+</div>
+<div class="main-content-card p-7 bg-white shadow-md rounded">
+  <%= render partial: 'user/transactions/partials/form',
+              locals: {
+                transaction: @transaction,
+                url: user_transaction_path(@transaction),
+                text_submit: 'Update',
+                back_url: user_transaction_path(@transaction)
+              } %>
+</div>

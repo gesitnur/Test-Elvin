@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-dark py-3 shadow fixed-top navigation">
+  <div class="container">
+    <%= image_tag asset_image("nineod-freight/logo-light.svg"), class: 'img-logo navbar-brand p-0', 'data-aos': 'fade-right', 'data-aos-duration': '1000' %>
+    <%= image_tag asset_image("nineod-freight/logo-black.svg"), class: 'img-logo-black d-none' %>
+    <div class="menu-toggle toggle" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="bar1 rounded"></div>
+      <div class="bar2 rounded"></div>
+      <div class="bar3 rounded float-end m-0"></div>
+    </div>
+    <div class="collapse navbar-collapse menu-wrapper" id="navbarText">
+      <ul class="navbar-nav mb-2 mb-lg-0 text-uppercase menu-item" data-aos="fade-left" data-aos-duration="1000">
+        <li class="nav-item item-nav me-4 fs-6 fw-semibold">
+          <%= link_to 'Home' , '/', class: "nav-link #{nineod_active_section('index', params[:action])}", 'aria-current': 'page' %>
+        </li>
+        <li class="nav-item item-nav me-4 fs-6 fw-semibold">
+          <%= link_to 'About' , about_us_path, class: "nav-link #{nineod_active_section('about_us', params[:action])}", 'aria-current': 'page' %>
+        </li>
+        <li class="nav-item item-nav me-4 fs-6 fw-semibold">
+          <%= link_to 'Service' , service_path, class: "nav-link #{nineod_active_section('service', params[:action])}", 'aria-current': 'page' %>
+        </li>
+        <li class="nav-item item-nav fs-6 fw-semibold">
+          <%= link_to 'Contact' , contact_path, class: "nav-link #{nineod_active_section('contact', params[:action])}", 'aria-current': 'page' %>
+          <!-- <a class="nav-link" aria-current="page" href="index.html">Home</a> -->
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
