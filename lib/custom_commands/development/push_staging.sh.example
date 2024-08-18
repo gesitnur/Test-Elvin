@@ -1,0 +1,23 @@
+#!/bin/bash
+
+### NOTE ###
+# Replace it based on app preferences:
+# - [branch_name]
+### NOTE ###
+
+# hint to run:
+# - go to project folder
+# run:
+# ./push_production.sh
+# OR
+# sh ./push_production.sh
+source ~/.bash_aliases
+
+function UpdateRepo () { 
+  git checkout [branch_name]
+  pull_from [branch_name]
+  push_to [branch_name]
+}
+
+UpdateRepo
+deploy_cap_staging

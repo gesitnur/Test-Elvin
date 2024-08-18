@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Backup For Local Server
+
+### NOTE ###
+# Replace it based on app preferences:
+# - [postgres_username]
+# - [app_database_name]
+### NOTE ###
+
+source ~/.bash_aliases
+now_date=$(date +'%F')
+
+pg_dump --host localhost --username [postgres_username] --verbose --clean --no-owner --no-acl --format=c [app_database_name] > "backup-development-${now_date}.dump"

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Backup from VPS Server
+
+### NOTE ###
+# Replace it based on app preferences:
+# - [postgres_username]
+# - [server_ip]
+# - [app_database_name]
+### NOTE ###
+
+source ~/.bash_aliases
+now_date=$(date +'%F')
+
+to_current_path
+pg_dump --host localhost --username [postgres_username] --verbose --clean --no-owner --no-acl --format=c [app_database_name] > "[/path/to/backup_db]/backup-${now_date}.dump"

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Download Backup from VPS Server
+
+### NOTE ###
+# Replace it based on app preferences:
+# - [server_user]
+# - [server_ip]
+# - [app_database_name]
+### NOTE ###
+
+source ~/.bash_aliases
+# Production
+now_date=$(date -v-1d +%F)
+scp "[server_user]@[server_ip]:[/path/to/backup_db]/backup-${now_date}.dump" temporary_backup.dump
+
+recreate_db
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U [postgres_username] -d [app_database_name] temporary_backup.dump
+rm -f temporary_backup.dump
